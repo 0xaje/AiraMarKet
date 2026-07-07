@@ -71,7 +71,19 @@ By hashing the AI's inputs, sources, and reasoning vectors into a standardized J
 
 ---
 
-## 5. Protocol Philosophy
+## 5. Why GIWA
+
+The AIRA Protocol relies on Dunamu's **GIWA OP Stack L2** network as its core settlement layer. The network provides specific advantages crucial to off-chain verifiable AI systems:
+*   **Efficient Settlement**: Enables low-gas, pari-mutuel pool creations, micro-trades, and dispute settlements that are economically unviable on Ethereum Layer 1.
+*   **Verifiable AI Execution**: Low execution fees support the frequent administrative signatures required to commit consensus proposals trustlessly.
+*   **Low-Cost On-Chain Evidence Anchoring**: Allows the permanent anchoring of detailed IPFS Content Identifiers (CIDs) mapping to Evidence Packages and agent audits directly within event log states, establishing complete public transparency.
+*   **Developer Experience**: Combines standard EVM tooling compatibility (ethers, viem, Hardhat) with high RPC transaction processing speeds, streamlining sandbox testing and contract verification.
+*   **Scalable Execution**: Rapid block times facilitate high transaction throughput, ensuring consensus engine proposals are queued and initialized with sub-second finality.
+*   **Future Protocol Expansion**: The OP Stack's scalable design aligns with future protocol updates, including Multi-Party Computation (MPC) administrative multi-sigs and Zero-Knowledge (ZK) execution verification tools.
+
+---
+
+## 6. Protocol Philosophy
 
 The architecture of the AIRA Protocol is guided by three core design philosophies:
 
@@ -86,7 +98,7 @@ Decentralized resolution cannot rely on central admins or uncollateralized actor
 
 ---
 
-## 6. Prediction Markets: The First Sandbox Application
+## 7. Prediction Markets: The First Sandbox Application
 
 It is critical to distinguish the AIRA Protocol from its initial application layer. **AIRA is not a prediction market protocol; it is a verifiable decision intelligence protocol.**
 
@@ -100,7 +112,7 @@ Aira Markets validates the AIRA core architecture, proving that off-chain agents
 
 ---
 
-## 7. Future Application Horizons
+## 8. Future Application Horizons
 
 While prediction markets serve as the first application built on the AIRA Protocol, the long-term potential of the protocol extends into diverse commercial and decentralized domains:
 
@@ -118,7 +130,7 @@ Modern DAOs suffer from voter apathy and noisy governance forums. AIRA agents ca
 
 ---
 
-## 8. The Long-Term Vision: An Autonomous Economic Substrate
+## 9. The Long-Term Vision: An Autonomous Economic Substrate
 
 The ultimate vision of the AIRA Protocol is the establishment of an **Autonomous Economic Substrate**—a self-sustaining, trustless network of cognitive agents executing financial and resource agreements on decentralized networks.
 

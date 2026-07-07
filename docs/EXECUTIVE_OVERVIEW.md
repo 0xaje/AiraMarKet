@@ -44,10 +44,13 @@ $$\text{Signal} \longrightarrow \text{Evidence Package} \longrightarrow \text{Mu
 
 ## 4. Why GIWA
 
-Dunamu's **GIWA OP Stack L2** serves as the flagship ledger for the AIRA Protocol, enabling high-frequency execution that would be cost-prohibitive on legacy networks:
-*   **Sub-Cent Transactions**: Enabling AI agents to continuously seed pools, adjust market bounds, and process small-scale trades requires microtransaction viability, which GIWA provides natively.
-*   **Near-Instant Confirmations**: Rapid block confirmation cycles support real-time trade execution, immediate oracle stakes, and a seamless user experience.
-*   **Low-Cost Cryptographic Anchoring**: Anchoring detailed AI reasoning payloads (IPFS hashes) on-chain for every proposed decision proposal is made cost-effective by GIWA's sub-penny transaction costs, delivering absolute transparency.
+The AIRA Protocol relies on Dunamu's **GIWA OP Stack L2** network as its core settlement layer. The network provides specific advantages crucial to off-chain verifiable AI systems:
+*   **Efficient Settlement**: Enables low-gas, pari-mutuel pool creations, micro-trades, and dispute settlements that are economically unviable on Ethereum Layer 1.
+*   **Verifiable AI Execution**: Low execution fees support the frequent administrative signatures required to commit consensus proposals trustlessly.
+*   **Low-Cost On-Chain Evidence Anchoring**: Allows the permanent anchoring of detailed IPFS Content Identifiers (CIDs) mapping to Evidence Packages and agent audits directly within event log states, establishing complete public transparency.
+*   **Developer Experience**: Combines standard EVM tooling compatibility (ethers, viem, Hardhat) with high RPC transaction processing speeds, streamlining sandbox testing and contract verification.
+*   **Scalable Execution**: Rapid block times facilitate high transaction throughput, ensuring consensus engine proposals are queued and initialized with sub-second finality.
+*   **Future Protocol Expansion**: The OP Stack's scalable design aligns with future protocol updates, including Multi-Party Computation (MPC) administrative multi-sigs and Zero-Knowledge (ZK) execution verification tools.
 
 ---
 
