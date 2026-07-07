@@ -5,19 +5,22 @@
 
 ## 1. High-Level Architecture
 
-The AIRA Protocol is designed around a strict **Separation of Concerns**. Computational cognitive labor (data scraping, text analysis, and sentiment valuation) is separated from economic settlement (asset custody, token distribution, and dispute resolution). 
+The AIRA Protocol is designed around a strict **Separation of Concerns**. Computational cognitive labor (ingestion feeds, evidence collection, and consensus engine analysis) is separated from economic settlement (asset custody, token distribution, and dispute resolution) to form a robust, verifiable pipeline:
+
+$$\text{Signal} \longrightarrow \text{Evidence Package} \longrightarrow \text{Multi-Agent Analysis} \longrightarrow \text{Consensus Engine} \longrightarrow \text{Decision Proposal} \longrightarrow \text{Human Verification} \longrightarrow \text{GIWA Settlement}$$
 
 By isolating heavy AI computation off-chain, the protocol avoids high gas costs and execution latency. By keeping all asset custody on-chain, user funds remain fully protected by smart contracts; even in the event of an off-chain server crash or AI model hallucination, the integrity of the ledger and user balances is maintained.
 
 ```
-                  ┌──────────────────────────────────────────────┐
-                  │            COGNITIVE LAYER (Off-Chain)       │
-                  │  ┌────────────────┐      ┌────────────────┐  │
-                  │  │ Ingestion Feeds│ ───> │Consensus Engine│  │
-                  │  └────────────────┘      └────────────────┘  │
-                  └──────────────────────────┬───────────────────┘
-                                             │(Decision Proposal)
-                                             ▼
+                  ┌────────────────────────────────────────────────────────┐
+                  │              COGNITIVE LAYER (Off-Chain)               │
+                  │  ┌───────────┐      ┌───────────┐      ┌────────────┐  │
+                  │  │ Ingestion │ ───> │ Evidence  │ ───> │ Multi-Agent│  │
+                  │  │   Feeds   │      │  Package  │      │  Consensus │  │
+                  │  └───────────┘      └───────────┘      └────────────┘  │
+                  └──────────────────────────────────────────────┬─────────┘
+                                                                 │(Decision Proposal)
+                                                                 ▼
                   ┌──────────────────────────────────────────────┐
                   │            INTEGRATION BUS & CACHE           │
                   │  ┌────────────────┐      ┌────────────────┐  │
@@ -48,15 +51,15 @@ By isolating heavy AI computation off-chain, the protocol avoids high gas costs 
 
 The protocol relies on several core services, each defined by strict boundaries and design rationales:
 
-### I. Data Ingestion Service
-*   **Responsibility**: Periodically queries real-world feeds (e.g., news, financials, sports) and normalizes raw JSON data into standardized data structures.
-*   **Service Boundary**: Inputs are external REST APIs; outputs are normalized data payloads emitted to the internal event bus.
-*   **Why it exists**: Isolates the rest of the application from changes in external API formatting and rate-limiting constraints.
+### I. Data Ingestion & Evidence Service
+*   **Responsibility**: Periodically queries real-world feeds (e.g., news, financials, sports), normalizes raw JSON data, and compiles it into structured **Evidence Packages** (which encapsulate normalized signals, source metadata, timestamps, and confidence inputs).
+*   **Service Boundary**: Inputs are external REST APIs; outputs are structured Evidence Packages stored in the persistent database and emitted to the internal event bus.
+*   **Why it exists**: Guarantees that every decision proposal is backed by a verifiable record of evidence before entering downstream agent review processes.
 
 ### II. AI Sentiment Service (Neural Processor)
-*   **Responsibility**: Evaluates normalized data signals, analyzes market sentiment, and generates structured binary (YES/NO) decision proposals.
-*   **Service Boundary**: Inputs are normalized data signals; outputs are structured proposal schemas containing categories, questions, exspiries, and confidence parameters.
-*   **Why it exists**: Translates qualitative natural language sources into quantitative risk parameters.
+*   **Responsibility**: Evaluates Evidence Packages, analyzes sentiment, and generates structured binary (YES/NO) decision proposals.
+*   **Service Boundary**: Inputs are Evidence Packages; outputs are structured proposal schemas containing categories, questions, exspiries, and confidence parameters.
+*   **Why it exists**: Translates qualitative evidence inputs into quantitative decision proposal parameters.
 
 ### III. Multi-Agent Consensus Engine
 *   **Responsibility**: Group of specialized verification agents (Analyst, Risk, Compliance) that act as quality gatekeepers by auditing decision proposals against a minimum 0.70 confidence threshold.
@@ -82,20 +85,21 @@ The lifecycle of converting real-world information into an on-chain contract sta
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Feed as External Data Feed
-    participant Ingest as Ingestion Service
-    participant Engine as Consensus Engine
+    participant Feed as External Data Feed (Signal)
+    participant Ingest as Ingestion Service (Evidence Layer)
+    participant Engine as Multi-Agent Consensus Engine
     participant IPFS as IPFS Storage
-    participant Admin as Admin Signer
-    participant Contract as L2 Smart Contract
+    participant Admin as Admin Signer (Human Verification)
+    participant Contract as L2 Smart Contract (GIWA Settlement)
 
-    Feed->>Ingest: Stream unstructured raw data
-    Ingest->>Engine: Normalise and emit signal payload
-    Engine->>Engine: Evaluate confidence threshold (> 0.70)
-    Engine->>IPFS: Upload raw data and reasoning payload
+    Feed->>Ingest: Stream unstructured raw data (Signal)
+    Ingest->>Ingest: Normalise & compile Evidence Package
+    Ingest->>Engine: Disseminate Evidence Package for Multi-Agent Analysis
+    Engine->>Engine: Perform evaluations (Analyst, Risk, Compliance) & quorum check
+    Engine->>IPFS: Upload Evidence Package and agent signatures/metadata
     IPFS-->>Engine: Return Content Identifier (IPFS CID)
-    Engine->>Admin: Queue approved decision proposal with IPFS CID
-    Admin->>Contract: Validate and sign createMarket() transaction
+    Engine->>Admin: Queue approved decision proposal with IPFS CID for human audit
+    Admin->>Contract: Sign and dispatch createMarket() transaction (GIWA Settlement)
     Contract->>Contract: Lock 2.0 Native Token seed (50/50 YES/NO pool)
 ```
 
@@ -128,7 +132,7 @@ sequenceDiagram
 ## 5. Architectural Tiers
 
 ### I. Backend (Cognitive Processing)
-*   **Responsibility**: Runs the continuous ingestion scrapers, drives the Multi-Agent Consensus Engine, exposes the REST API server, and logs auditable actions to the local filesystem.
+*   **Responsibility**: Runs the continuous ingestion scrapers, compiles Evidence Packages, drives the Multi-Agent Consensus Engine, exposes the REST API server, and logs auditable actions to the local filesystem.
 *   **Why it exists**: Offloads high-computation AI calculations and database querying from the client browser and the blockchain ledger.
 
 ### II. Frontend (User Interface)

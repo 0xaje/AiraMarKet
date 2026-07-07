@@ -24,3 +24,8 @@ This document acts as the technical playbook for upcoming developer upgrades. It
 *   **Current State**: Agents hash raw sentiment inputs to IPFS CIDs to prove their logic.
 *   **Target State**: Cryptographic zk-proofs of LLM execution. Agents compile proofs confirming that the sentiment output was calculated using the correct model parameters and confidence heuristics without revealing the proprietary prompt structures.
 *   **Implementation Path**: Leverage zk-virtual machine frameworks to compile agent execution proofs.
+
+### IV. Evidence Layer Integration & IPFS Anchoring
+*   **Current State**: Unstructured data feeds are normalized directly into database proposal tables.
+*   **Target State**: Structured **Evidence Packages** are generated for every incoming signal. Each package encapsulates normalized feeds, source metadata, timestamps, and AI confidence parameters before hitting the Multi-Agent Consensus Engine. In the future, this evidence metadata package will be anchored directly to IPFS, storing the resulting CID on-chain.
+*   **Implementation Path**: Hook the `SignalIngestionService` to database adapters to instantiate an `EvidencePackage` record before triggering the analyst event handlers.

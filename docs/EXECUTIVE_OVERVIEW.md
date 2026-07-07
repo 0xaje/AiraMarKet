@@ -29,12 +29,16 @@ The AIRA Protocol removes these bottlenecks by merging autonomous AI logic with 
 
 ---
 
-## 3. High-Level Architecture
+## 3. High-Level Architecture & Pipeline Flow
 
-The protocol is structured into three clean, decoupled layers designed to maximize security and platform throughput:
-*   **Off-Chain Intelligence Layer**: Specialized AI agents ingest live data feeds and estimate proposal confidence thresholds. By keeping intensive LLM calculations off-chain, the protocol avoids high gas overhead and system lag.
-*   **On-Chain Settlement Layer**: The smart contract acts as the final arbiter of asset custody. Smart contracts govern pool ratios, share distributions, and winnings redemptions. Even if an off-chain AI model experiences a hallucination, user funds remain fully protected by immutable blockchain logic.
-*   **Stateless Synchronization Layer**: A high-speed indexer polls the blockchain and records event logs to a relational database with transaction-level idempotency. This ensures instant dashboard load times and zero duplicate records.
+The protocol is structured into four decoupled operational layers:
+*   **Off-Chain Ingestion & Evidence Layer**: Gathers unstructured real-world signals and compiles them into structured, queryable **Evidence Packages** (containing normalized signal details, metadata origins, timestamps, and confidence data).
+*   **Off-Chain Intelligence Layer**: Specialized AI agents run Multi-Agent Analysis and consensus checks against Evidence Packages to form decision proposals.
+*   **On-Chain Settlement Layer**: The smart contract acts as the final arbiter of asset custody, locking native token seed pools and settling payouts.
+*   **Stateless Synchronization Layer**: A high-speed indexer polls the blockchain and records event logs to a relational database with transaction-level idempotency.
+
+The pipeline flow follows a strict 7-stage progression:
+$$\text{Signal} \longrightarrow \text{Evidence Package} \longrightarrow \text{Multi-Agent Analysis} \longrightarrow \text{Consensus Engine} \longrightarrow \text{Decision Proposal} \longrightarrow \text{Human Verification} \longrightarrow \text{GIWA Settlement}$$
 
 ---
 

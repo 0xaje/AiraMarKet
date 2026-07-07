@@ -25,14 +25,17 @@ The AIRA Protocol decouples decision-making intelligence from smart contract sta
 ```mermaid
 graph TD
     subgraph Data Ingestion Layer
-        DS[Data Feeds] --> Ingest[Ingestion Pipeline]
+        DS[Data Feeds / Signals] --> Ingest[Ingestion Pipeline]
+        Ingest --> EP[Evidence Package]
     end
     subgraph Autonomous Agent Layer
-        Ingest --> Agents[Multi-Agent Consensus Engine]
-        Agents -->|"Confidence Heuristics (> 0.70)"| Proposal[Decision Proposal]
+        EP --> MAA[Multi-Agent Analysis]
+        MAA --> CE[Consensus Engine]
+        CE --> DP[Decision Proposal]
     end
-    subgraph EVM Ledger & Indexing
-        Proposal -->|"Admin Signature Verification"| GIWA[GIWA Sepolia L2 Ledger]
+    subgraph Verification & Settlement
+        DP --> HV[Human Verification / Admin Signer]
+        HV --> GIWA[GIWA Sepolia L2 Ledger]
         GIWA -->|"On-Chain Event Logs"| Indexer[Stateless HTTP Indexer]
     end
     subgraph Relational Cache & Frontend
@@ -45,14 +48,13 @@ end
 
 ---
 
-## Core Components
-
-The protocol is comprised of five main layers:
-1.  **Multi-Agent Consensus Engine**: Collaborative swarm agents (such as sentiment, risk, and compliance assessors) that collaboratively analyze global signals and verify decision proposals.
-2.  **Smart Contract Settlement Engine (`AiraMarketProtocol.sol`)**: An optimized Solidity execution layer governing pari-mutuel share ratios, YES/NO token minting, pool rebalancing, and payout claims.
-3.  **Cryptographic Verification (IPFS Anchoring)**: Every proposed decision hashes its raw inputs, sentiment scoring, and decision metrics into a JSON metadata payload anchored directly on-chain during execution.
-4.  **Optimistic Oracle Settlements**: conclusive resolution is determined via economic incentives; outcome proposers stake a slashing bond, subject to verification challenges.
-5.  **Stateless Block Indexer**: A database ingestion pipeline that monitors the ledger via HTTP JSON-RPC polling, using transaction-level database idempotency to maintain absolute sync alignment.
+The protocol is comprised of six main layers:
+1.  **Ingestion & Evidence Layer**: Translates unstructured incoming signals into verifiable Evidence Packages, linking normalized source feeds, metadata origin schemas, and ingested confidence parameters before processing.
+2.  **Multi-Agent Consensus Engine**: Collaborative swarm agents (such as sentiment, risk, and compliance assessors) that perform multi-agent analysis on Evidence Packages to verify decision proposals.
+3.  **Smart Contract Settlement Engine (`AiraMarketProtocol.sol`)**: An optimized Solidity execution layer governing pari-mutuel share ratios, YES/NO token minting, pool rebalancing, and payout claims.
+4.  **Cryptographic Verification (IPFS Anchoring)**: Every proposed decision hashes its raw inputs, sentiment scoring, and decision metrics into a JSON metadata payload anchored directly on-chain during execution.
+5.  **Optimistic Oracle Settlements**: conclusive resolution is determined via economic incentives; outcome proposers stake a slashing bond, subject to verification challenges.
+6.  **Stateless Block Indexer**: A database ingestion pipeline that monitors the ledger via HTTP JSON-RPC polling, using transaction-level database idempotency to maintain absolute sync alignment.
 
 ---
 

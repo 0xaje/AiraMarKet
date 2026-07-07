@@ -11,6 +11,16 @@ export interface NormalizedSignal {
     sentiment: "bullish" | "bearish" | "neutral";
 }
 
+export interface EvidencePackage {
+    id?: number;
+    signalId: string;
+    normalizedSignal: string; // JSON stringified NormalizedSignal
+    sourceMetadata: string;   // Origin API metadata, headers or details
+    aiReasoningRef: string;   // Reference metadata or analysis links
+    confidenceInputs: number; // Confidence inputs or metrics
+    createdAt?: Date;
+}
+
 export class SignalIngestionService {
     
     /**

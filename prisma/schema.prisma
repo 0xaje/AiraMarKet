@@ -64,3 +64,13 @@ model Trade {
   amount    Float
   createdAt DateTime @default(now())
 }
+
+model EvidencePackage {
+  id                 Int      @id @default(autoincrement())
+  signalId           String   @unique
+  normalizedSignal   String   // JSON representation of the NormalizedSignal
+  sourceMetadata     String   // Metadata detailing the ingestion origin
+  aiReasoningRef     String   // References or descriptors of initial AI reasoning
+  confidenceInputs   Float    // Sourced confidence inputs/scores
+  createdAt          DateTime @default(now())
+}
