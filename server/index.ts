@@ -73,7 +73,7 @@ API:         Ready
 
     await runPrismaMigrations();
 
-    // Start block indexer and agent worker loops
+    // Start block indexer and Consensus Engine validation loops
     indexer.startIndexing();
     analystAgent;
     riskAgent;

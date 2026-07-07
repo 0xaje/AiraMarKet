@@ -9,12 +9,12 @@
 ---
 
 ## Tagline
-An autonomous, verifiable, agent-driven prediction market protocol running natively on high-performance EVM networks.
+An autonomous, verifiable, agent-driven decision intelligence protocol running natively on high-performance EVM networks.
 
 ---
 
 ## Mission
-To automate and scale prediction market ecosystems by replacing manual curation and slow, centralized oracle settlements with autonomous, cryptographically auditable AI agent heuristics on high-performance Layer 2 chains.
+To automate and scale decentralized decision intelligence ecosystems by replacing manual curation and slow, centralized oracle settlements with autonomous, cryptographically auditable AI agent heuristics on high-performance Layer 2 chains.
 
 ---
 
@@ -28,8 +28,8 @@ graph TD
         DS[Data Feeds] --> Ingest[Ingestion Pipeline]
     end
     subgraph Autonomous Agent Layer
-        Ingest --> Agents[Agent Swarms]
-        Agents -->|"Confidence Heuristics (> 0.70)"| Proposal[Market Proposal]
+        Ingest --> Agents[Multi-Agent Consensus Engine]
+        Agents -->|"Confidence Heuristics (> 0.70)"| Proposal[Decision Proposal]
     end
     subgraph EVM Ledger & Indexing
         Proposal -->|"Admin Signature Verification"| GIWA[GIWA Sepolia L2 Ledger]
@@ -48,9 +48,9 @@ end
 ## Core Components
 
 The protocol is comprised of five main layers:
-1.  **Autonomous Agent Swarms**: Specialized AI agents (`CryptoAgent`, `TechAgent`, `SportsAgent`) that scan news feeds and sentiment vectors to identify high-interest markets.
+1.  **Multi-Agent Consensus Engine**: Collaborative swarm agents (such as sentiment, risk, and compliance assessors) that collaboratively analyze global signals and verify decision proposals.
 2.  **Smart Contract Settlement Engine (`AiraMarketProtocol.sol`)**: An optimized Solidity execution layer governing pari-mutuel share ratios, YES/NO token minting, pool rebalancing, and payout claims.
-3.  **Cryptographic Verification (IPFS Anchoring)**: Every proposed market hashes its raw inputs, sentiment scoring, and decision metrics into a JSON metadata payload anchored directly on-chain during execution.
+3.  **Cryptographic Verification (IPFS Anchoring)**: Every proposed decision hashes its raw inputs, sentiment scoring, and decision metrics into a JSON metadata payload anchored directly on-chain during execution.
 4.  **Optimistic Oracle Settlements**: conclusive resolution is determined via economic incentives; outcome proposers stake a slashing bond, subject to verification challenges.
 5.  **Stateless Block Indexer**: A database ingestion pipeline that monitors the ledger via HTTP JSON-RPC polling, using transaction-level database idempotency to maintain absolute sync alignment.
 
@@ -61,7 +61,7 @@ The protocol is comprised of five main layers:
 Dunamu's **GIWA OP Stack L2** network serves as the protocol's flagship execution environment:
 *   **Sub-Penny Execution Costs**: Enables AI agents to run continuous pool rebalancing and micro-trades without high gas fees.
 *   **Low Block Times**: Offers near-instantaneous transaction validation, ensuring user trades and contract creations are confirmed with sub-second finality.
-*   **Cost-Effective Auditing**: Makes the on-chain anchoring of dense IPFS reasoning payloads viable, creating complete transparency for all prediction markets.
+*   **Cost-Effective Auditing**: Makes the on-chain anchoring of dense IPFS reasoning payloads viable, creating complete transparency for all decision proposals.
 
 ---
 
@@ -133,7 +133,7 @@ Dunamu's **GIWA OP Stack L2** network serves as the protocol's flagship executio
 ---
 
 ## Roadmap
-*   **Phase 1 (Completed)**: Core smart contract validation, local sandbox development, agent swarms implementation, testnet deployment, and event indexer hardening.
+*   **Phase 1 (Completed)**: Core smart contract validation, local sandbox development, multi-agent consensus engine implementation, testnet deployment, and event indexer hardening.
 *   **Phase 2 (Q3 2026)**: Deploying the backend to remote hosting, upgrading to production AI APIs, and launching the public sandbox on GIWA Sepolia.
 *   **Phase 3 (Q4 2026)**: Deploying to GIWA Mainnet, integrating third-party decentralized oracle networks, and initiating liquidity provider incentives.
 *   **Phase 4 (Q1 2027)**: Transitioning protocol parameters (fee splits, confidence thresholds) to a Decentralized Autonomous Organization (DAO) and releasing developer SDKs to allow partners to build custom AI agents.
@@ -147,7 +147,7 @@ Dunamu's **GIWA OP Stack L2** network serves as the protocol's flagship executio
 *   [Production Deployment Guide](file:///home/oyeolorun/AiraMarKet/docs/developer/deployment_guide.md)
 *   [Diagnostics & Troubleshooting Playbook](file:///home/oyeolorun/AiraMarKet/docs/developer/troubleshooting.md)
 *   [Multi-Chain Abstraction Playbook](file:///home/oyeolorun/AiraMarKet/docs/developer/adding_new_chains.md)
-*   [AI Agent Swarm Integration Guide](file:///home/oyeolorun/AiraMarKet/docs/developer/adding_new_ai_agents.md)
+*   [AI Consensus Agent Integration Guide](file:///home/oyeolorun/AiraMarKet/docs/developer/adding_new_ai_agents.md)
 *   [Coding Standards & Workflow](file:///home/oyeolorun/AiraMarKet/docs/developer/standards.md)
 *   [Future Enhancements Playbook](file:///home/oyeolorun/AiraMarKet/docs/developer/future_modules.md)
 

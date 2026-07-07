@@ -58,7 +58,7 @@ export class ConsensusService {
                     }))
                 };
 
-                // Emit MARKET_APPROVED event to trigger market creation lifecycle
+                // Emit MARKET_APPROVED event to trigger decision proposal generation lifecycle
                 eventBus.emit(SystemEvents.MARKET_APPROVED, consolidatedProposal);
             } else {
                 Logger.warn(`[CONSENSUS_SERVICE] Consensus REJECTED for signal ${signalId}: Average confidence ${avgConfidence.toFixed(2)} is below threshold ${this.CONFIDENCE_THRESHOLD}`);

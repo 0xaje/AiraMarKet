@@ -13,10 +13,10 @@ By isolating heavy AI computation off-chain, the protocol avoids high gas costs 
                   ┌──────────────────────────────────────────────┐
                   │            COGNITIVE LAYER (Off-Chain)       │
                   │  ┌────────────────┐      ┌────────────────┐  │
-                  │  │ Ingestion Feeds│ ───> │ AI Agent Swarm │  │
+                  │  │ Ingestion Feeds│ ───> │Consensus Engine│  │
                   │  └────────────────┘      └────────────────┘  │
                   └──────────────────────────┬───────────────────┘
-                                             │ (Market Proposal)
+                                             │(Decision Proposal)
                                              ▼
                   ┌──────────────────────────────────────────────┐
                   │            INTEGRATION BUS & CACHE           │
@@ -54,17 +54,17 @@ The protocol relies on several core services, each defined by strict boundaries 
 *   **Why it exists**: Isolates the rest of the application from changes in external API formatting and rate-limiting constraints.
 
 ### II. AI Sentiment Service (Neural Processor)
-*   **Responsibility**: Evaluates normalized data signals, analyzes market sentiment, and generates structured binary (YES/NO) prediction proposals.
+*   **Responsibility**: Evaluates normalized data signals, analyzes market sentiment, and generates structured binary (YES/NO) decision proposals.
 *   **Service Boundary**: Inputs are normalized data signals; outputs are structured proposal schemas containing categories, questions, exspiries, and confidence parameters.
-*   **Why it exists**: Translates qualitative natural language sources into quantitative risk markets.
+*   **Why it exists**: Translates qualitative natural language sources into quantitative risk parameters.
 
-### III. Category Agent Swarm
-*   **Responsibility**: Group of specialized agents (`CryptoAgent`, `TechAgent`, `SportsAgent`) that act as quality gatekeepers by auditing proposals against a minimum 0.70 confidence threshold.
+### III. Multi-Agent Consensus Engine
+*   **Responsibility**: Group of specialized verification agents (Analyst, Risk, Compliance) that act as quality gatekeepers by auditing decision proposals against a minimum 0.70 confidence threshold.
 *   **Service Boundary**: Inputs are AI proposals; outputs are approved proposals emitted to the administrative queue.
 *   **Why it exists**: Filters out low-interest or highly ambiguous proposals before they require human approval or contract gas fees.
 
 ### IV. Unified Event Bus
-*   **Responsibility**: Acts as the central, asynchronous broker for all off-chain system updates (signals received, markets proposed, log errors).
+*   **Responsibility**: Acts as the central, asynchronous broker for all off-chain system updates (signals received, decisions proposed, log errors).
 *   **Service Boundary**: Acts as an internal publisher-subscriber registry across all Node.js backend processes.
 *   **Why it exists**: Decouples the ingestion pipeline, AI agents, and indexing services, preventing synchronous blocking and network lag.
 
@@ -84,17 +84,17 @@ sequenceDiagram
     autonumber
     participant Feed as External Data Feed
     participant Ingest as Ingestion Service
-    participant Swarm as Agent Swarm
+    participant Engine as Consensus Engine
     participant IPFS as IPFS Storage
     participant Admin as Admin Signer
     participant Contract as L2 Smart Contract
 
     Feed->>Ingest: Stream unstructured raw data
-    Ingest->>Swarm: Normalise and emit signal payload
-    Swarm->>Swarm: Evaluate confidence threshold (> 0.70)
-    Swarm->>IPFS: Upload raw data and reasoning payload
-    IPFS-->>Swarm: Return Content Identifier (IPFS CID)
-    Swarm->>Admin: Queue approved proposal with IPFS CID
+    Ingest->>Engine: Normalise and emit signal payload
+    Engine->>Engine: Evaluate confidence threshold (> 0.70)
+    Engine->>IPFS: Upload raw data and reasoning payload
+    IPFS-->>Engine: Return Content Identifier (IPFS CID)
+    Engine->>Admin: Queue approved decision proposal with IPFS CID
     Admin->>Contract: Validate and sign createMarket() transaction
     Contract->>Contract: Lock 2.0 Native Token seed (50/50 YES/NO pool)
 ```
@@ -120,7 +120,7 @@ sequenceDiagram
     Indexer->>Ledger: Poll block updates via HTTP JSON-RPC
     Ledger-->>Indexer: Return event logs
     Indexer->>Cache: Write transaction state with idempotency checks
-    Cache-->>Client: Serve updated market and portfolio graphs
+    Cache-->>Client: Serve updated decision proposals and portfolio graphs
 ```
 
 ---
@@ -128,11 +128,11 @@ sequenceDiagram
 ## 5. Architectural Tiers
 
 ### I. Backend (Cognitive Processing)
-*   **Responsibility**: Runs the continuous ingestion scrapers, drives the AI Agent swarms, exposes the REST API server, and logs auditable actions to the local filesystem.
+*   **Responsibility**: Runs the continuous ingestion scrapers, drives the Multi-Agent Consensus Engine, exposes the REST API server, and logs auditable actions to the local filesystem.
 *   **Why it exists**: Offloads high-computation AI calculations and database querying from the client browser and the blockchain ledger.
 
 ### II. Frontend (User Interface)
-*   **Responsibility**: Serves as the user-facing web dashboard. Connects user Web3 wallets, displays active AI-proposed markets, renders real-time pricing curves, and formats transaction notifications.
+*   **Responsibility**: Serves as the user-facing web dashboard. Connects user Web3 wallets, displays active AI-proposed decision proposals, renders real-time pricing curves, and formats transaction notifications.
 *   **Why it exists**: Abstracts low-level smart contract functions and database queries into a seamless Web3 dashboard.
 
 ### III. Smart Contracts (Settlement Engine)
@@ -156,6 +156,6 @@ sequenceDiagram
 ## 6. Future Expansion
 
 The architecture is designed to support three key future enhancements:
-1.  **Multi-Swarm Consensus**: Upgrading the Agent Swarm to require consensus voting (e.g., 3 out of 5 agents approving a proposal) before it is queued.
+1.  **Multi-Engine Consensus**: Upgrading the Consensus Engine to require consensus voting (e.g., 3 out of 5 agents approving a proposal) before it is queued.
 2.  **MPC Administrative Signing**: Replacing the single-signature Admin validation with a Multi-Party Computation (MPC) or Multi-Sig threshold structure to eliminate single-point-of-failure vulnerabilities.
 3.  **Zero-Knowledge Reasoning Proofs**: Integrating ZK-provers to cryptographically verify that the off-chain AI processed the exact news inputs without revealing proprietary LLM prompts.

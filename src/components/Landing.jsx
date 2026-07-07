@@ -13,11 +13,11 @@ export default function Landing() {
         </div>
         
         <h1 className="serif-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.08] mb-3 text-on-surface tracking-tight font-extrabold">
-          Where AI turns information into <span className="italic text-primary">markets.</span>
+          Where AI turns information into <span className="italic text-primary">decisions.</span>
         </h1>
         
         <p className="max-w-2xl mx-auto text-on-surface-variant text-xs sm:text-sm md:text-base font-medium leading-relaxed mb-6 opacity-90 px-2">
-          The world's first autonomous prediction ecosystem. {ProtocolMetadata.protocolName} scans petabytes of global data to generate precision markets before the news even breaks.
+          The world's first autonomous decision intelligence ecosystem. {ProtocolMetadata.protocolName} scans petabytes of global data to generate verifiable intelligence proposals before the news even breaks.
         </p>
         
         <div className="flex flex-row gap-4 justify-center items-center px-4 w-full mb-2">
@@ -25,7 +25,7 @@ export default function Landing() {
             className="px-6 sm:px-8 py-3.5 bg-primary text-white rounded-lg font-bold text-[10px] tracking-[0.2em] uppercase hover:bg-on-surface transition-colors shadow-lg shadow-primary/20"
             onClick={() => navigate('/creator')}
           >
-            Launch AI Creator
+            Launch Consensus Engine
           </button>
           <button 
             className="px-6 sm:px-8 py-3.5 bg-surface border border-outline text-on-surface rounded-lg font-bold text-[10px] tracking-[0.2em] uppercase hover:border-primary hover:text-primary transition-all"

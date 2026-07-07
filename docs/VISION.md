@@ -15,7 +15,7 @@ The **AIRA Protocol** (Autonomous Intelligence & Risk Analysis Protocol) is desi
 
 ## 2. Why AIRA Exists
 
-In traditional web architectures, the ingestion of real-world information and its subsequent translation into financial decisions is manual, slow, and heavily centralized. Whether in insurance underwriting, treasury management, or prediction markets, the process is bound by human cognitive speed and administrative friction.
+In traditional web architectures, the ingestion of real-world information and its subsequent translation into financial decisions is manual, slow, and heavily centralized. Whether in insurance underwriting, treasury management, or decentralized decision intelligence, the process is bound by human cognitive speed and administrative friction.
 
 AIRA exists to automate this lifecycle. The core thesis of the protocol is that cognitive agents, guided by standardized confidence heuristics and backed by cryptographic verification, can manage risk and execute structural decisions more rapidly and efficiently than human-managed processes. 
 
@@ -79,15 +79,15 @@ Decentralized resolution cannot rely on central admins or uncollateralized actor
 
 ---
 
-## 6. Prediction Markets: The First Application
+## 6. Prediction Markets: The First Sandbox Application
 
-It is critical to distinguish the AIRA Protocol from its initial application layer. **AIRA is not a prediction market protocol; it is a verifiable intelligence protocol.**
+It is critical to distinguish the AIRA Protocol from its initial application layer. **AIRA is not a prediction market protocol; it is a verifiable decision intelligence protocol.**
 
-To demonstrate the viability of this cognitive infrastructure, the team developed **Aira Markets** as the flagship proof-of-concept application built on the protocol. Prediction markets represent the ultimate testing ground for autonomous agents because they combine data retrieval, sentiment analysis, risk pricing, and dispute resolution:
+To demonstrate the viability of this cognitive infrastructure, the team developed **Aira Markets** (a prediction market platform) as the flagship proof-of-concept application built on the protocol. Prediction markets represent the ultimate testing ground for autonomous agents because they combine data retrieval, sentiment analysis, risk pricing, and dispute resolution:
 
-*   **Autonomous Market Formulation**: AI agents scan news feeds (e.g., technology, sports, geopolitics) to identify emerging trends, translate them into binary YES/NO prediction options, and package the reasoning into an IPFS CID.
-*   **The Cold-Start Liquidity Solver**: To solve the early-stage liquidity constraints of traditional prediction pools, Aira Markets enforces an automated native token seed (e.g., 2.0 GIWA or MNT tokens) split 50/50 across YES/NO pools, establishing stable bonding curves from block zero.
-*   **Optimistic Settlements**: concluders submit market resolutions alongside a 10 native token slashing bond. If the resolution matches the verified real-world outcome, the proposer is rewarded; if contested, a decentralized dispute cycle is triggered.
+*   **Autonomous Decision Proposal Formulation**: AI agents scan news feeds (e.g., technology, sports, geopolitics) to identify emerging trends, translate them into binary YES/NO decision options, and package the reasoning into an IPFS CID.
+*   **The Cold-Start Liquidity Solver**: To solve the early-stage liquidity constraints of traditional decision pools, Aira Markets enforces an automated native token seed (e.g., 2.0 GIWA or MNT tokens) split 50/50 across YES/NO pools, establishing stable bonding curves from block zero.
+*   **Optimistic Settlements**: concluders submit resolutions alongside a 10 native token slashing bond. If the resolution matches the verified real-world outcome, the proposer is rewarded; if contested, a decentralized dispute cycle is triggered.
 
 Aira Markets validates the AIRA core architecture, proving that off-chain agents can programmatically deploy gas-optimized contracts, seed liquidity, and drive consistent transaction volume on Layer 2 blockchains.
 
@@ -95,7 +95,7 @@ Aira Markets validates the AIRA core architecture, proving that off-chain agents
 
 ## 7. Future Application Horizons
 
-While prediction markets serve as the initial validation sandbox, the long-term potential of the AIRA Protocol extends into diverse commercial and decentralized domains:
+While prediction markets serve as the first application built on the AIRA Protocol, the long-term potential of the protocol extends into diverse commercial and decentralized domains:
 
 ### I. Autonomous Treasury & Yield Rebalancing
 Traditional DAO treasuries suffer from slow human governance. By deploying specialized financial agents on the AIRA Protocol, treasuries can autonomously parse market indicators, liquidity pool yields, and protocol risk profiles. When pre-set metrics are met, agents can propose and execute portfolio rebalancing transactions, verified by on-chain IPFS logs to ensure compliance with DAO mandates.

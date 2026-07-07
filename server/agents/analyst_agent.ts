@@ -18,7 +18,7 @@ export class AnalystAgent {
         try {
             const proposal = await AIService.generateMarketProposal(signal);
             
-            // Broadcast the generated proposal for collaborative swarm review
+            // Broadcast the generated proposal for collaborative consensus review
             eventBus.emit(SystemEvents.MARKET_PROPOSAL_GENERATED, {
                 signalId,
                 title: proposal.title,

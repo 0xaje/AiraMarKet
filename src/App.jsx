@@ -79,7 +79,7 @@ function App() {
               className={`font-semibold text-sm pb-1 transition-all ${currentView === 'creator' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary'}`}
               onClick={() => navigate('/creator')}
             >
-              AI Agent
+              Consensus Engine
             </button>
             <button 
               className={`font-semibold text-sm pb-1 transition-all ${currentView === 'terminal' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary'}`}

@@ -46,7 +46,7 @@ npx prisma db push
 ```
 
 ### Step 3: Run Backend Ingestion & Indexer
-Boot the event listeners, AI agent swarms, block indexers, and API server:
+Boot the event listeners, Multi-Agent Consensus Engine, block indexers, and API server:
 ```bash
 npm run server
 ```
@@ -67,7 +67,7 @@ Smart contract unit tests are located in `/test/` and run via the Hardhat compil
 ```bash
 npx hardhat test
 ```
-Tests cover deployment configurations, market proposals execution, YES/NO token purchases, optimistic resolution timelocks, dispute slashing bonds, and payout splits.
+Tests cover deployment configurations, decision proposals execution, YES/NO token purchases, optimistic resolution timelocks, dispute slashing bonds, and payout splits.
 
 ### Test Coverage Reporting
 To generate code coverage reports for the Solidity smart contracts:

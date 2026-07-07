@@ -12,7 +12,7 @@ In decentralized finance and prediction systems, security vulnerabilities, oracl
 It mitigates oracle vulnerability and malicious resolution risks. By implementing a multi-tiered validation architecture combining automated event indexing, checks-effects-interactions contract patterns, and an optimistic timelocked settlement process, it prevents single-point-of-failure vulnerabilities.
 
 ### Why It Matters
-For prediction markets, capital safety and resolution honesty are the primary trust metrics. Standardizing these security definitions ensures that administrators, oracle providers, and user communities have an aligned reference for protocol safety rules, guaranteeing that user funds are handled trustlessly.
+For decision proposals, capital safety and resolution honesty are the primary trust metrics. Standardizing these security definitions ensures that administrators, oracle providers, and user communities have an aligned reference for protocol safety rules, guaranteeing that user funds are handled trustlessly.
 
 ### How It Benefits GIWA
 - **Promoting Secure L2 Execution**: By implementing the optimistic 24-hour timelock and slashee-bonded resolutions on Dunamu's **GIWA OP Stack L2**, the protocol proves that L2 networks can securely arbitrate multi-party financial disputes with minimal fee overhead.

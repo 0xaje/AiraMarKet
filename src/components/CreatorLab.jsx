@@ -38,7 +38,7 @@ export default function CreatorLab() {
               id: `signal_${index}_${Date.now()}`,
               category: categoryUpper,
               title: signal.topic.substring(0, 30),
-              prompt: `Create a market for ${signal.topic}`,
+              prompt: `Propose decision for ${signal.topic}`,
               volume: `$${(signal.signal_strength * 25).toFixed(0)}K`,
               hotness: `${signal.signal_strength}%`,
               icon
@@ -175,10 +175,10 @@ export default function CreatorLab() {
               NEURAL ENGINE ACTIVE
             </div>
             <h2 className="serif-heading text-2xl md:text-3xl lg:text-4xl text-on-surface tracking-tight leading-tight">
-              Intelligent Markets, <br/><span className="text-primary italic">Deployed Instantly.</span>
+              Intelligent Decisions, <br/><span className="text-primary italic">Deployed Instantly.</span>
             </h2>
             <p className="text-on-surface-variant text-xs leading-relaxed opacity-95">
-              Describe your market vision and let {ProtocolMetadata.protocolName}'s intelligence structure, validate, and launch liquidity pools directly to the {getActiveNetworkName()} ledger.
+              Describe your decision proposal vision and let {ProtocolMetadata.protocolName}'s intelligence structure, validate, and launch decision pools directly to the {getActiveNetworkName()} ledger.
             </p>
           </div>
 
@@ -291,7 +291,7 @@ export default function CreatorLab() {
                              <div className="bg-surface-variant/30 rounded border border-outline-variant/50 p-3.5 mt-2">
                                 <div className="flex items-center gap-1.5 mb-2.5 border-b border-outline-variant/30 pb-1.5">
                                    <span className="material-symbols-outlined text-[10px] text-primary">diversity_3</span>
-                                   <span className="text-[8px] font-mono font-bold text-on-surface-variant uppercase tracking-widest">Consensus Swarm Audits (Verifiable Decisions)</span>
+                                   <span className="text-[8px] font-mono font-bold text-on-surface-variant uppercase tracking-widest">Consensus Engine Audits (Verifiable Decisions)</span>
                                 </div>
                                 <div className="space-y-2">
                                   {msg.evaluations.map((val, idx) => (
@@ -315,7 +315,7 @@ export default function CreatorLab() {
                             className="group px-6 py-3.5 bg-primary text-white font-mono text-[9px] tracking-[0.2em] rounded-lg transition-all hover:bg-on-surface hover:shadow-lg active:scale-95 uppercase font-bold flex items-center gap-2"
                             onClick={() => handleLaunchOnChain(msg)}
                           >
-                            <span>Create Market</span>
+                            <span>Generate Proposal</span>
                             <span className="material-symbols-outlined text-xs">rocket_launch</span>
                           </button>
                         </div>
@@ -379,7 +379,7 @@ export default function CreatorLab() {
                       </span>
                     </div>
                     <p className="font-semibold text-xs text-on-surface leading-snug tracking-tight mb-3 line-clamp-2 italic group-hover:text-primary transition-colors">
-                      "{item.prompt.replace(/Create a market for /gi, '')}"
+                      "{item.prompt.replace(/Propose decision for /gi, '')}"
                     </p>
                     <div className="flex justify-between items-center w-full mt-auto pt-2 border-t border-outline-variant/60 text-[8px] font-bold tracking-widest text-on-surface-variant/50 uppercase font-mono">
                       <span>VOL POTENTIAL</span>
@@ -398,7 +398,7 @@ export default function CreatorLab() {
               </div>
               <input 
                 className="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/50 py-2.5 text-xs outline-none" 
-                placeholder="Describe your market idea..." 
+                placeholder="Describe your decision proposal..." 
                 type="text"
                 value={creatorInput}
                 onChange={(e) => setCreatorInput(e.target.value)}

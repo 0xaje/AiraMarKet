@@ -19,13 +19,13 @@ export class RiskAgent {
         if (isNaN(expiryTime) || expiryTime <= now) {
             vote = 'REJECT';
             confidence = 0.10;
-            reasoning = 'Proposed market expiry timestamp is invalid or in the past.';
+            reasoning = 'Proposed expiry timestamp is invalid or in the past.';
         } else {
             const bufferHours = (expiryTime - now) / 3600;
             if (bufferHours < 12) {
                 vote = 'REJECT';
                 confidence = 0.30;
-                reasoning = `Insufficient timeline buffer: proposed market window (${bufferHours.toFixed(1)} hrs) is below the 12-hour risk minimum.`;
+                reasoning = `Insufficient timeline buffer: proposed decision window (${bufferHours.toFixed(1)} hrs) is below the 12-hour risk minimum.`;
             } else if (bufferHours < 24) {
                 vote = 'APPROVE';
                 confidence = 0.75;

@@ -5,12 +5,12 @@
 
 ## 1. High-Level Architecture Design
 The AIRA Protocol splits functionality into a decoupled design:
-*   **Off-Chain Cognitive Processing**: AI agent swarms process data scrapers, news trends, and confidence scores. By keeping heavy computations off-chain, the system runs with sub-second performance.
+*   **Off-Chain Cognitive Processing**: The Multi-Agent Consensus Engine processes data scrapers, news trends, and confidence scores. By keeping heavy computations off-chain, the system runs with sub-second performance.
 *   **On-Chain State Settlement**: Smart contracts govern all custody, tokens, and payouts. This guarantees safety of user funds even if the off-chain system experiences downtime.
 
 ```
 ┌────────────────────────┐      ┌────────────────────────┐      ┌────────────────────────┐
-│  Data Ingestion Tier   │ ───> │  Cognitive Swarm Tier  │ ───> │ Integration Event Bus  │
+│  Data Ingestion Tier   │ ───> │  Consensus Engine Tier │ ───> │ Integration Event Bus  │
 └────────────────────────┘      └────────────────────────┘      └───────────┬────────────┘
                                                                             │
                                                                             ▼
@@ -35,14 +35,14 @@ The AIRA Protocol splits functionality into a decoupled design:
 *   **Rationale**: Decouples external API updates from agent reasoning logic.
 
 ### II. AI Sentiment Service
-*   **Responsibility**: Analyzes sentiment vectors and structures binary prediction proposals.
-*   **Boundary**: Inputs: normalized signals. Outputs: structured market proposal objects.
-*   **Rationale**: Translates qualitative source texts into quantitative market structures.
+*   **Responsibility**: Analyzes sentiment vectors and structures binary decision proposals.
+*   **Boundary**: Inputs: normalized signals. Outputs: structured decision proposal objects.
+*   **Rationale**: Translates qualitative source texts into quantitative risk parameters.
 
-### III. Cognitive Agent Swarms
+### III. Multi-Agent Consensus Engine
 *   **Responsibility**: Specialized agents verify AI proposals against confidence parameters (> 0.70).
 *   **Boundary**: Inputs: structured proposals. Outputs: verified proposals.
-*   **Rationale**: Prevents weak or low-interest markets from reaching execution pipelines.
+*   **Rationale**: Prevents weak or low-interest decision proposals from reaching execution pipelines.
 
 ### IV. Smart Contracts
 *   **Responsibility**: State registry of markets, token pools, and dispute resolution.

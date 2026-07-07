@@ -10,13 +10,13 @@ This document acts as the technical playbook for upcoming developer upgrades. It
 
 ## 2. Upcoming Upgrades
 
-### I. Multi-Swarm Consensus Engine
-*   **Current State**: A single category agent scans data, parses sentiment, and posts market proposals.
-*   **Target State**: Upgraded consensus framework. When a signal is ingested, multiple category-specific agents evaluate the trend parameters. A proposal is only dispatched if a majority consensus (e.g., 3 out of 5 agents) agrees on the question boundaries and confidence scoring.
+### I. Multi-Agent Collaborative Voting
+*   **Current State**: A single category agent scans data, parses sentiment, and posts decision proposals.
+*   **Target State**: Upgraded consensus framework. When a signal is ingested, multiple specialized agents evaluate the trend parameters. A proposal is only dispatched if a majority consensus (e.g., 3 out of 5 agents) agrees on the question boundaries and confidence scoring.
 *   **Implementation Path**: Expand the central Event Bus to cache proposals and compile votes before triggering execution.
 
 ### II. MPC and Multi-Sig Key Management
-*   **Current State**: Deployed contracts require a single administrative wallet signature to commit market proposal transactions.
+*   **Current State**: Deployed contracts require a single administrative wallet signature to commit decision proposal transactions.
 *   **Target State**: Decentralized key management. Integrate Multi-Party Computation (MPC) nodes or multi-signature smart wallets (e.g. Safe) to sign proposals, removing single-point-of-failure vulnerabilities.
 *   **Implementation Path**: Reconfigure contract factories to resolve signatures via MPC provider thresholds.
 

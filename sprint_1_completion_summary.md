@@ -1,16 +1,16 @@
 # Sprint 1 Completion Summary
 
 ## 1. Executive Summary
-Traditional prediction and information markets suffer from high operational friction, reliance on centralized parties, and low user engagement. The **AIRA Protocol** resolves these issues by introducing an autonomous, AI-driven framework that programmatically generates and settles prediction markets. 
+Traditional prediction and information markets suffer from high operational friction, reliance on centralized parties, and low user engagement. The **AIRA Protocol** resolves these issues by introducing an autonomous, AI-driven framework that programmatically generates and settles decision proposals, demonstrating the protocol's capacity with a prediction market sandbox. 
 
-Sprint 1 successfully established a production-ready, fully validated smart contract architecture and database indexer sandbox. By automating market creation and verification on Dunamu's high-throughput **GIWA OP Stack L2** network, the protocol removes human coordination bottlenecks, eliminates early-stage liquidity droughts, and proves the commercial viability of autonomous agent networks on L2 blockchains.
+Sprint 1 successfully established a production-ready, fully validated smart contract architecture and database indexer sandbox. By automating decision proposal generation and verification on Dunamu's high-throughput **GIWA OP Stack L2** network, the protocol removes human coordination bottlenecks, eliminates early-stage liquidity droughts, and proves the commercial viability of autonomous agent networks on L2 blockchains.
 
 ---
 
 ## 2. Product Evolution
-Over the course of Sprint 1, the AIRA Protocol evolved from a static contract prototype into an autonomous prediction market ecosystem:
-*   **Autonomous Market Discovery**: Replaced manual curation with specialized AI agents that continuously scan news and social trends, formulating structured trade questions in real-time.
-*   **Cold-Start Liquidity Stability**: Integrated an automated initial seed mechanism. Every new market is pre-funded and balanced across YES/NO pools upon creation, providing stable trading curves from block zero and solving the liquidity constraints of early-stage prediction markets.
+Over the course of Sprint 1, the AIRA Protocol evolved from a static contract prototype into an autonomous decision intelligence ecosystem:
+*   **Autonomous Decision Proposal Generation**: Replaced manual curation with specialized AI agents that continuously scan news and social trends, formulating structured decision proposals in real-time.
+*   **Cold-Start Liquidity Stability**: Integrated an automated initial seed mechanism. Every new proposal is pre-funded and balanced across YES/NO pools upon creation, providing stable trading curves from block zero and solving the liquidity constraints of early-stage decision proposals.
 *   **Verifiable AI Heuristics**: To eliminate trust issues with "black-box" AI models, the protocol packages the AI's inputs, source data, and sentiment scores. This payload is hashed and permanently anchored to the blockchain, creating a fully transparent audit trail.
 
 ---
@@ -49,7 +49,7 @@ To foster ecosystem adoption and external contributions, developer onboarding wa
 
 ## 7. Validation
 The entire system was subjected to rigorous testnet validation:
-*   **Complete Lifecycle Testing**: Successfully verified the complete market journey on public testnets, covering automated AI market proposals, position executions, optimistic oracle settlements with slashing bonds, and proportional winnings claims.
+*   **Complete Lifecycle Testing**: Successfully verified the complete decision proposal journey on public testnets, covering automated AI decision proposals, position executions, optimistic oracle settlements with slashing bonds, and proportional winnings claims.
 *   **UX Transparency Upgrades**: Built a global, non-blocking notification alert system that translates complex RPC codes into human-readable messages and provides direct transaction links to blockchain explorers, establishing user trust.
 
 ---

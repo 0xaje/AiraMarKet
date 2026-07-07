@@ -31,7 +31,7 @@ export class ComplianceAgent {
         if (vote === 'APPROVE' && !ComplianceAgent.ALLOWED_CATEGORIES.includes(categoryLower)) {
             vote = 'REJECT';
             confidence = 0.20;
-            reasoning = `Unsupported market category: "${proposal.category}". Approved categories are: ${ComplianceAgent.ALLOWED_CATEGORIES.join(', ')}.`;
+            reasoning = `Unsupported decision category: "${proposal.category}". Approved categories are: ${ComplianceAgent.ALLOWED_CATEGORIES.join(', ')}.`;
         }
 
         eventBus.emit(SystemEvents.EVALUATION_SUBMITTED, {
