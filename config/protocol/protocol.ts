@@ -22,8 +22,8 @@ export const ProtocolMetadata = {
   repositoryUrl: "https://github.com/0xaje/AiraMarKet",
   network: activeChainConfig.networkName,
   supportedChains: ["GIWA Sepolia Testnet", "Mantle Sepolia Testnet", "Mantle Mainnet"],
-  protocolDescription: "An autonomous, verifiable, agent-driven prediction market protocol running natively on high-performance EVM networks.",
+  protocolDescription: "An autonomous, verifiable, agent-driven decision intelligence protocol running natively on high-performance EVM networks.",
   tagline: "Autonomous Intelligence & Risk Analysis Protocol",
-  mission: "To automate and scale prediction market ecosystems by replacing manual curation and slow, centralized oracle settlements with autonomous, cryptographically auditable AI agent heuristics on high-performance Layer 2 chains.",
+  mission: "To automate and scale decentralized decision intelligence ecosystems by replacing manual curation and slow, centralized oracle settlements with autonomous, cryptographically auditable AI agent heuristics on high-performance Layer 2 chains.",
   vision: "A decentralized information layer where public knowledge, predictions, and outcomes are formulated programmatically and verified cryptographically without intermediary gatekeepers, enabling instantaneous, global risk management for any real-world event."
 };

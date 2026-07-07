@@ -6,7 +6,7 @@ import { Logger } from '../utils/logger';
 
 /**
  * Multi-chain Settlement & Oracle Service
- * Handles verifiable resolutions of prediction markets
+ * Handles verifiable resolutions of decision proposals
  */
 export class SettlementService {
     private provider: ethers.JsonRpcProvider;

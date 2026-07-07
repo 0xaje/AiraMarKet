@@ -7,7 +7,7 @@ import { Logger } from '../utils/logger';
  */
 export class AIService {
     static async generateMarketProposal(signal: NormalizedSignal) {
-        // Structuring the prediction market from live web signals
+        // Structuring the decision proposal from live web signals
         Logger.info(`[AI_SERVICE] Analyzing signal for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
         
         // Calculate a highly realistic and deterministic confidence score based on signal strength & sentiment
