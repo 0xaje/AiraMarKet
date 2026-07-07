@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { Logger } from '../utils/logger';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,6 +46,6 @@ export class TransparencyLogger {
         formattedEntries.push(logEntry);
         fs.writeFileSync(formattedLogFile, JSON.stringify(formattedEntries, null, 2), 'utf-8');
 
-        console.log(`[TRANSPARENCY] Log written securely for txHash: ${txHash}`);
+        Logger.success(`[TRANSPARENCY] Verifiable AI log entries written securely for txHash: ${txHash}`);
     }
 }

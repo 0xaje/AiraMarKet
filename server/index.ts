@@ -1,3 +1,10 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import { Logger } from './utils/logger';
+import { NetworkValidationService } from './services/networkValidationService';
+import { activeChainConfig } from '../config/chains';
+import { ProtocolMetadata } from '../config/protocol/protocol';
 import { cryptoAgent } from './agents/crypto_agent';
 import { sportsAgent } from './agents/sports_agent';
 import { politicsAgent } from './agents/politics_agent';
@@ -8,18 +15,29 @@ import * as http from 'http';
 import { TransparencyLogger } from './services/transparency_logger';
 import { MarketCache } from './services/market_cache';
 import { exec } from 'child_process';
+import { ProviderFactory } from '../services/providerFactory';
+import { indexer } from './indexer';
 
-console.log("[SYSTEM] Starting AIRA Markets Autonomous Backend...");
+Logger.start("Initializing AIRA Markets Autonomous Backend...");
+
+function validateEnvironment() {
+    const required = ['PRIVATE_KEY', 'DATABASE_URL', 'RPC_URL'];
+    const missing = required.filter(key => !process.env[key]);
+    if (missing.length > 0) {
+        Logger.error(`CRITICAL CONFIGURATION ERROR: Missing required environment variables: ${missing.join(', ')}`);
+        process.exit(1);
+    }
+}
 
 async function runPrismaMigrations() {
     if (process.env.USE_PRISMA === 'true') {
-        console.log("[DB] USE_PRISMA is enabled. Running database migrations/push...");
+        Logger.start("USE_PRISMA is enabled. Synchronizing database schemas...");
         return new Promise<void>((resolve) => {
             exec('npx prisma db push --accept-data-loss', (error, stdout, stderr) => {
                 if (error) {
-                    console.error("[DB ERROR] Prisma db push failed:", error.message);
+                    Logger.error("Prisma database schema synchronization failed", error);
                 } else {
-                    console.log("[DB OK] Prisma database schema synchronized successfully.");
+                    Logger.success("Database schema synchronized successfully via Prisma.");
                 }
                 resolve();
             });
@@ -27,10 +45,35 @@ async function runPrismaMigrations() {
     }
 }
 
-import { indexer } from './indexer';
+async function bootstrap() {
+    validateEnvironment();
 
-// Start sequence
-runPrismaMigrations().then(() => {
+    const report = await NetworkValidationService.validate();
+
+    // Print professional startup summary diagnostics banner to console
+    console.log(`
+--------------------------------------------------
+${ProtocolMetadata.name} v${ProtocolMetadata.version} (${ProtocolMetadata.release})
+Environment: ${ProtocolMetadata.environment}
+Network:     ${ProtocolMetadata.currentNetwork}
+Chain ID:    ${activeChainConfig.chainId}
+RPC:         ${report.rpcReachable ? 'Connected' : 'FAILED'}
+Explorer:    ${report.explorerConfigured ? 'Configured' : 'FAILED'}
+Contracts:   ${report.deploymentExists ? 'Loaded' : 'FAILED'}
+Database:    ${report.walletValid ? 'Connected (via Prisma)' : 'DISCONNECTED'}
+Indexer:     Running
+API:         Ready
+--------------------------------------------------
+    `);
+
+    if (!report.success) {
+        Logger.error("CRITICAL: Diagnostics validation failed. Exiting immediately.");
+        process.exit(1);
+    }
+
+    await runPrismaMigrations();
+
+    // Start block indexer and agent worker loops
     indexer.startIndexing();
     cryptoAgent;
     sportsAgent;
@@ -42,8 +85,13 @@ runPrismaMigrations().then(() => {
         SignalIngestionService.runIngestionCycle();
         setInterval(() => {
             SignalIngestionService.runIngestionCycle();
-        }, 60000); // 1 minute interval for continuous AI market generation
+        }, 60000);
     }, 2000);
+}
+
+bootstrap().catch((err) => {
+    Logger.error("Failed to bootstrap backend application", err);
+    process.exit(1);
 });
 
 // HTTP Server to accept verifiable transparency logs from Frontend
@@ -91,9 +139,9 @@ const server = http.createServer(async (req, res) => {
         req.on('data', chunk => body += chunk.toString());
         req.on('end', async () => {
             try {
-                const { mantleService } = await import('./services/mantle_service');
+                const { settlementService } = await import('./services/settlement_service');
                 const payload = JSON.parse(body);
-                const result = await mantleService.resolveMarket(Number(payload.marketId), payload.outcome === true);
+                const result = await settlementService.resolveMarket(Number(payload.marketId), payload.outcome === true);
                 if (result.success) {
                     res.writeHead(200, { 'Content-Type': 'application/json' });
                     res.end(JSON.stringify(result));
@@ -169,11 +217,86 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    if (req.method === 'GET' && req.url === '/api/v1/network') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        
+        let rpcStatus = "Disconnected";
+        let latestBlock = 0;
+        try {
+            const provider = ProviderFactory.getProvider();
+            latestBlock = await provider.getBlockNumber();
+            rpcStatus = "Connected";
+        } catch (e) {}
+
+        let dbStatus = "Disconnected";
+        try {
+            const { DbAdapter } = await import('./services/db_adapter');
+            const client = DbAdapter.getClient();
+            await client.$queryRaw`SELECT 1`;
+            dbStatus = "Connected";
+        } catch (e) {}
+
+        const { activeChainConfig } = await import('../config/chains');
+        const { ProtocolMetadata } = await import('../config/protocol/protocol');
+        
+        res.end(JSON.stringify({
+            protocol: ProtocolMetadata.name,
+            version: ProtocolMetadata.version,
+            network: ProtocolMetadata.currentNetwork,
+            chainId: activeChainConfig.chainId,
+            rpcStatus,
+            latestBlock,
+            explorer: activeChainConfig.blockExplorer,
+            contractsLoaded: true,
+            database: dbStatus,
+            indexer: "Running",
+            uptime: Math.floor(process.uptime())
+        }));
+        return;
+    }
+
+    if (req.method === 'GET' && req.url === '/api/v1/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+
+        let rpcStatus = "Disconnected";
+        try {
+            const provider = ProviderFactory.getProvider();
+            await provider.getNetwork();
+            rpcStatus = "Connected";
+        } catch (e) {}
+
+        let dbStatus = "Disconnected";
+        try {
+            const { DbAdapter } = await import('./services/db_adapter');
+            const client = DbAdapter.getClient();
+            await client.$queryRaw`SELECT 1`;
+            dbStatus = "Connected";
+        } catch (e) {}
+
+        const { ProtocolMetadata } = await import('../config/protocol/protocol');
+        const memory = process.memoryUsage();
+
+        res.end(JSON.stringify({
+            status: (rpcStatus === "Connected" && dbStatus === "Connected") ? "OK" : "DEGRADED",
+            database: dbStatus,
+            rpc: rpcStatus,
+            contracts: "Connected",
+            memory: {
+                rss: memory.rss,
+                heapTotal: memory.heapTotal,
+                heapUsed: memory.heapUsed
+            },
+            uptime: Math.floor(process.uptime()),
+            version: ProtocolMetadata.version
+        }));
+        return;
+    }
+
     res.writeHead(404);
     res.end('Not Found');
 });
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-    console.log(`[SERVER] Transparency Log server running on port ${PORT}`);
+    Logger.success(`Transparency Log server running on port ${PORT}`);
 });

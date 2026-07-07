@@ -12,14 +12,27 @@ module.exports = {
     mantleMainnet: {
       url: "https://rpc.mantle.xyz",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
+    },
+    giwa: {
+      url: process.env.RPC_URL || "https://sepolia-rpc.giwa.io",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     }
   },
   etherscan: {
     apiKey: {
       mantleTestnet: process.env.MANTLE_EXPLORER_API_KEY || "",
-      mantleMainnet: process.env.MANTLE_EXPLORER_API_KEY || ""
+      mantleMainnet: process.env.MANTLE_EXPLORER_API_KEY || "",
+      giwa: "any_value_needed_by_hardhat"
     },
     customChains: [
+      {
+        network: "giwa",
+        chainId: 91342,
+        urls: {
+          apiURL: "https://sepolia-explorer.giwa.io/api",
+          browserURL: "https://sepolia-explorer.giwa.io"
+        }
+      },
       {
         network: "mantleTestnet",
         chainId: 5003,

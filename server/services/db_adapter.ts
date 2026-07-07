@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { Logger } from '../utils/logger';
 
 export class DbAdapter {
     private static prisma: PrismaClient;
@@ -18,7 +19,7 @@ export class DbAdapter {
             });
             return records;
         } catch (error) {
-            console.error('[DB_ADAPTER] Error fetching pending markets:', error);
+            Logger.error('[DB_ADAPTER] Error fetching pending markets', error);
             return [];
         }
     }
@@ -36,9 +37,9 @@ export class DbAdapter {
                     status: proposal.status || 'PENDING_APPROVAL'
                 }
             });
-            console.log(`[DB_ADAPTER] Stored proposal in SQLite relational DB successfully: ${proposal.title}`);
+            Logger.success(`[DB_ADAPTER] Stored proposal in database successfully: ${proposal.title}`);
         } catch (error) {
-            console.error('[DB_ADAPTER] Error writing to SQLite DB:', error);
+            Logger.error('[DB_ADAPTER] Error writing to database', error);
         }
     }
 
@@ -46,9 +47,9 @@ export class DbAdapter {
         try {
             const client = this.getClient();
             await client.pendingMarket.deleteMany({});
-            console.log('[DB_ADAPTER] SQLite pending markets cleared.');
+            Logger.success('[DB_ADAPTER] Database pending markets cache cleared.');
         } catch (error) {
-            console.error('[DB_ADAPTER] Error clearing SQLite DB:', error);
+            Logger.error('[DB_ADAPTER] Error clearing database cache', error);
         }
     }
 }

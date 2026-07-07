@@ -1,0 +1,62 @@
+import { ChainConfig } from './types';
+import { mantle } from './mantle';
+import { mantleSepolia } from './mantleSepolia';
+import { giwa } from './giwa';
+
+const chains: Record<string, ChainConfig> = {
+  giwa,
+  mantle,
+  mantleSepolia,
+};
+
+const getEnv = (key: string): string | undefined => {
+  if (typeof process !== 'undefined' && process.env && process.env[key]) {
+    return process.env[key];
+  }
+  // @ts-ignore
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    // @ts-ignore
+    return import.meta.env[`VITE_${key}`] || import.meta.env[key];
+  }
+  return undefined;
+};
+
+export function loadChainConfig(): ChainConfig {
+  const defaultChainKey = getEnv('DEFAULT_CHAIN') || 'giwa';
+  
+  // Find chain by name or by chainId
+  let baseConfig = chains[defaultChainKey];
+  if (!baseConfig) {
+    // Fallback search by chainId or name
+    const found = Object.values(chains).find(
+      c => c.chainId.toString() === defaultChainKey || c.networkName.toLowerCase() === defaultChainKey.toLowerCase()
+    );
+    baseConfig = found || giwa; // Default to giwa
+  }
+
+  // Deep copy base config
+  const config = JSON.parse(JSON.stringify(baseConfig)) as ChainConfig;
+
+  // Apply overrides from env variables if present
+  const envRpcUrl = getEnv('RPC_URL') || getEnv('MANTLE_RPC_URL');
+  if (envRpcUrl) {
+    config.rpcUrl = envRpcUrl;
+  }
+
+  const envChainId = getEnv('CHAIN_ID');
+  if (envChainId) {
+    config.chainId = parseInt(envChainId, 10);
+  }
+
+  const envBlockExplorer = getEnv('BLOCK_EXPLORER');
+  if (envBlockExplorer) {
+    config.blockExplorer = envBlockExplorer;
+  }
+
+  const envContractAddress = getEnv('CONTRACT_ADDRESS') || getEnv('VITE_CONTRACT_ADDRESS') || getEnv('VITE_MANTLE_CONTRACT_ADDRESS');
+  if (envContractAddress) {
+    config.contracts.marketProtocol = envContractAddress;
+  }
+
+  return config;
+}

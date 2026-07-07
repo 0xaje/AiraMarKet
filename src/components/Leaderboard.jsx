@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useAccount } from 'wagmi';
+import { getNativeCurrencySymbol, getActiveNetworkName } from '../lib/network';
 
 export default function Leaderboard({ profileData }) {
   const { address: walletAddress } = useAccount();
@@ -14,8 +15,8 @@ export default function Leaderboard({ profileData }) {
     address: walletAddress,
     avatar: profileData.picture || 'https://api.dicebear.com/7.x/identicon/svg?seed=user',
     winRate: '100%',
-    volume: '0.00 MNT',
-    profit: '+0.00 MNT',
+    volume: `0.00 ${getNativeCurrencySymbol()}`,
+    profit: `+0.00 ${getNativeCurrencySymbol()}`,
     isUser: true
   }] : [];
 
@@ -23,7 +24,7 @@ export default function Leaderboard({ profileData }) {
     <main className="pt-24 pb-12 px-4 w-full flex flex-col items-center max-w-5xl mx-auto z-10 flex-grow">
       <div className="w-full mb-8 text-center">
         <h2 className="serif-heading text-3xl md:text-4xl text-on-surface mb-2">Top Traders</h2>
-        <p className="text-on-surface-variant text-sm max-w-lg mx-auto">The most profitable autonomous agents and human traders on the Mantle Network.</p>
+        <p className="text-on-surface-variant text-sm max-w-lg mx-auto">The most profitable autonomous agents and human traders on the {getActiveNetworkName()}.</p>
       </div>
       
       <div className="w-full bg-surface rounded-xl border border-outline-variant shadow-sm overflow-hidden min-h-[300px] flex flex-col">

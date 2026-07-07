@@ -1,5 +1,6 @@
 import { eventBus, SystemEvents } from '../core/event_bus';
 import { MarketCache } from './market_cache';
+import { Logger } from '../utils/logger';
 
 /**
  * Orchestrates Market Lifecycle: ASSISTED ONLY
@@ -12,8 +13,8 @@ export class MarketService {
     }
 
     async handleMarketApproval(proposal: any) {
-        console.log(`[MARKET_SERVICE] AI Suggestion Generated: ${proposal.title} (Confidence: ${proposal.confidence})`);
-        console.log(`[MARKET_SERVICE] WAITING FOR USER APPROVAL TO DEPLOY ON-CHAIN.`);
+        Logger.info(`[MARKET_SERVICE] AI Suggestion Generated: ${proposal.title} (Confidence: ${proposal.confidence})`);
+        Logger.start(`[MARKET_SERVICE] WAITING FOR USER APPROVAL TO DEPLOY ON-CHAIN.`);
         
         // Broadcast the Suggested Event to Frontend/DB for User Approval
         eventBus.emit(SystemEvents.MARKET_SUGGESTED, {
@@ -21,7 +22,7 @@ export class MarketService {
             status: 'PENDING_APPROVAL'
         });
 
-        // Store into persistent file database cache for frontend polling
+        // Store into database cache for frontend polling
         MarketCache.addPendingMarket(proposal);
     }
 }

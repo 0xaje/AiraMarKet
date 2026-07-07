@@ -1,4 +1,5 @@
 import { NormalizedSignal } from './signal_ingestion';
+import { Logger } from '../utils/logger';
 
 /**
  * AIRA AI Intelligence Service
@@ -7,7 +8,7 @@ import { NormalizedSignal } from './signal_ingestion';
 export class AIService {
     static async generateMarketProposal(signal: NormalizedSignal) {
         // Structuring the prediction market from live web signals
-        console.log(`[AI_SERVICE] Analyzing signal for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
+        Logger.info(`[AI_SERVICE] Analyzing signal for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
         
         // Calculate a highly realistic and deterministic confidence score based on signal strength & sentiment
         // Base confidence is signal_strength mapped from [10, 100] to [0.7, 0.95]
@@ -30,6 +31,4 @@ export class AIService {
             reason: `Generated from ${signal.source} exhibiting a ${signal.sentiment} sentiment score of ${signal.signal_strength}.`
         };
     }
-
-
 }

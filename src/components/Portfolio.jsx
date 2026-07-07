@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useAppStore from '../store/useAppStore';
 import { useAccount, useBalance } from 'wagmi';
+import { getNativeCurrencySymbol } from '../lib/network';
 
 export default function Portfolio() {
   const { isConnected, address: walletAddress } = useAccount();
@@ -133,7 +134,7 @@ export default function Portfolio() {
             <span className="material-symbols-outlined text-primary text-3xl mb-2">account_balance_wallet</span>
             <p className="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase mb-1">Total Balance</p>
             <p className="text-xl font-bold font-mono text-on-surface">
-              {walletAddress && balanceData ? `${Number(balanceData.formatted).toFixed(4)} ${balanceData.symbol}` : walletAddress ? '0.00 MNT' : '---'}
+              {walletAddress && balanceData ? `${Number(balanceData.formatted).toFixed(4)} ${balanceData.symbol}` : walletAddress ? `0.00 ${getNativeCurrencySymbol()}` : '---'}
             </p>
           </div>
 
@@ -149,7 +150,7 @@ export default function Portfolio() {
             <span className="material-symbols-outlined text-amber-500 text-3xl mb-2">emoji_events</span>
             <p className="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase mb-1">Total Winnings</p>
             <p className="text-xl font-bold font-mono text-on-surface">
-              {walletAddress ? `${(portfolioStats.totalWinnings / 1e18).toFixed(4)} MNT` : '---'}
+              {walletAddress ? `${(portfolioStats.totalWinnings / 1e18).toFixed(4)} ${getNativeCurrencySymbol()}` : '---'}
             </p>
           </div>
         </div>
@@ -173,7 +174,7 @@ export default function Portfolio() {
                           {trade.side} POSITION
                         </span>
                         <p className="text-sm font-bold mt-2 text-on-surface">
-                           {(trade.amount / 1e18).toFixed(2)} MNT
+                           {(trade.amount / 1e18).toFixed(2)} {getNativeCurrencySymbol()}
                         </p>
                      </div>
                   </div>

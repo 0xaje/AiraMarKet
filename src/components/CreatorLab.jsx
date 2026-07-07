@@ -3,11 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useAppStore from '../store/useAppStore';
 import { trendingSuggestions } from '../mocks/data';
 import { useAccount, useWriteContract } from 'wagmi';
-
-// Example ABI
-const abi = [
-  { "inputs": [{ "internalType": "string", "name": "_title", "type": "string" }, { "internalType": "string", "name": "_category", "type": "string" }, { "internalType": "uint256", "name": "_resolutionTime", "type": "uint256" }, { "internalType": "string", "name": "_ipfsCID", "type": "string" }], "name": "createMarket", "outputs": [], "stateMutability": "payable", "type": "function" }
-];
+import { getContractAddress, getContractAbi, getNativeCurrencySymbol, getActiveNetworkName } from '../lib/network';
 
 export default function CreatorLab() {
   const navigate = useNavigate();
@@ -120,11 +116,11 @@ export default function CreatorLab() {
       const { parseEther } = await import('viem');
       
       const hash = await writeContractAsync({
-        address: import.meta.env.VITE_MANTLE_CONTRACT_ADDRESS,
-        abi,
+        address: getContractAddress(),
+        abi: getContractAbi(),
         functionName: 'createMarket',
         args: [market.title, market.category, expirySeconds, mockIpfsCID],
-        value: parseEther("2.0") // 2 MNT initial liquidity seed
+        value: parseEther("2.0") // 2 initial liquidity seed
       });
       
       useAppStore.getState().showToast("Transaction Pending", "Waiting for network confirmation...", "info", hash);
@@ -164,7 +160,7 @@ export default function CreatorLab() {
             <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
               <div className="h-full bg-primary animate-marquee w-[60%]"></div>
             </div>
-            <p className="text-[10px] font-mono text-on-surface-variant/60 uppercase">Securing transactions on Mantle Network...</p>
+            <p className="text-[10px] font-mono text-on-surface-variant/60 uppercase">Securing transactions on {getActiveNetworkName()}...</p>
           </div>
         </div>
       )}
@@ -180,7 +176,7 @@ export default function CreatorLab() {
               Intelligent Markets, <br/><span className="text-primary italic">Deployed Instantly.</span>
             </h2>
             <p className="text-on-surface-variant text-xs leading-relaxed opacity-95">
-              Describe your market vision and let AIRA's intelligence structure, validate, and launch liquidity pools directly to the Mantle Network ledger.
+              Describe your market vision and let AIRA's intelligence structure, validate, and launch liquidity pools directly to the {getActiveNetworkName()} ledger.
             </p>
           </div>
 

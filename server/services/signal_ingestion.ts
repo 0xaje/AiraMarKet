@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { eventBus, SystemEvents } from '../core/event_bus';
+import { Logger } from '../utils/logger';
 
 export interface NormalizedSignal {
     category: "crypto" | "sports" | "politics" | "tech";
@@ -52,7 +53,7 @@ export class SignalIngestionService {
                 sentiment: "bullish"
             }));
         } catch (error: any) {
-            console.error("[INGESTION] Crypto fetch failed:", error.message);
+            Logger.error("[INGESTION] Crypto fetch failed", error);
             return [];
         }
     }
@@ -77,7 +78,7 @@ export class SignalIngestionService {
             }
             return signals;
         } catch (error: any) {
-            console.error("[INGESTION] Tech fetch failed:", error.message);
+            Logger.error("[INGESTION] Tech fetch failed", error);
             return [];
         }
     }
@@ -99,7 +100,7 @@ export class SignalIngestionService {
                 sentiment: this.estimateSentiment(post.data.title)
             }));
         } catch (error: any) {
-            console.error("[INGESTION] Politics fetch failed:", error.message);
+            Logger.error("[INGESTION] Politics fetch failed", error);
             return [];
         }
     }
@@ -118,7 +119,7 @@ export class SignalIngestionService {
                 sentiment: this.estimateSentiment(article.headline)
             }));
         } catch (error: any) {
-            console.error("[INGESTION] Sports fetch failed:", error.message);
+            Logger.error("[INGESTION] Sports fetch failed", error);
             return [];
         }
     }
@@ -130,7 +131,7 @@ export class SignalIngestionService {
     }
 
     static async runIngestionCycle() {
-        console.log("[INGESTION] Starting REAL data ingestion cycle...");
+        Logger.start("[INGESTION] Starting data ingestion cycle...");
         
         const [crypto, tech, politics, sports] = await Promise.all([
             this.fetchCryptoSignals(),
@@ -143,7 +144,7 @@ export class SignalIngestionService {
         this.recentSignals = allSignals;
         
         allSignals.forEach(signal => {
-            console.log(`[INGESTION] Emitted real normalized signal for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
+            Logger.info(`[INGESTION] Emitted normalized signal for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
             eventBus.emit(SystemEvents.SIGNAL_RECEIVED, signal);
         });
         

@@ -2,8 +2,10 @@ import React from 'react';
 import './App.css';
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { getContractAddress, getTxExplorerUrl, getActiveChainId, getActiveNetworkName } from './lib/network';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import useAppStore from './store/useAppStore';
+import { useAccount, useChainId, useSwitchChain } from 'wagmi';
 
 import Landing from './components/Landing';
 import Leaderboard from './components/Leaderboard';
@@ -16,6 +18,15 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const currentView = location.pathname.substring(1) || 'landing';
+
+  // Network State
+  const { isConnected } = useAccount();
+  const connectedChainId = useChainId();
+  const { switchChain, isPending } = useSwitchChain();
+  const activeChainId = getActiveChainId();
+  const activeNetworkName = getActiveNetworkName();
+
+  const showChainWarning = isConnected && connectedChainId !== activeChainId;
 
   // Global State (Zustand)
   const isDarkMode = useAppStore(state => state.isDarkMode);
@@ -108,6 +119,26 @@ function App() {
         </div>
       </header>
 
+      {/* Hanging Chain Warning Banner */}
+      {showChainWarning && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-surface/95 backdrop-blur-md border border-t-0 border-outline-variant shadow-2xl rounded-b-2xl px-5 py-3 flex items-center gap-4 text-xs max-w-[90%] sm:max-w-md animate-slide-down">
+          <span className="material-symbols-outlined text-amber-500 animate-pulse text-lg shrink-0">warning</span>
+          <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+            <span className="font-bold text-[9px] uppercase tracking-wider text-amber-500 font-mono">alternate chain connected</span>
+            <p className="text-[11px] text-on-surface-variant leading-tight">
+              Switch network to <strong className="text-on-surface">{activeNetworkName}</strong> for the flagship experience.
+            </p>
+          </div>
+          <button 
+            onClick={() => switchChain({ chainId: activeChainId })}
+            disabled={isPending}
+            className="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-background font-extrabold font-mono rounded-lg text-[9px] tracking-wider uppercase transition-all shrink-0 ml-2"
+          >
+            {isPending ? 'Switching...' : 'Switch'}
+          </button>
+        </div>
+      )}
+
       {/* Main View Area Routing */}
       <Routes>
         <Route path="/" element={<Landing />} />
@@ -173,15 +204,15 @@ function App() {
           {toast.hash && (
             <div className="mt-2 flex flex-col gap-1 border-t border-white/20 pt-2">
               <span className="text-[9px] font-mono opacity-60">
-                CONTRACT: {import.meta.env.VITE_MANTLE_CONTRACT_ADDRESS || "0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846"}
+                CONTRACT: {getContractAddress()}
               </span>
               <a 
-                href={`https://explorer.sepolia.mantle.xyz/tx/${toast.hash}`} 
+                href={getTxExplorerUrl(toast.hash)} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-[10px] font-bold font-mono underline opacity-80 hover:opacity-100 flex items-center gap-1"
               >
-                VIEW ON MANTLE EXPLORER
+                VIEW ON BLOCK EXPLORER
                 <span className="material-symbols-outlined text-[10px]">open_in_new</span>
               </a>
             </div>
