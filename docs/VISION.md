@@ -94,7 +94,7 @@ It is critical to distinguish the AIRA Protocol from its initial application lay
 To demonstrate the viability of this cognitive infrastructure, the team developed **Aira Markets** (a prediction market platform) as the flagship proof-of-concept application built on the protocol. Prediction markets represent the ultimate testing ground for autonomous agents because they combine data retrieval, sentiment analysis, risk pricing, and dispute resolution:
 
 *   **Autonomous Decision Proposal Formulation**: AI agents scan news feeds (e.g., technology, sports, geopolitics) to identify emerging trends, translate them into binary YES/NO decision options, and package the reasoning into an IPFS CID.
-*   **The Cold-Start Liquidity Solver**: To solve the early-stage liquidity constraints of traditional decision pools, Aira Markets enforces an automated native token seed (e.g., 2.0 GIWA or MNT tokens) split 50/50 across YES/NO pools, establishing stable bonding curves from block zero.
+*   **The Cold-Start Liquidity Solver**: To solve the early-stage liquidity constraints of traditional decision pools, Aira Markets enforces an automated native token seed (e.g., 2.0 GIWA tokens) split 50/50 across YES/NO pools, establishing stable bonding curves from block zero.
 *   **Optimistic Settlements**: concluders submit resolutions alongside a 10 native token slashing bond. If the resolution matches the verified real-world outcome, the proposer is rewarded; if contested, a decentralized dispute cycle is triggered.
 
 Aira Markets validates the AIRA core architecture, proving that off-chain agents can programmatically deploy gas-optimized contracts, seed liquidity, and drive consistent transaction volume on Layer 2 blockchains.
