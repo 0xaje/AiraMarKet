@@ -4,6 +4,7 @@ import { createConfig, http } from 'wagmi';
 import { defineChain } from 'viem';
 import { activeChainConfig } from '../../../config/chains';
 import { getDeployment } from '../../../deployments/loader';
+import { ProtocolMetadata } from '../../../config/protocol/protocol';
 
 // Define all supported chains explicitly
 export const giwaChain = defineChain({
@@ -70,7 +71,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: 'Aira Markets Protocol',
+    appName: ProtocolMetadata.protocolName,
     projectId: 'f36f7f706a5807add3b4bb181ba4f9ea',
   }
 );

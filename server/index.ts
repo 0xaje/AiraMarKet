@@ -5,10 +5,10 @@ import { Logger } from './utils/logger';
 import { NetworkValidationService } from './services/networkValidationService';
 import { activeChainConfig } from '../config/chains';
 import { ProtocolMetadata } from '../config/protocol/protocol';
-import { cryptoAgent } from './agents/crypto_agent';
-import { sportsAgent } from './agents/sports_agent';
-import { politicsAgent } from './agents/politics_agent';
-import { techAgent } from './agents/tech_agent';
+import { analystAgent } from './agents/analyst_agent';
+import { riskAgent } from './agents/risk_agent';
+import { complianceAgent } from './agents/compliance_agent';
+import { consensusService } from './services/consensus_service';
 import { marketService } from './services/market_service';
 import { SignalIngestionService } from './services/signal_ingestion';
 import * as http from 'http';
@@ -18,7 +18,7 @@ import { exec } from 'child_process';
 import { ProviderFactory } from '../services/providerFactory';
 import { indexer } from './indexer';
 
-Logger.start("Initializing AIRA Markets Autonomous Backend...");
+Logger.start(`Initializing ${ProtocolMetadata.protocolName} Autonomous Backend...`);
 
 function validateEnvironment() {
     const required = ['PRIVATE_KEY', 'DATABASE_URL', 'RPC_URL'];
@@ -75,10 +75,10 @@ API:         Ready
 
     // Start block indexer and agent worker loops
     indexer.startIndexing();
-    cryptoAgent;
-    sportsAgent;
-    politicsAgent;
-    techAgent;
+    analystAgent;
+    riskAgent;
+    complianceAgent;
+    consensusService;
     marketService;
 
     setTimeout(() => {

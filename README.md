@@ -1,88 +1,165 @@
 # AIRA Protocol
-### The Autonomous Intelligence & Risk Analysis Protocol — Powered by GIWA
+### The Autonomous Intelligence & Risk Analysis Protocol
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](file:///home/oyeolorun/AiraMarKet/LICENSE)
+[![GIWA L2](https://img.shields.io/badge/Ecosystem-GIWA_L2-blue.svg)](https://sepolia-explorer.giwa.io)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](file:///home/oyeolorun/AiraMarKet/docs/developer/local_development.md)
+[![Solidity](https://img.shields.io/badge/Language-Solidity-lightgrey.svg)](file:///home/oyeolorun/AiraMarKet/contracts/AiraMarket.sol)
 
 ---
 
-## 1. Executive Summary
-
-### Why This Exists
-In traditional prediction and information markets, market creation and resolution suffer from high operational friction, reliance on centralized actors, and low engagement. The **AIRA Protocol** represents an autonomous, AI-driven infrastructure engineered to programmatically ingest real-world data, formulate prediction markets, and settle outcomes trustlessly.
-
-### What Problem It Solves
-Traditional platforms suffer from the "cold start" liquidity problem and opaque resolution rules. The AIRA Protocol resolves these issues by introducing:
-1. **Automated Market Formulation**: Background AI swarms constantly analyze public data streams, translating emerging trends into structured, binary options.
-2. **Cold-Start Liquidity Balancing**: A mathematically balanced initial seed mechanism stabilizes trading curves from block zero.
-3. **Decentralized Verification**: Every suggestion packages its underlying data signals and AI reasoning into a cryptographically anchored IPFS payload, ensuring full transparency.
-
-### Why It Matters
-By removing human coordination bottlenecks in market generation and oracle settlements, the AIRA Protocol establishes a highly efficient, trustless, and scalable prediction framework. It demonstrates how autonomous agents can securely interact with decentralized state machines without introducing custody risks.
-
-### How It Benefits GIWA
-As the flagship network hosting the protocol, Dunamu's **GIWA OP Stack L2** directly benefits in the following ways:
-- **Transaction Velocity**: The protocol generates continuous on-chain trading volumes and gas consumption through agent actions and global user participation, proving GIWA's high throughput capabilities.
-- **Showcasing L2 Efficiency**: By utilizing GIWA's ultra-low transaction fees, the protocol executes complex state updates (e.g. pool adjustments, reward redemptions) cost-effectively, highlighting GIWA as the premier L2 network for microtransaction-heavy applications.
-- **Verifiable AI Proofs**: Proving AI reasoning on-chain requires low-latency transaction confirmation, which is natively achieved through GIWA's rapid block confirmation cycle.
+## Tagline
+An autonomous, verifiable, agent-driven prediction market protocol running natively on high-performance EVM networks.
 
 ---
 
-## 2. Core Value Propositions & Architectural Design
-
-### 1. Verifiable AI (IPFS Anchoring)
-The protocol implements a cryptographically verifiable AI reasoning flow. When an agent proposes a market, the raw reasoning data (e.g. sentiment score, sources, metrics) is packaged into a JSON schema, hashed, and anchored on-chain as an `_ipfsCID` during contract execution. This guarantees that the reasoning behind every market is permanently auditable.
-
-### 2. Cold-Start Pari-Mutuel Liquidity
-To bypass the early liquidity imbalances that plague peer-to-peer prediction curves, the protocol implements a mandatory native liquidity seed. Upon creation, 2.0 native tokens are deposited and split 50/50 between the YES and NO pools. This establishes a stable starting price point on the bonding curve before any user interaction occurs.
-
-### 3. Optimistic slashee-bonded Settlement
-Market resolution is governed by a decentralized optimistic oracle design. Proposers submit outcomes along with a 10 native token slashing bond. This bond is subject to dispute challenges, ensuring that actors are economically incentivized to report truthful outcomes.
+## Mission
+To automate and scale prediction market ecosystems by replacing manual curation and slow, centralized oracle settlements with autonomous, cryptographically auditable AI agent heuristics on high-performance Layer 2 chains.
 
 ---
 
-## 3. Technology Stack
+## Architecture Diagram
 
-*   **Smart Contracts:** Solidity, Hardhat, Ethers.js v6
-*   **Blockchain Ledger:** Flagship GIWA Network (supporting multi-chain EVM configurations for Mantle)
-*   **Indexer Engine:** Node.js, Prisma, PostgreSQL
-*   **AI Swarm Ingestion:** Node stream scrapers, OpenAI/Anthropic APIs
-*   **Client Interface:** React, Vite, TailwindCSS, Zustand
-*   **Web3 Integration:** Wagmi, Viem, RainbowKit
+The AIRA Protocol decouples decision-making intelligence from smart contract state settlement to guarantee absolute capital safety:
+
+```mermaid
+graph TD
+    subgraph Data Ingestion Layer
+        DS[Data Feeds] --> Ingest[Ingestion Pipeline]
+    end
+    subgraph Autonomous Agent Layer
+        Ingest --> Agents[Agent Swarms]
+        Agents -->|"Confidence Heuristics (> 0.70)"| Proposal[Market Proposal]
+    end
+    subgraph EVM Ledger & Indexing
+        Proposal -->|"Admin Signature Verification"| GIWA[GIWA Sepolia L2 Ledger]
+        GIWA -->|"On-Chain Event Logs"| Indexer[Stateless HTTP Indexer]
+    end
+    subgraph Relational Cache & Frontend
+        Indexer --> DB[(PostgreSQL Database)]
+        Client[React Client UI] -->|Reads| DB
+        Client -->|State Transactions| GIWA
+    end
+end
+```
 
 ---
 
-## 4. Network Deployment Configurations
+## Core Components
 
-The protocol is modularized to support multiple EVM networks out-of-the-box, with **GIWA Sepolia Testnet** serving as the default flagship deployment.
-
-### Flagship Deployment (GIWA Sepolia)
-- **AiraMarketProtocol Contract:** `0xAA277CCB8cDa72D652CdcA4df09df5f2522fc846`
-- **Chain ID:** `91342`
-- **Block Explorer:** [sepolia-explorer.giwa.io](https://sepolia-explorer.giwa.io/address/0xAA277CCB8cDa72D652CdcA4df09df5f2522fc846)
-
-### Alternate Deployment (Mantle Sepolia)
-- **AiraMarketProtocol Contract:** `0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`
-- **Chain ID:** `5003`
-- **Block Explorer:** [explorer.sepolia.mantle.xyz](https://explorer.sepolia.mantle.xyz/address/0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846)
+The protocol is comprised of five main layers:
+1.  **Autonomous Agent Swarms**: Specialized AI agents (`CryptoAgent`, `TechAgent`, `SportsAgent`) that scan news feeds and sentiment vectors to identify high-interest markets.
+2.  **Smart Contract Settlement Engine (`AiraMarketProtocol.sol`)**: An optimized Solidity execution layer governing pari-mutuel share ratios, YES/NO token minting, pool rebalancing, and payout claims.
+3.  **Cryptographic Verification (IPFS Anchoring)**: Every proposed market hashes its raw inputs, sentiment scoring, and decision metrics into a JSON metadata payload anchored directly on-chain during execution.
+4.  **Optimistic Oracle Settlements**: conclusive resolution is determined via economic incentives; outcome proposers stake a slashing bond, subject to verification challenges.
+5.  **Stateless Block Indexer**: A database ingestion pipeline that monitors the ledger via HTTP JSON-RPC polling, using transaction-level database idempotency to maintain absolute sync alignment.
 
 ---
 
-## 5. Startup Quickstart Playbook
+## Why GIWA
 
-### Installation
-1. Clone the protocol repository:
-   ```bash
-   git clone https://github.com/0xaje/AiraMarKet.git
-   cd AiraMarKet
-   ```
-2. Install standardized package dependencies:
-   ```bash
-   npm install
-   ```
-3. Initialize the backend database schema and start the indexer:
-   ```bash
-   npm run server
-   ```
-4. Start the client dev server:
-   ```bash
-   npm run dev
-   ```
-   The client interface will reside at `http://localhost:5173`.
+Dunamu's **GIWA OP Stack L2** network serves as the protocol's flagship execution environment:
+*   **Sub-Penny Execution Costs**: Enables AI agents to run continuous pool rebalancing and micro-trades without high gas fees.
+*   **Low Block Times**: Offers near-instantaneous transaction validation, ensuring user trades and contract creations are confirmed with sub-second finality.
+*   **Cost-Effective Auditing**: Makes the on-chain anchoring of dense IPFS reasoning payloads viable, creating complete transparency for all prediction markets.
+
+---
+
+## Features
+*   **Automatic Market Formulation**: Continual, algorithmic creation of trending binary options.
+*   **Pre-Seeded Liquidity Pools**: Contract-enforced native token seeding (2.0 tokens split 50/50) to prevent early-trader curve manipulation.
+*   **Vibrant Interface**: A mobile-responsive React dashboard featuring Web3 wallet connectors (Wagmi/RainbowKit) and direct explorer notifications.
+*   **Fault-Tolerant indexer**: Relies on stateless polling to eliminate WebSocket disconnections and node rate-limit crashes.
+
+---
+
+## Technology Stack
+*   **Smart Contracts**: Solidity, Hardhat, Ethers.js v6
+*   **Blockchain Ledger**: Flagship GIWA Sepolia L2 Network (supporting multi-chain EVM config for Mantle)
+*   **Indexer & Data Pipeline**: Node.js, Prisma ORM, PostgreSQL
+*   **Client Interface**: React, Vite, TailwindCSS, Zustand
+*   **Web3 Integrations**: Wagmi, Viem, RainbowKit
+
+---
+
+## Quick Start
+
+### Prerequisites
+*   Node.js (v18+)
+*   PostgreSQL running database instance
+
+### Setup
+1.  Clone the protocol repository:
+    ```bash
+    git clone https://github.com/0xaje/AiraMarKet.git
+    cd AiraMarKet
+    ```
+2.  Install standardized package dependencies:
+    ```bash
+    npm install
+    ```
+3.  Initialize environment configurations (`.env`):
+    ```bash
+    PRIVATE_KEY="0x..."
+    DATABASE_URL="postgresql://..."
+    RPC_URL="https://sepolia-rpc.giwa.io"
+    ```
+4.  Synchronize the PostgreSQL schemas and boot the server/indexer:
+    ```bash
+    npx prisma db push
+    npm run server
+    ```
+5.  Start the client development server:
+    ```bash
+    npm run dev
+    ```
+    The React UI will run at `http://localhost:5173`.
+
+---
+
+## Repository Structure
+```
+├── config/                 # Core network and protocol settings registries
+├── contracts/              # Solidity source contracts
+├── deployments/            # Chain-specific deployment addresses and ABIs
+├── docs/                   # Developer guides and executive reports
+├── scripts/                # Hardhat deployment and validation tasks
+├── server/                 # AI agents, event buses, and block indexers
+├── services/               # Multi-chain provider and contract factories
+├── src/                    # Client React dashboard components
+└── test/                   # Smart contract unit tests
+```
+
+---
+
+## Roadmap
+*   **Phase 1 (Completed)**: Core smart contract validation, local sandbox development, agent swarms implementation, testnet deployment, and event indexer hardening.
+*   **Phase 2 (Q3 2026)**: Deploying the backend to remote hosting, upgrading to production AI APIs, and launching the public sandbox on GIWA Sepolia.
+*   **Phase 3 (Q4 2026)**: Deploying to GIWA Mainnet, integrating third-party decentralized oracle networks, and initiating liquidity provider incentives.
+*   **Phase 4 (Q1 2027)**: Transitioning protocol parameters (fee splits, confidence thresholds) to a Decentralized Autonomous Organization (DAO) and releasing developer SDKs to allow partners to build custom AI agents.
+
+---
+
+## Documentation
+*   [Executive Overview](file:///home/oyeolorun/AiraMarKet/docs/EXECUTIVE_OVERVIEW.md)
+*   [Architecture Overview](file:///home/oyeolorun/AiraMarKet/docs/developer/architecture_overview.md)
+*   [Local Development Guide](file:///home/oyeolorun/AiraMarKet/docs/developer/local_development.md)
+*   [Production Deployment Guide](file:///home/oyeolorun/AiraMarKet/docs/developer/deployment_guide.md)
+*   [Diagnostics & Troubleshooting Playbook](file:///home/oyeolorun/AiraMarKet/docs/developer/troubleshooting.md)
+*   [Multi-Chain Abstraction Playbook](file:///home/oyeolorun/AiraMarKet/docs/developer/adding_new_chains.md)
+*   [AI Agent Swarm Integration Guide](file:///home/oyeolorun/AiraMarKet/docs/developer/adding_new_ai_agents.md)
+*   [Coding Standards & Workflow](file:///home/oyeolorun/AiraMarKet/docs/developer/standards.md)
+*   [Future Enhancements Playbook](file:///home/oyeolorun/AiraMarKet/docs/developer/future_modules.md)
+
+---
+
+## Contributing
+We welcome contributions to the AIRA Protocol. Please read our [Local Development Guide](file:///home/oyeolorun/AiraMarKet/docs/developer/local_development.md) and [Coding Standards & Workflow](file:///home/oyeolorun/AiraMarKet/docs/developer/standards.md) to set up your environment. Ensure that all modifications pass the Hardhat unit tests before opening a Pull Request:
+```bash
+npx hardhat test
+```
+
+---
+
+## License
+This project is licensed under the MIT License. See [LICENSE](file:///home/oyeolorun/AiraMarKet/LICENSE) for more details.

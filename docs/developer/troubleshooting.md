@@ -1,37 +1,47 @@
 # Diagnostics & Troubleshooting Playbook
-### Powered by GIWA
+### System Maintenance & Log Analysis Guide
 
 ---
 
-## 1. Executive Summary
+## 1. Startup Config Failures
 
-### Why This Exists
-Operational issues like database disconnection, network latency, and wallet revert errors can disrupt the development lifecycle. This **Diagnostics & Troubleshooting Playbook** exists to catalog known issues and provide clear solutions.
-
-### What Problem It Solves
-It eliminates guess-work and lengthy debugging cycles. By matching error logs with structural solutions, the playbook allows developers to quickly diagnose RPC timeouts, database validation failures, and address format errors.
-
-### Why It Matters
-A comprehensive diagnostics guide improves developer autonomy, reduces time-to-resolution, and ensures that the protocol remains stable and easy to maintain throughout its lifecycle.
-
-### How It Benefits GIWA
-- **Ensuring GIWA Network Stability**: Documenting common RPC errors and provider timeouts guides developers on how to configure resilient connections to GIWA endpoints, reducing unnecessary load on public infrastructure.
+### I. Missing Environment Variables
+*   **Symptom**: System crashes during boot with error `CRITICAL CONFIGURATION ERROR: Missing required environment variables`.
+*   **Reason**: The backend server validates environment config parameters at boot time to prevent partial executions.
+*   **Resolution**: Verify that `PRIVATE_KEY`, `DATABASE_URL`, and `RPC_URL` are set and non-empty in your `.env` file.
 
 ---
 
-## 2. Common Issues & Resolutions
+## 2. Database Sync & Connectivity Issues
 
-### 1. Startup validation Failures
-- **Issue**: `CRITICAL CONFIGURATION ERROR: Missing required environment variables`
-  - **Reason**: The startup environment validator checks for `PRIVATE_KEY`, `DATABASE_URL`, and `RPC_URL`. If any are missing, the server exits.
-  - **Resolution**: Open `.env` and verify that all three variables exist and contain valid parameters.
+### I. Database Sync Failures
+*   **Symptom**: `Prisma db push failed` or `database url is offline`.
+*   **Reason**: The PostgreSQL service is unreachable, or credentials in the database connection string are incorrect.
+*   **Resolution**: Confirm your PostgreSQL server is active. Double-check username/password variables inside your `DATABASE_URL` parameter in `.env`.
 
-### 2. Network Latency & Timeout Warnings
-- **Issue**: `RPC connection attempt failed`
-  - **Reason**: The designated public RPC endpoint is unresponsive or rate-limited.
-  - **Resolution**: Confirm internet connectivity, check endpoint availability, or configure a private RPC endpoint.
+### II. Indexer State Desynchronization
+*   **Symptom**: Client UI fails to update portfolio details, or duplicate transactions are listed in logs.
+*   **Reason**: Out-of-order block ingestion or temporary RPC network disconnects.
+*   **Resolution**: Ensure database sync uses transaction-level database idempotency. Check that the indexer uses transaction hashes as database primary keys, which automatically drops duplicate updates.
 
-### 3. Checksum Address Errors
-- **Issue**: `bad address checksum` in Ethers
-  - **Reason**: The contract address contains mixed-case characters that fail the EIP-55 checksum test.
-  - **Resolution**: Save the address in `.env` or configuration files in **all lowercase** (e.g. `0xaa27...`). All-lowercase strings bypass checksum validation checks in Ethers.
+---
+
+## 3. Network Latency & Timeout Errors
+
+### I. RPC Endpoint Latency
+*   **Symptom**: Logs display `RPC connection attempt failed` or connection timeouts.
+*   **Reason**: The public RPC endpoint is unresponsive or rate-limited.
+*   **Resolution**: Replace the public RPC URL in your registry configuration with a private or high-performance RPC endpoint.
+
+---
+
+## 4. Wallet & Contract Execution Reverts
+
+### I. Checksum Address Violations
+*   **Symptom**: Crash or error `bad address checksum` in Ethers.
+*   **Reason**: EVM address configuration has mixed-case characters that fail EIP-55 checksum validation check.
+*   **Resolution**: Open `.env` or configurations and save the contract address parameters in **all lowercase** (e.g. `0xaa27...`). All-lowercase strings bypass checksum validation checks in Ethers.
+
+### II. User Signature Rejection or Insufficient Funds
+*   **Symptom**: Application fails silently or returns vague stack traces.
+*   **Resolution**: RainbowKit integrates Zustand notification alerts that catch the exact `err.shortMessage` from Viem, translating complex RPC codes into human-readable notifications with block explorer transaction links.

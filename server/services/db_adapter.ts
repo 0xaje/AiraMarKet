@@ -15,6 +15,7 @@ export class DbAdapter {
         try {
             const client = this.getClient();
             const records = await client.pendingMarket.findMany({
+                include: { evaluations: true },
                 orderBy: { createdAt: 'asc' }
             });
             return records;
@@ -29,12 +30,21 @@ export class DbAdapter {
             const client = this.getClient();
             await client.pendingMarket.create({
                 data: {
+                    signalId: proposal.signalId || String(Math.random()),
                     title: proposal.title || '',
                     category: proposal.category || '',
                     expiry: String(proposal.expiry || ''),
                     confidence: Number(proposal.confidence || 0),
                     sentiment: proposal.sentiment || '',
-                    status: proposal.status || 'PENDING_APPROVAL'
+                    status: proposal.status || 'PENDING_APPROVAL',
+                    evaluations: {
+                        create: (proposal.evaluations || []).map((e: any) => ({
+                            agentName: e.agentName,
+                            vote: e.vote,
+                            confidence: Number(e.confidence),
+                            reasoning: e.reasoning
+                        }))
+                    }
                 }
             });
             Logger.success(`[DB_ADAPTER] Stored proposal in database successfully: ${proposal.title}`);

@@ -1,62 +1,161 @@
-# AIRA Protocol Architecture
-### Powered by GIWA
+# AIRA Protocol: System Architecture
+### Decoupled Cognitive Ingestion and Immutable Blockchain Settlement
 
 ---
 
-## 1. Executive Summary
+## 1. High-Level Architecture
 
-### Why This Exists
-High fees and transaction confirmation latencies on L1 EVM chains restrict prediction protocols to high-value, slow-moving markets. The **AIRA Protocol** architecture is engineered as a high-frequency, low-friction framework designed to modularize prediction mechanics.
+The AIRA Protocol is designed around a strict **Separation of Concerns**. Computational cognitive labor (data scraping, text analysis, and sentiment valuation) is separated from economic settlement (asset custody, token distribution, and dispute resolution). 
 
-### What Problem It Solves
-It solves the data-ingestion-to-onchain-deployment bottleneck. By using specialized AI agent modules that continuously scan online information spaces and filter inputs using strict confidence thresholds, the protocol automates the proposal of prediction topics. This removes manual research overhead and coordinates trustless, peer-to-peer risk management.
+By isolating heavy AI computation off-chain, the protocol avoids high gas costs and execution latency. By keeping all asset custody on-chain, user funds remain fully protected by smart contracts; even in the event of an off-chain server crash or AI model hallucination, the integrity of the ledger and user balances is maintained.
 
-### Why It Matters
-This design decouples decision intelligence (AI) from execution settlement (smart contracts). Smart contracts act as the absolute final arbiter of asset custody, while the AI acts as a programmatic broker. This enforces absolute capital safety even if an AI model exhibits hallucinations.
-
-### How It Benefits GIWA
-- **Low Gas Optimization Showcase**: The architecture leverages Dunamu's **GIWA OP Stack L2** to execute continuous indexer sweeps, market updates, and trade state alterations at a fraction of a cent.
-- **Developer Ecosystem Leverage**: By establishing a modular configuration registry (`config/chains`), the protocol sets a template for other developers to deploy multi-chain services natively targeting GIWA.
+```
+                  ┌──────────────────────────────────────────────┐
+                  │            COGNITIVE LAYER (Off-Chain)       │
+                  │  ┌────────────────┐      ┌────────────────┐  │
+                  │  │ Ingestion Feeds│ ───> │ AI Agent Swarm │  │
+                  │  └────────────────┘      └────────────────┘  │
+                  └──────────────────────────┬───────────────────┘
+                                             │ (Market Proposal)
+                                             ▼
+                  ┌──────────────────────────────────────────────┐
+                  │            INTEGRATION BUS & CACHE           │
+                  │  ┌────────────────┐      ┌────────────────┐  │
+                  │  │ Local Event Bus│      │ PostgreSQL DB  │  │
+                  │  └───────┬────────┘      └────────▲───────┘  │
+                  └──────────┼────────────────────────┼──────────┘
+                             │ (Transaction Trigger)  │ (Block Indexing)
+                             ▼                        │
+                  ┌──────────────────────────┬────────┴──────────┐
+                  │            SETTLEMENT LAYER (On-Chain)       │
+                  │  ┌────────────────┐      ┌────────────────┐  │
+                  │  │ Smart Contract │ <─── │   EVM Ledger   │  │
+                  │  └───────┬────────┘      └────────────────┘  │
+                  └──────────┼───────────────────────────────────┘
+                             │ (User Interactions)
+                             ▼
+                  ┌──────────────────────────────────────────────┐
+                  │             CLIENT LAYER (Browser)           │
+                  │  ┌────────────────────────────────────────┐  │
+                  │  │            React Web Dashboard         │  │
+                  │  └────────────────────────────────────────┘  │
+                  └──────────────────────────────────────────────┘
+```
 
 ---
 
-## 2. Modular Architecture Layers
+## 2. Core Services
 
-### 1. Data Ingestion & Sentiment Analysis (Backend Service)
-- **Ingestion Module (`server/services/signal_ingestion.ts`)**: Streams structured signals from CoinGecko, Hacker News, ESPN, and Reddit.
-- **AI Sentiment Service (`server/services/ai_service.ts`)**: Estimates trend vectors, structures market propositions, and generates confidence scores.
-- **Autonomous Agent Swarms**: Monitor the internal event bus and filter proposals through a minimum 0.70 confidence coefficient.
+The protocol relies on several core services, each defined by strict boundaries and design rationales:
 
-### 2. Multi-Chain Abstraction Layer
-- **Registry Schema (`config/chains/`)**: Standardizes properties (RPC URL, native currency symbols, block explorers) across chains.
-- **Unified Object Factories (`/services/`)**:
-  - `ProviderFactory`: Standardizes connection checks and retry logic.
-  - `ContractFactory`: Standardizes loading deployment ABIs and checking checksum addresses.
+### I. Data Ingestion Service
+*   **Responsibility**: Periodically queries real-world feeds (e.g., news, financials, sports) and normalizes raw JSON data into standardized data structures.
+*   **Service Boundary**: Inputs are external REST APIs; outputs are normalized data payloads emitted to the internal event bus.
+*   **Why it exists**: Isolates the rest of the application from changes in external API formatting and rate-limiting constraints.
 
-### 3. Smart Contract Settlement Layer (Solidity)
-- **`AiraMarketProtocol.sol`**: Governs pool logic, share tokens, and settlements.
-- **Storage Variable Packing**: Optimizes gas fees on L2 by compacting market data inside 32-byte storage slots.
+### II. AI Sentiment Service (Neural Processor)
+*   **Responsibility**: Evaluates normalized data signals, analyzes market sentiment, and generates structured binary (YES/NO) prediction proposals.
+*   **Service Boundary**: Inputs are normalized data signals; outputs are structured proposal schemas containing categories, questions, exspiries, and confidence parameters.
+*   **Why it exists**: Translates qualitative natural language sources into quantitative risk markets.
 
-### 4. Client Dashboard (React / Zustand)
-- **Network Interface (`src/lib/network/`)**: Configures Wagmi/RainbowKit dynamically using the active chain configuration.
+### III. Category Agent Swarm
+*   **Responsibility**: Group of specialized agents (`CryptoAgent`, `TechAgent`, `SportsAgent`) that act as quality gatekeepers by auditing proposals against a minimum 0.70 confidence threshold.
+*   **Service Boundary**: Inputs are AI proposals; outputs are approved proposals emitted to the administrative queue.
+*   **Why it exists**: Filters out low-interest or highly ambiguous proposals before they require human approval or contract gas fees.
+
+### IV. Unified Event Bus
+*   **Responsibility**: Acts as the central, asynchronous broker for all off-chain system updates (signals received, markets proposed, log errors).
+*   **Service Boundary**: Acts as an internal publisher-subscriber registry across all Node.js backend processes.
+*   **Why it exists**: Decouples the ingestion pipeline, AI agents, and indexing services, preventing synchronous blocking and network lag.
+
+### V. Multi-Chain Registry
+*   **Responsibility**: Centralizes provider endpoints, block explorers, and contract ABIs across separate EVM blockchains.
+*   **Service Boundary**: Exposes unified loader functions (`ProviderFactory`, `ContractFactory`) to both frontend and backend modules.
+*   **Why it exists**: Abstracts differences across multiple L2 networks, allowing the protocol to scale to new chains with zero code changes.
 
 ---
 
-## 3. Data & Transaction Flows
+## 3. Data Flow
+
+The lifecycle of converting real-world information into an on-chain contract state follows a structured pipeline:
 
 ```mermaid
 sequenceDiagram
-  autonumber
-  participant Signal as Signal Ingestion
-  participant Agent as Agent Swarm
-  participant UI as Client Interface
-  participant Ledger as GIWA L2 Ledger
-  participant Logger as Transparency Logger
+    autonumber
+    participant Feed as External Data Feed
+    participant Ingest as Ingestion Service
+    participant Swarm as Agent Swarm
+    participant IPFS as IPFS Storage
+    participant Admin as Admin Signer
+    participant Contract as L2 Smart Contract
 
-  Signal->>Agent: Emit SIGNAL_RECEIVED event
-  Agent->>Agent: Evaluate sentiment and confidence (> 0.7)
-  Agent->>UI: Broadcast MARKET_SUGGESTED
-  UI->>Ledger: Admin signs createMarket() tx (Locks 2.0 Native Token)
-  Ledger-->>UI: Return transaction hash
-  UI->>Logger: POST txHash (Verifiable AI Log Entry)
+    Feed->>Ingest: Stream unstructured raw data
+    Ingest->>Swarm: Normalise and emit signal payload
+    Swarm->>Swarm: Evaluate confidence threshold (> 0.70)
+    Swarm->>IPFS: Upload raw data and reasoning payload
+    IPFS-->>Swarm: Return Content Identifier (IPFS CID)
+    Swarm->>Admin: Queue approved proposal with IPFS CID
+    Admin->>Contract: Validate and sign createMarket() transaction
+    Contract->>Contract: Lock 2.0 Native Token seed (50/50 YES/NO pool)
 ```
+
+---
+
+## 4. Event Flow
+
+To keep the client user interface responsive, on-chain state updates are synchronized to the local cache via an event-driven indexing loop:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User as Web3 User
+    participant Contract as L2 Smart Contract
+    participant Ledger as EVM Block Ledger
+    participant Indexer as Block Indexer
+    participant Cache as PostgreSQL Database
+    participant Client as React Client UI
+
+    User->>Contract: Submit trade YES/NO transaction
+    Contract->>Ledger: Update pool balances & emit TradeRecorded log
+    Indexer->>Ledger: Poll block updates via HTTP JSON-RPC
+    Ledger-->>Indexer: Return event logs
+    Indexer->>Cache: Write transaction state with idempotency checks
+    Cache-->>Client: Serve updated market and portfolio graphs
+```
+
+---
+
+## 5. Architectural Tiers
+
+### I. Backend (Cognitive Processing)
+*   **Responsibility**: Runs the continuous ingestion scrapers, drives the AI Agent swarms, exposes the REST API server, and logs auditable actions to the local filesystem.
+*   **Why it exists**: Offloads high-computation AI calculations and database querying from the client browser and the blockchain ledger.
+
+### II. Frontend (User Interface)
+*   **Responsibility**: Serves as the user-facing web dashboard. Connects user Web3 wallets, displays active AI-proposed markets, renders real-time pricing curves, and formats transaction notifications.
+*   **Why it exists**: Abstracts low-level smart contract functions and database queries into a seamless Web3 dashboard.
+
+### III. Smart Contracts (Settlement Engine)
+*   **Responsibility**: Serves as the ultimate trust anchor. Enforces pool ratios, handles YES/NO token minting, holds deposited funds, and locks optimistic dispute bonds.
+*   **Why it exists**: Guarantees that asset custody, trade math, and winnings distributions are executed transparently and immune to manipulation.
+
+### IV. Indexer (Blockchain Sync)
+*   **Responsibility**: Executes stateless HTTP polling of new blocks, parses transaction logs, and updates the local database.
+*   **Why it exists**: Resolves the RPC rate-limit crashes and filter timeouts typical of WebSockets, maintaining stable synchronization between the blockchain and the cached database.
+
+### V. Storage (Persistence Cache)
+*   **Responsibility**: Retains structured historical records of market statistics, block checkpoints, and user portfolios.
+*   **Why it exists**: The EVM ledger is not optimized for complex queries (such as sorting, filtering, or time-series charting). A relational database provides the performance required for the client UI.
+
+### VI. Infrastructure (Hosting Environment)
+*   **Responsibility**: Host systems for the backend API, L2 RPC nodes, IPFS gateways, and static CDNs for browser client hosting.
+*   **Why it exists**: Ensures high service availability, secure data pipelines, and low latency.
+
+---
+
+## 6. Future Expansion
+
+The architecture is designed to support three key future enhancements:
+1.  **Multi-Swarm Consensus**: Upgrading the Agent Swarm to require consensus voting (e.g., 3 out of 5 agents approving a proposal) before it is queued.
+2.  **MPC Administrative Signing**: Replacing the single-signature Admin validation with a Multi-Party Computation (MPC) or Multi-Sig threshold structure to eliminate single-point-of-failure vulnerabilities.
+3.  **Zero-Knowledge Reasoning Proofs**: Integrating ZK-provers to cryptographically verify that the off-chain AI processed the exact news inputs without revealing proprietary LLM prompts.

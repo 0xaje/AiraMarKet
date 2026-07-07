@@ -8,15 +8,29 @@ generator client {
 }
 
 model PendingMarket {
-  id         Int      @id @default(autoincrement())
-  title      String
-  category   String
-  expiry     String
-  confidence Float
-  sentiment  String
-  status     String
-  createdAt  DateTime @default(now())
+  id          Int               @id @default(autoincrement())
+  signalId    String            @unique
+  title       String
+  category    String
+  expiry      String
+  confidence  Float
+  sentiment   String
+  status      String
+  evaluations AgentEvaluation[]
+  createdAt   DateTime          @default(now())
 }
+
+model AgentEvaluation {
+  id              Int           @id @default(autoincrement())
+  pendingMarketId Int
+  pendingMarket   PendingMarket @relation(fields: [pendingMarketId], references: [id], onDelete: Cascade)
+  agentName       String
+  vote            String
+  confidence      Float
+  reasoning       String
+  createdAt       DateTime      @default(now())
+}
+
 
 model User {
   address       String   @id

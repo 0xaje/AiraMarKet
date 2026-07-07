@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { ProtocolMetadata } from '../config/protocol/protocol';
 
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { getContractAddress, getTxExplorerUrl, getActiveChainId, getActiveNetworkName } from './lib/network';
@@ -59,7 +60,7 @@ function App() {
             className="font-bold text-base sm:text-lg md:text-xl tracking-tight sahara-gradient-text uppercase cursor-pointer font-display shrink-0"
             onClick={() => navigate('/landing')}
           >
-            AIRA MARKETS
+            {ProtocolMetadata.protocolName}
           </span>
           <nav className="hidden md:flex gap-8">
             <button 

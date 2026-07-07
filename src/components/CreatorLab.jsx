@@ -4,6 +4,7 @@ import useAppStore from '../store/useAppStore';
 import { trendingSuggestions } from '../mocks/data';
 import { useAccount, useWriteContract } from 'wagmi';
 import { getContractAddress, getContractAbi, getNativeCurrencySymbol, getActiveNetworkName } from '../lib/network';
+import { ProtocolMetadata } from '../../config/protocol/protocol';
 
 export default function CreatorLab() {
   const navigate = useNavigate();
@@ -74,7 +75,8 @@ export default function CreatorLab() {
               yesProb: Math.round(proposal.confidence * 100),
               noProb: 100 - Math.round(proposal.confidence * 100),
               inputSignals: proposal.inputSignals,
-              reason: proposal.reason
+              reason: proposal.reason,
+              evaluations: proposal.evaluations || []
             };
             setCreatorMessages(prev => [...prev, botMessage]);
           });
@@ -176,7 +178,7 @@ export default function CreatorLab() {
               Intelligent Markets, <br/><span className="text-primary italic">Deployed Instantly.</span>
             </h2>
             <p className="text-on-surface-variant text-xs leading-relaxed opacity-95">
-              Describe your market vision and let AIRA's intelligence structure, validate, and launch liquidity pools directly to the {getActiveNetworkName()} ledger.
+              Describe your market vision and let {ProtocolMetadata.protocolName}'s intelligence structure, validate, and launch liquidity pools directly to the {getActiveNetworkName()} ledger.
             </p>
           </div>
 
@@ -233,7 +235,7 @@ export default function CreatorLab() {
                       <div className="flex items-center justify-between mb-4 pb-3 border-b border-outline-variant">
                         <div className="flex items-center gap-2">
                           <span className="font-mono text-primary text-[9px] tracking-widest uppercase font-bold">Proposal</span>
-                          <span className="px-1.5 py-0.5 bg-bullish-green/10 text-bullish-green text-[8px] rounded font-bold font-mono">AIRA APPROVED</span>
+                          <span className="px-1.5 py-0.5 bg-bullish-green/10 text-bullish-green text-[8px] rounded font-bold font-mono">{ProtocolMetadata.protocolName.toUpperCase()} APPROVED</span>
                         </div>
                         <span className="font-mono text-on-surface-variant text-[9px]">2.14ms Ticker</span>
                       </div>
@@ -284,6 +286,28 @@ export default function CreatorLab() {
                                "{msg.reason || "Historical probability heavily favors this outcome based on localized news volume."}"
                              </p>
                           </div>
+
+                          {msg.evaluations && msg.evaluations.length > 0 && (
+                             <div className="bg-surface-variant/30 rounded border border-outline-variant/50 p-3.5 mt-2">
+                                <div className="flex items-center gap-1.5 mb-2.5 border-b border-outline-variant/30 pb-1.5">
+                                   <span className="material-symbols-outlined text-[10px] text-primary">diversity_3</span>
+                                   <span className="text-[8px] font-mono font-bold text-on-surface-variant uppercase tracking-widest">Consensus Swarm Audits (Verifiable Decisions)</span>
+                                </div>
+                                <div className="space-y-2">
+                                  {msg.evaluations.map((val, idx) => (
+                                    <div key={idx} className="text-[9px] font-mono text-on-surface-variant border-b border-outline-variant/10 pb-2 last:border-0 last:pb-0">
+                                      <div className="flex justify-between items-center mb-1">
+                                        <span className="font-bold text-primary">{val.agentName}</span>
+                                        <span className={`px-1.5 py-0.5 rounded text-[7px] font-bold font-mono ${val.vote === 'APPROVE' ? 'bg-bullish-green/10 text-bullish-green' : 'bg-bearish-red/10 text-bearish-red'}`}>
+                                          {val.vote} ({(val.confidence * 100).toFixed(0)}%)
+                                        </span>
+                                      </div>
+                                      <p className="opacity-80 pl-2 border-l border-primary/20 leading-relaxed font-mono text-[8px]">{val.reasoning}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                             </div>
+                          )}
                         </div>
 
                         <div className="flex justify-center pt-1">
@@ -308,7 +332,7 @@ export default function CreatorLab() {
                   <span className="material-symbols-outlined text-primary text-sm animate-spin">sync</span>
                 </div>
                 <div className="bg-surface-variant/40 px-5 py-3 rounded-xl border border-outline-variant max-w-xl">
-                  <p className="text-on-surface-variant leading-relaxed text-xs animate-pulse">AIRA is analyzing sentiment and structuring liquidity contracts...</p>
+                  <p className="text-on-surface-variant leading-relaxed text-xs animate-pulse">{ProtocolMetadata.protocolName} is analyzing sentiment and structuring liquidity contracts...</p>
                 </div>
               </div>
             )}
