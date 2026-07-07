@@ -37,8 +37,18 @@ The protocol is structured into four decoupled operational layers:
 *   **On-Chain Settlement Layer**: The smart contract acts as the final arbiter of asset custody, locking native token seed pools and settling payouts.
 *   **Stateless Synchronization Layer**: A high-speed indexer polls the blockchain and records event logs to a relational database with transaction-level idempotency.
 
-The pipeline flow follows a strict 7-stage progression:
-$$\text{Signal} \longrightarrow \text{Evidence Package} \longrightarrow \text{Multi-Agent Analysis} \longrightarrow \text{Consensus Engine} \longrightarrow \text{Decision Proposal} \longrightarrow \text{Human Verification} \longrightarrow \text{GIWA Settlement}$$
+The protocol is governed by an 8-stage unified protocol lifecycle:
+
+```mermaid
+flowchart TD
+    stage1[External Signals] --> stage2[Signal Normalization]
+    stage2 --> stage3[Evidence Package]
+    stage3 --> stage4[Multi-Agent Analysis]
+    stage4 --> stage5[Consensus Engine]
+    stage5 --> stage6[Decision Proposal]
+    stage6 --> stage7[Human Verification]
+    stage7 --> stage8[GIWA On-Chain Settlement]
+```
 
 ---
 

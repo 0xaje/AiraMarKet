@@ -5,45 +5,20 @@
 
 ## 1. High-Level Architecture
 
-The AIRA Protocol is designed around a strict **Separation of Concerns**. Computational cognitive labor (ingestion feeds, evidence collection, and consensus engine analysis) is separated from economic settlement (asset custody, token distribution, and dispute resolution) to form a robust, verifiable pipeline:
+The AIRA Protocol is governed by an 8-stage unified protocol lifecycle that decouples off-chain cognitive risk modeling from on-chain smart contract settlement:
 
-$$\text{Signal} \longrightarrow \text{Evidence Package} \longrightarrow \text{Multi-Agent Analysis} \longrightarrow \text{Consensus Engine} \longrightarrow \text{Decision Proposal} \longrightarrow \text{Human Verification} \longrightarrow \text{GIWA Settlement}$$
+```mermaid
+flowchart TD
+    stage1[External Signals] --> stage2[Signal Normalization]
+    stage2 --> stage3[Evidence Package]
+    stage3 --> stage4[Multi-Agent Analysis]
+    stage4 --> stage5[Consensus Engine]
+    stage5 --> stage6[Decision Proposal]
+    stage6 --> stage7[Human Verification]
+    stage7 --> stage8[GIWA On-Chain Settlement]
+```
 
 By isolating heavy AI computation off-chain, the protocol avoids high gas costs and execution latency. By keeping all asset custody on-chain, user funds remain fully protected by smart contracts; even in the event of an off-chain server crash or AI model hallucination, the integrity of the ledger and user balances is maintained.
-
-```
-                  ┌────────────────────────────────────────────────────────┐
-                  │              COGNITIVE LAYER (Off-Chain)               │
-                  │  ┌───────────┐      ┌───────────┐      ┌────────────┐  │
-                  │  │ Ingestion │ ───> │ Evidence  │ ───> │ Multi-Agent│  │
-                  │  │   Feeds   │      │  Package  │      │  Consensus │  │
-                  │  └───────────┘      └───────────┘      └────────────┘  │
-                  └──────────────────────────────────────────────┬─────────┘
-                                                                 │(Decision Proposal)
-                                                                 ▼
-                  ┌──────────────────────────────────────────────┐
-                  │            INTEGRATION BUS & CACHE           │
-                  │  ┌────────────────┐      ┌────────────────┐  │
-                  │  │ Local Event Bus│      │ PostgreSQL DB  │  │
-                  │  └───────┬────────┘      └────────▲───────┘  │
-                  └──────────┼────────────────────────┼──────────┘
-                             │ (Transaction Trigger)  │ (Block Indexing)
-                             ▼                        │
-                  ┌──────────────────────────┬────────┴──────────┐
-                  │            SETTLEMENT LAYER (On-Chain)       │
-                  │  ┌────────────────┐      ┌────────────────┐  │
-                  │  │ Smart Contract │ <─── │   EVM Ledger   │  │
-                  │  └───────┬────────┘      └────────────────┘  │
-                  └──────────┼───────────────────────────────────┘
-                             │ (User Interactions)
-                             ▼
-                  ┌──────────────────────────────────────────────┐
-                  │             CLIENT LAYER (Browser)           │
-                  │  ┌────────────────────────────────────────┐  │
-                  │  │            React Web Dashboard         │  │
-                  │  └────────────────────────────────────────┘  │
-                  └──────────────────────────────────────────────┘
-```
 
 ---
 

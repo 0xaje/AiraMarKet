@@ -45,26 +45,15 @@ Autonomous agents cannot hold direct custody of cryptographic assets. Providing 
 
 The AIRA Protocol solves these challenges by implementing a system of **Verifiable Intelligence**. Instead of forcing the blockchain to process AI logic, or forcing the AI to manage private keys, the protocol standardizes an asynchronous, cryptographically anchored communication flow:
 
-```
-   [Incoming Raw Signal]
-            │ (Scraping & Normalization)
-            ▼
-   [Evidence Package] ◄─── (Normalized Signals, Sources, Timestamps, Confidence)
-            │
-            ▼
-  [Multi-Agent Analysis] ◄─── (Specialized Analyst, Risk, Compliance Audits)
-            │
-            ▼
-  [Consensus Engine] ─── (Quorum and Threshold Verifications)
-            │
-            ▼
-  [Decision Proposal]
-            │ (Metadata CID Packaging)
-            ▼
-  [Human Verification] ◄─── (Administrative Signature Audit)
-            │
-            ▼
-  [GIWA L2 Settlement] ─── (Immutable Custody & Pool Initialization)
+```mermaid
+flowchart TD
+    stage1[External Signals] --> stage2[Signal Normalization]
+    stage2 --> stage3[Evidence Package]
+    stage3 --> stage4[Multi-Agent Analysis]
+    stage4 --> stage5[Consensus Engine]
+    stage5 --> stage6[Decision Proposal]
+    stage6 --> stage7[Human Verification]
+    stage7 --> stage8[GIWA On-Chain Settlement]
 ```
 
 By hashing the AI's inputs, sources, and reasoning vectors into a standardized JSON payload, uploading it to IPFS, and anchoring the resulting CID (Content Identifier) to the blockchain ledger, AIRA guarantees that the reasoning behind every automated transaction is permanently auditable. AI logic is transformed from an opaque "black box" into a cryptographically verifiable transaction ledger.

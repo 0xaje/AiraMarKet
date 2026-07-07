@@ -8,19 +8,18 @@ The AIRA Protocol splits functionality into a decoupled design:
 *   **Off-Chain Cognitive Processing**: The Ingestion Feed gathers real-world signals, compiling them into **Evidence Packages** which are audited via Multi-Agent Analysis in the Multi-Agent Consensus Engine.
 *   **On-Chain State Settlement**: Smart contracts govern all custody, tokens, and payouts. This guarantees safety of user funds even if the off-chain system experiences downtime.
 
-```
-┌────────────────────────┐      ┌────────────────────────┐      ┌────────────────────────┐      ┌────────────────────────┐
-│  Data Ingestion Tier   │ ───> │     Evidence Layer     │ ───> │ Consensus Engine Tier  │ ───> │ Integration Event Bus  │
-└────────────────────────┘      └────────────────────────┘      └────────────────────────┘      └───────────┬────────────┘
-                                                                                                            │
-                                                                                                            ▼
-┌────────────────────────┐      ┌────────────────────────┐      ┌────────────────────────┐      ┌────────────────────────┐
-│  Vite React Client UI   │ <─── │ Relational SQL Cache   │ <─── │ Stateless Block Indexer│ <─── │   EVM L2 Settlement    │
-└────────────────────────┘      └────────────────────────┘      └────────────────────────┘      └────────────────────────┘
-```
+The AIRA Protocol is governed by an 8-stage unified protocol lifecycle:
 
-The system flow follows a strict 7-stage architectural progression:
-$$\text{Signal} \longrightarrow \text{Evidence Package} \longrightarrow \text{Multi-Agent Analysis} \longrightarrow \text{Consensus Engine} \longrightarrow \text{Decision Proposal} \longrightarrow \text{Human Verification} \longrightarrow \text{GIWA Settlement}$$
+```mermaid
+flowchart TD
+    stage1[External Signals] --> stage2[Signal Normalization]
+    stage2 --> stage3[Evidence Package]
+    stage3 --> stage4[Multi-Agent Analysis]
+    stage4 --> stage5[Consensus Engine]
+    stage5 --> stage6[Decision Proposal]
+    stage6 --> stage7[Human Verification]
+    stage7 --> stage8[GIWA On-Chain Settlement]
+```
 
 ---
 

@@ -18,32 +18,19 @@ To automate and scale decentralized decision intelligence ecosystems by replacin
 
 ---
 
-## Architecture Diagram
+## Unified Protocol Lifecycle
 
-The AIRA Protocol decouples decision-making intelligence from smart contract state settlement to guarantee absolute capital safety:
+The AIRA Protocol is governed by an 8-stage unified protocol lifecycle that decouples cognitive risk modeling from immutable state settlement:
 
 ```mermaid
-graph TD
-    subgraph Data Ingestion Layer
-        DS[Data Feeds / Signals] --> Ingest[Ingestion Pipeline]
-        Ingest --> EP[Evidence Package]
-    end
-    subgraph Autonomous Agent Layer
-        EP --> MAA[Multi-Agent Analysis]
-        MAA --> CE[Consensus Engine]
-        CE --> DP[Decision Proposal]
-    end
-    subgraph Verification & Settlement
-        DP --> HV[Human Verification / Admin Signer]
-        HV --> GIWA[GIWA Sepolia L2 Ledger]
-        GIWA -->|"On-Chain Event Logs"| Indexer[Stateless HTTP Indexer]
-    end
-    subgraph Relational Cache & Frontend
-        Indexer --> DB[(PostgreSQL Database)]
-        Client[React Client UI] -->|Reads| DB
-        Client -->|State Transactions| GIWA
-    end
-end
+flowchart TD
+    stage1[External Signals] --> stage2[Signal Normalization]
+    stage2 --> stage3[Evidence Package]
+    stage3 --> stage4[Multi-Agent Analysis]
+    stage4 --> stage5[Consensus Engine]
+    stage5 --> stage6[Decision Proposal]
+    stage6 --> stage7[Human Verification]
+    stage7 --> stage8[GIWA On-Chain Settlement]
 ```
 
 ---
