@@ -1,11 +1,28 @@
 # Adding New Chains
+### Powered by GIWA
 
-The AIRA Markets protocol utilizes a centralized configuration schema to support adding any EVM-compatible chain in minutes.
+---
 
-## Checklist to Integrate a New Chain
+## 1. Executive Summary
 
-### 1. Define Chain Parameters
-Create a network configuration file in `/config/chains/` (e.g. `/config/chains/arbitrum.ts`):
+### Why This Exists
+EVM compatibility allows dApps to easily expand their user base. This **Multi-Chain Integration Playbook** exists to standardize the registration of new blockchain networks within the AIRA Protocol.
+
+### What Problem It Solves
+It eliminates hardcoded network assumptions and manual codebase refactoring. By providing a configuration-driven registry, the protocol allows developers to add support for any EVM-compatible chain (e.g. Arbitrum, Optimism, Base) in minutes, solely by editing registry settings.
+
+### Why It Matters
+A configuration-driven registry reduces deployment errors, simplifies multi-chain rollouts, and ensures that the backend indexer and client UI dynamically adapt to any selected chain.
+
+### How It Benefits GIWA
+- **Ensuring Flagship Primacy**: While multi-chain support is maintained, the protocol defaults to **GIWA Sepolia** as the flagship network. This highlights GIWA as the primary network, while demonstrating that the protocol remains compatible with the broader EVM ecosystem.
+
+---
+
+## 2. Integration Playbook
+
+### Step 1: Define Network Configuration
+Create a network parameters file in `/config/chains/` (e.g., `config/chains/arbitrum.ts`):
 ```typescript
 import { ChainConfig } from './types';
 
@@ -28,8 +45,8 @@ export const arbitrum: ChainConfig = {
 };
 ```
 
-### 2. Register Chain in Registry
-Import and add your chain configuration in `/config/chains/loader.ts`:
+### Step 2: Register in Chain Loader
+Import and append the configuration to `/config/chains/loader.ts`:
 ```typescript
 import { arbitrum } from './arbitrum';
 
@@ -37,25 +54,18 @@ const chains: Record<string, ChainConfig> = {
   giwa,
   mantle,
   mantleSepolia,
-  arbitrum, // Register here
+  arbitrum,
 };
 ```
 
-### 3. Deploy Smart Contracts
-Deploy the Solidity contract to the new network.
-Create the deployment address/ABI file under `/deployments/<CHAIN_ID>/AiraMarketProtocol.ts` exporting `AiraMarketProtocolDeployment`.
-
-### 4. Register Deployments Loader
-Update `/deployments/loader.ts` to map the new Chain ID to the newly created deployment files:
+### Step 3: Register Deployment Artifacts
+Save the contract deployment details to `/deployments/42161/AiraMarketProtocol.ts` and map it in `/deployments/loader.ts`:
 ```typescript
 import { AiraMarketProtocolDeployment as arbitrumDeployment } from './42161/AiraMarketProtocol';
 
 const deployments: Record<number, Record<string, { address: string; abi: any }>> = {
   91342: { AiraMarketProtocol: giwaDeployment },
   5003: { AiraMarketProtocol: mantleSepoliaDeployment },
-  42161: { AiraMarketProtocol: arbitrumDeployment }, // Register here
+  42161: { AiraMarketProtocol: arbitrumDeployment },
 };
 ```
-
-### 5. Update Web3 Wallet Supported Lists
-Add the new chain object definition to `/src/lib/network/index.ts` so RainbowKit displays the connector, and pass it to Wagmi's `chains` parameter.

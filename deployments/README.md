@@ -1,32 +1,39 @@
 # Smart Contract Deployment Registry
-
-This directory stores verified deployment addresses and compiled contract ABIs for the AIRA Markets protocol, dynamically indexed by chain ID.
+### Powered by GIWA
 
 ---
 
-## 1. Network Deployment Status
+## 1. Executive Summary
+
+### Why This Exists
+In multi-chain EVM architectures, maintaining, retrieving, and verifying smart contract deployments across separate network networks introduces operational friction. This **Smart Contract Deployment Registry** exists to centralize verified contract addresses and compiled ABIs in a clean, structure-driven schema.
+
+### What Problem It Solves
+It eliminates hardcoded contract address assumptions and prevents manual lookup errors. By dynamically loading deployment files based on the active network's Chain ID (`deployments/loader.ts`), the protocol ensures that the backend indexer, settlement oracle, and frontend interface stay perfectly in sync with the live contracts.
+
+### Why It Matters
+A standardized registry prevents configuration drift and assures developers that they are interacting with the correct contract instances. This is vital for maintaining protocol auditability and ensuring that client interfaces connect to authentic smart contract endpoints.
+
+### How It Benefits GIWA
+- **Flagship Registry Showcase**: By establishing GIWA Sepolia (`Chain ID 91342`) as the flagship default target, the registry promotes GIWA as the primary network of the protocol, boosting its ecosystem adoption.
+- **Simplifying Verification**: Providing pre-configured, modular Hardhat deployment settings for GIWA enables external developers to quickly deploy, audit, and verify contracts on GIWA, lowering the friction for L2 expansion.
+
+---
+
+## 2. Registry Status
 
 | Network | Chain ID | Contract Address | Status | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | **Mantle Sepolia Testnet** | `5003` | `0xdd277ccb8cda72d652cdca4df09df5f2522fc846` | ✅ **Live Production** | Fully operational and verified on-chain. |
-| **Mantle Mainnet** | `5000` | — | ⏳ *Planned* | Mainnet target, no address deployed. |
-| **GIWA Sepolia Testnet** | `91342` | `0xaa277ccb8cda72d652cdca4df09df5f2522fc846` | ⚠️ **Mock / Placeholder** | *Contracts are not physically deployed to the GIWA chain yet.* Using a standard mock address for network bootstrap validation. |
+| **GIWA Sepolia Testnet** | `91342` | `0xaa277ccb8cda72d652cdca4df09df5f2522fc846` | ⚠️ **Bootstrap Placeholder** | *Contracts are not physically deployed to the GIWA chain yet.* Using a standard mock address for network bootstrap validation. |
 
 ---
 
-## 2. Placeholder Deployments Explanation
+## 3. Deployment Playbook
 
-For the flagship network **GIWA Sepolia Testnet (91342)**, the address `0xaa277ccb8cda72d652cdca4df09df5f2522fc846` is configured as a bootstrap placeholder:
-- The contract ABI stored in `deployments/91342/AiraMarketProtocol.ts` is identical to the verified `5003` (Mantle Sepolia) deployment.
-- This placeholder allows developers to test client compilation, Wagmi connectors, and indexer start loops without incurring live transaction costs prior to official contract release on Dunamu's OP Stack.
+To deploy and register contracts on any supported EVM chain:
 
----
-
-## 3. Deployment Process
-
-To deploy smart contracts to any EVM network independently, follow these steps:
-
-1. **Configure Environment**: Make sure your deployer wallet private key is loaded in `.env`:
+1. **Configure Keys**: Ensure the deployer wallet private key is set in `.env`:
    ```bash
    PRIVATE_KEY="0x..."
    ```
@@ -43,15 +50,3 @@ To deploy smart contracts to any EVM network independently, follow these steps:
    - Create a directory `/deployments/<CHAIN_ID>` matching the network chain ID.
    - Save the deployed address and compiled JSON ABI to `/deployments/<CHAIN_ID>/AiraMarketProtocol.ts` as `AiraMarketProtocolDeployment`.
    - Update `deployments/loader.ts` to register the new chain mapping.
-
----
-
-## 4. Contract Verification Status
-
-To verify the Solidity contract source code on the blockchain explorer:
-
-- **Mantle Sepolia**: Verified on Blockscout/explorer. (Verify command is in deploy docs).
-- **GIWA Sepolia**: Use the custom verification command:
-  ```bash
-  npm run verify:giwa -- --contract contracts/AiraMarket.sol:AiraMarketProtocol <DEPLOYED_CONTRACT_ADDRESS>
-  ```
