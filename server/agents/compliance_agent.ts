@@ -10,7 +10,7 @@ export class ComplianceAgent {
     }
 
     private async handleEvaluation(proposal: any) {
-        Logger.info(`[COMPLIANCE_AGENT] Evaluating regulatory and category compliance for signal ${proposal.signalId}...`);
+        Logger.info(`[COMPLIANCE_AGENT] Evaluating policy compliance, supported domains, and protocol safety requirements for signal ${proposal.signalId}...`);
 
         const titleLower = (proposal.title || '').toLowerCase();
         const categoryLower = (proposal.category || '').toLowerCase();

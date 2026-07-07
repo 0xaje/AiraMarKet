@@ -62,9 +62,9 @@ The protocol relies on several core services, each defined by strict boundaries 
 *   **Why it exists**: Translates qualitative evidence inputs into quantitative decision proposal parameters.
 
 ### III. Multi-Agent Consensus Engine
-*   **Responsibility**: Group of specialized verification agents (Analyst, Risk, Compliance) that act as quality gatekeepers by auditing decision proposals against a minimum 0.70 confidence threshold.
+*   **Responsibility**: Group of specialized verification agents (Analyst, Risk, Compliance) that act as quality gatekeepers by performing semantic reasoning, temporal feasibility, policy compliance, and safety evaluations.
 *   **Service Boundary**: Inputs are AI proposals; outputs are approved proposals emitted to the administrative queue.
-*   **Why it exists**: Filters out low-interest or highly ambiguous proposals before they require human approval or contract gas fees.
+*   **Why it exists**: Prevents weak, insecure, or policy-violating proposals from reaching execution pipelines.
 
 ### IV. Unified Event Bus
 *   **Responsibility**: Acts as the central, asynchronous broker for all off-chain system updates (signals received, decisions proposed, log errors).

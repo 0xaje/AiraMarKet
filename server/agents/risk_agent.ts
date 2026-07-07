@@ -7,7 +7,7 @@ export class RiskAgent {
     }
 
     private async handleEvaluation(proposal: any) {
-        Logger.info(`[RISK_AGENT] Evaluating timeline and sizing risks for signal ${proposal.signalId}...`);
+        Logger.info(`[RISK_AGENT] Evaluating temporal feasibility, operational risk, and protocol integrity before proposals enter consensus for signal ${proposal.signalId}...`);
 
         const now = Math.floor(Date.now() / 1000);
         const expiryTime = Number(proposal.expiry);

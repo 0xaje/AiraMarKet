@@ -5,10 +5,10 @@ import { Logger } from '../utils/logger';
 
 export class AnalystAgent {
     constructor() {
-        // Step 1: Listen for incoming signals and generate structured proposals
+        // Step 1: Perform semantic reasoning over normalized signals and generate structured intelligence with confidence scoring
         eventBus.on(SystemEvents.SIGNAL_RECEIVED, this.handleSignal.bind(this));
 
-        // Step 2: Listen for generated proposals and submit sentiment evaluation
+        // Step 2: Formulate sentiment assessments and compile structured evaluations
         eventBus.on(SystemEvents.MARKET_PROPOSAL_GENERATED, this.handleProposalEvaluation.bind(this));
     }
 

@@ -7,6 +7,11 @@
 
 The Multi-Agent Consensus Engine in the AIRA Protocol is modularized by specialized validation agents (e.g., `AnalystAgent`, `RiskAgent`, `ComplianceAgent`). This playbook guides developers through writing, registering, and integrating a new autonomous validation agent into the protocol backend.
 
+### Core Swarm Validators:
+*   **Analyst Agent**: Performs semantic reasoning over normalized signals and generates structured intelligence with confidence scoring.
+*   **Risk Agent**: Evaluates temporal feasibility, operational risk, and protocol integrity before proposals enter consensus.
+*   **Compliance Agent**: Evaluates policy compliance, supported domains, and protocol safety requirements.
+
 ---
 
 ## 2. Integration Playbook

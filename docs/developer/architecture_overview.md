@@ -37,9 +37,9 @@ $$\text{Signal} \longrightarrow \text{Evidence Package} \longrightarrow \text{Mu
 *   **Rationale**: Translates qualitative source texts and metadata into quantitative risk parameters.
 
 ### III. Multi-Agent Consensus Engine
-*   **Responsibility**: Performs Multi-Agent Analysis, verifying proposals against confidence thresholds and safety rules.
+*   **Responsibility**: Performs Multi-Agent Analysis, evaluating semantic alignment, checking temporal feasibility, assessing content safety, and verifying consensus thresholds.
 *   **Boundary**: Inputs: structured proposals and Evidence Packages. Outputs: consensus-approved proposals.
-*   **Rationale**: Prevents weak or low-interest decision proposals from reaching execution pipelines.
+*   **Rationale**: Prevents weak, insecure, or policy-violating proposals from reaching execution pipelines.
 
 ### IV. Smart Contracts
 *   **Responsibility**: Core state registry, pool distributions, and final settlement on the GIWA Network.
