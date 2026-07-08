@@ -1,5 +1,6 @@
 import { eventBus, SystemEvents } from '../core/event_bus';
 import { Logger } from '../utils/logger';
+import { EvidenceService } from './evidence/service';
 
 export class ConsensusService {
     private votesCache = new Map<string, any[]>();
@@ -42,6 +43,21 @@ export class ConsensusService {
 
                 // Aggregate metadata from the first approving vote
                 const baseVote = approvals[0];
+
+                // Compile the final verifiable, immutable Evidence Package
+                const evidence = await EvidenceService.generatePackage(
+                    {
+                        category: baseVote.category,
+                        topic: baseVote.title,
+                        source: 'Multi-Agent Audits',
+                        signal_strength: Math.floor(avgConfidence * 100),
+                        sentiment: baseVote.sentiment
+                    },
+                    votes,
+                    `Consensus approved with ${approvals.length}/${votes.length} approvals`,
+                    avgConfidence
+                );
+
                 const consolidatedProposal = {
                     signalId,
                     title: baseVote.title,
@@ -50,6 +66,8 @@ export class ConsensusService {
                     confidence: Number(avgConfidence.toFixed(4)),
                     sentiment: baseVote.sentiment || 'BULLISH',
                     status: 'PENDING_APPROVAL',
+                    ipfsHash: evidence.hash,
+                    evidencePackage: evidence.payload,
                     evaluations: votes.map(v => ({
                         agentName: v.agentName,
                         vote: v.vote,

@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { eventBus, SystemEvents } from '../core/event_bus';
 import { Logger } from '../utils/logger';
+import { DbAdapter } from './db_adapter';
 
 export interface NormalizedSignal {
+    signalId?: string;
     category: "crypto" | "sports" | "politics" | "tech";
     topic: string;
     source: string;
@@ -153,10 +155,22 @@ export class SignalIngestionService {
         const allSignals = [...crypto, ...tech, ...politics, ...sports];
         this.recentSignals = allSignals;
         
-        allSignals.forEach(signal => {
-            Logger.info(`[INGESTION] Emitted normalized signal for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
+        for (const signal of allSignals) {
+            const signalId = signal.topic.replace(/[^a-zA-Z0-9]/g, '').substring(0, 24) || 'default-signal';
+            signal.signalId = signalId;
+
+            const basePkg = {
+                signalId,
+                normalizedSignal: JSON.stringify(signal),
+                sourceMetadata: `Origin API Feed: ${signal.source}`,
+                aiReasoningRef: 'Base package registered on ingestion cycle.',
+                confidenceInputs: signal.signal_strength / 100
+            };
+            await DbAdapter.saveEvidencePackage(basePkg);
+
+            Logger.info(`[INGESTION] Emitted normalized signal ${signalId} for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
             eventBus.emit(SystemEvents.SIGNAL_RECEIVED, signal);
-        });
+        }
         
         return allSignals;
     }

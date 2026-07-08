@@ -53,6 +53,24 @@ export class DbAdapter {
         }
     }
 
+    static async saveEvidencePackage(pkg: any) {
+        try {
+            const client = this.getClient();
+            await client.evidencePackage.create({
+                data: {
+                    signalId: pkg.signalId,
+                    normalizedSignal: pkg.normalizedSignal,
+                    sourceMetadata: pkg.sourceMetadata,
+                    aiReasoningRef: pkg.aiReasoningRef,
+                    confidenceInputs: Number(pkg.confidenceInputs || 0)
+                }
+            });
+            Logger.success(`[DB_ADAPTER] Stored EvidencePackage in database successfully for signalId: ${pkg.signalId}`);
+        } catch (error) {
+            Logger.error('[DB_ADAPTER] Error writing EvidencePackage to database', error);
+        }
+    }
+
     static async clearPendingMarkets() {
         try {
             const client = this.getClient();
