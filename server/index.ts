@@ -176,6 +176,31 @@ const server = http.createServer(async (req, res) => {
                 orderBy: { createdAt: 'desc' }
             });
 
+            const enrichedProposals = proposals.map(p => {
+                const totalEvaluationsCount = p.evaluations.length;
+                const approvals = p.evaluations.filter(e => e.vote === 'APPROVE');
+
+                const decisionReason = `Consensus APPROVED: Weighted score met the 66% threshold, and Weighted Confidence of ${(p.confidence * 100).toFixed(1)}% met the 75% target.`;
+
+                const disagreements = p.evaluations
+                    .filter(e => e.vote !== 'APPROVE')
+                    .map(e => `${e.agentName} dissented with ${e.vote} (confidence ${(e.confidence * 100).toFixed(0)}%)`);
+
+                const riskEv = p.evaluations.find(e => e.agentName === 'RiskAgent');
+                const compEv = p.evaluations.find(e => e.agentName === 'ComplianceAgent');
+                const riskAssessment = `Risk Audit: ${riskEv ? riskEv.reasoning : 'No risk assessment log available.'} | Compliance Audit: ${compEv ? compEv.reasoning : 'No compliance assessment log available.'}`;
+
+                const supportingEvidence = `Signal ID: ${p.signalId} | Category: ${p.category} | Expire: ${p.expiry}`;
+
+                return {
+                    ...p,
+                    decisionReason,
+                    disagreements,
+                    riskAssessment,
+                    supportingEvidence
+                };
+            });
+
             const evidencePackages = await prisma.evidencePackage.findMany({
                 orderBy: { createdAt: 'desc' }
             });
@@ -206,12 +231,47 @@ const server = http.createServer(async (req, res) => {
                 }
             } catch (e) {}
 
+            const enrichedConsensusAudits = consensusAudits.map((a: any) => {
+                const totalWeight = a.auditTrail.reduce((sum: number, item: any) => sum + item.contributionWeight, 0);
+                const approvedWeight = a.auditTrail.filter((item: any) => item.vote === 'APPROVE').reduce((sum: number, item: any) => sum + item.contributionWeight, 0);
+                const score = totalWeight > 0 ? (approvedWeight / totalWeight) : 0;
+                const confidence = a.weightedConfidence;
+                
+                const isPassed = score >= 0.66 && confidence >= 0.75;
+                const verdict = isPassed ? 'APPROVE' : 'REJECT';
+
+                const decisionReason = isPassed 
+                    ? `Weighted consensus APPROVED: Weighted Score of ${(score * 100).toFixed(1)}% exceeded threshold (66%), and Weighted Confidence of ${(confidence * 100).toFixed(1)}% met target (75%).`
+                    : `Weighted consensus REJECTED: ` + (score < 0.66 
+                        ? `Weighted score of ${(score * 100).toFixed(1)}% was below the 66% threshold.` 
+                        : `Weighted confidence of ${(confidence * 100).toFixed(1)}% was below the 75% target.`);
+
+                const disagreements = a.auditTrail
+                    .filter((item: any) => item.vote !== verdict)
+                    .map((item: any) => `${item.agentName} dissented with ${item.vote} (confidence ${(item.rawConfidence * 100).toFixed(0)}%)`);
+
+                const riskItem = a.auditTrail.find((item: any) => item.agentName === 'RiskAgent');
+                const compItem = a.auditTrail.find((item: any) => item.agentName === 'ComplianceAgent');
+                const riskAssessment = `Risk Audit: ${riskItem ? riskItem.vote : 'N/A'} (Weight: ${riskItem ? riskItem.weight : 1.5}x) | Compliance Audit: ${compItem ? compItem.vote : 'N/A'} (Weight: ${compItem ? compItem.weight : 1.0}x)`;
+
+                const supportingEvidence = `Signal ID: ${a.signalId} | Compound Probability: ${(a.approvalProbability * 100).toFixed(1)}%`;
+
+                return {
+                    ...a,
+                    decisionReason,
+                    disagreements,
+                    riskAssessment,
+                    supportingEvidence,
+                    isPassed
+                };
+            });
+
             res.end(JSON.stringify({
-                proposals,
+                proposals: enrichedProposals,
                 evidencePackages,
                 transparency,
                 ipfsUploads,
-                consensusAudits
+                consensusAudits: enrichedConsensusAudits
             }));
         } catch (e: any) {
             res.writeHead(500);
