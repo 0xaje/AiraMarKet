@@ -25,7 +25,7 @@ A standardized registry prevents configuration drift and assures developers that
 | Network | Chain ID | Contract Address | Status | Notes |
 | :--- | :--- | :--- | :--- | :--- |
 | **Mantle Sepolia Testnet** | `5003` | `0xdd277ccb8cda72d652cdca4df09df5f2522fc846` | ✅ **Live Production** | Fully operational and verified on-chain. |
-| **GIWA Sepolia Testnet** | `91342` | `0xaa277ccb8cda72d652cdca4df09df5f2522fc846` | ⚠️ **Bootstrap Placeholder** | *Contracts are not physically deployed to the GIWA chain yet.* Using a standard mock address for network bootstrap validation. |
+| **GIWA Sepolia Testnet** | `91342` | `0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4` | ✅ **Live Production** | Fully operational and verified on-chain. |
 
 ---
 

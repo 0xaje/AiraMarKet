@@ -6,7 +6,13 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
 
   const AiraMarketProtocol = await hre.ethers.getContractFactory("AiraMarketProtocol");
-  const protocol = await AiraMarketProtocol.deploy();
+  
+  // Let ethers automatically estimate the gas limit, while forcing legacy gasPrice settings for compatibility
+  const protocol = await AiraMarketProtocol.deploy({
+    gasPrice: hre.ethers.parseUnits("0.05", "gwei")
+  });
+
+  console.log("Deploy transaction submitted. Hash:", protocol.deploymentTransaction().hash);
 
   await protocol.waitForDeployment();
 

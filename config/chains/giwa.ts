@@ -11,7 +11,7 @@ export const giwa: ChainConfig = {
     decimals: 18,
   },
   contracts: {
-    marketProtocol: '0xaa277ccb8cda72d652cdca4df09df5f2522fc846',
+    marketProtocol: '0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4',
   },
   confirmations: 1,
   isTestnet: true,

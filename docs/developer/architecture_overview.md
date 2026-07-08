@@ -49,3 +49,17 @@ flowchart TD
 *   **Responsibility**: Stateless polling of EVM block receipts and caching events to a PostgreSQL DB.
 *   **Boundary**: Inputs: RPC log events. Outputs: relational database states queried by the UI.
 *   **Rationale**: Prevents heavy RPC querying from the frontend dashboard.
+
+---
+
+## 3. Flagship Contract Deployments
+
+Smart contract interactions dynamically target these deployed network instances:
+
+*   **GIWA Sepolia Testnet** (`Chain ID: 91342`):
+    *   **Registry Address**: [`0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4`](https://sepolia-explorer.giwa.io/address/0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4)
+    *   **Status**: ✅ **Live & Verified on Explorer**
+*   **Mantle Sepolia Testnet** (`Chain ID: 5003`):
+    *   **Registry Address**: [`0xdd277ccb8cda72d652cdca4df09df5f2522fc846`](https://explorer.sepolia.mantle.xyz/address/0xdd277ccb8cda72d652cdca4df09df5f2522fc846)
+    *   **Status**: ✅ **Live & Verified on Explorer**
+
