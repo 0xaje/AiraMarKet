@@ -1,5 +1,6 @@
 import { eventBus, SystemEvents } from '../core/event_bus';
 import { AIService } from '../services/ai_service';
+import { llmManager } from '../services/llm/manager';
 import { NormalizedSignal } from '../services/signal_ingestion';
 import { Logger } from '../utils/logger';
 
@@ -33,27 +34,60 @@ export class AnalystAgent {
     }
 
     private async handleProposalEvaluation(proposal: any) {
-        Logger.info(`[ANALYST_AGENT] Evaluating proposal sentiment for signal ${proposal.signalId}...`);
+        Logger.info(`[ANALYST_AGENT] Submitting proposal sentiment to LLM for signal ${proposal.signalId}...`);
         
-        const isApproved = proposal.rawConfidence > 0.70;
-        const vote = isApproved ? 'APPROVE' : 'REJECT';
-        const reasoning = isApproved
-            ? `LLM analyst confirmed strong sentiment alignment (Confidence: ${proposal.rawConfidence.toFixed(2)})`
-            : `LLM analyst rejected proposal: confidence score ${proposal.rawConfidence.toFixed(2)} is below threshold (0.70)`;
+        try {
+            const prompt = `
+Task: Perform a semantic sentiment audit on the following decision proposal.
+Proposal Title: "${proposal.title}"
+Proposal Category: "${proposal.category}"
+Proposal Expiry: "${proposal.expiry}"
+Input Sentiment: "${proposal.sentiment}"
+Input Confidence: ${proposal.rawConfidence}
 
-        eventBus.emit(SystemEvents.EVALUATION_SUBMITTED, {
-            signalId: proposal.signalId,
-            agentName: 'AnalystAgent',
-            title: proposal.title,
-            category: proposal.category,
-            expiry: proposal.expiry,
-            sentiment: proposal.sentiment,
-            vote,
-            confidence: proposal.rawConfidence,
-            reasoning
-        });
+Evaluate whether this proposal exhibits sustainable, positive sentiment indicators and clear event boundary logic.
+You MUST respond in strict JSON matching this schema:
+{
+  "decision": "APPROVE" | "REJECT",
+  "confidence": <number between 0.0 and 1.0>,
+  "reasoning": "<concise reasoning details>",
+  "risks": "<key risk factors>",
+  "supportingEvidence": "<evidence references>",
+  "recommendedQuestion": "<optional representation question>"
+}
+Do not include markdown blocks. Raw JSON only.
+`;
+
+            const evaluation = await llmManager.analyze(prompt);
+
+            eventBus.emit(SystemEvents.EVALUATION_SUBMITTED, {
+                signalId: proposal.signalId,
+                agentName: 'AnalystAgent',
+                title: proposal.title,
+                category: proposal.category,
+                expiry: proposal.expiry,
+                sentiment: proposal.sentiment,
+                vote: evaluation.decision,
+                confidence: evaluation.confidence,
+                reasoning: evaluation.reasoning
+            });
+        } catch (error) {
+            Logger.error(`[ANALYST_AGENT] Error running LLM evaluation for signal ${proposal.signalId}`, error);
+            
+            // Fallback safety rule
+            eventBus.emit(SystemEvents.EVALUATION_SUBMITTED, {
+                signalId: proposal.signalId,
+                agentName: 'AnalystAgent',
+                title: proposal.title,
+                category: proposal.category,
+                expiry: proposal.expiry,
+                sentiment: proposal.sentiment,
+                vote: 'REJECT',
+                confidence: 0.10,
+                reasoning: `LLM evaluation pipeline failed: ${error}`
+            });
+        }
     }
 }
 
 export const analystAgent = new AnalystAgent();
-

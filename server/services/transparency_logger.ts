@@ -48,4 +48,36 @@ export class TransparencyLogger {
 
         Logger.success(`[TRANSPARENCY] Verifiable AI log entries written securely for txHash: ${txHash}`);
     }
+
+    static logLlmCall(metrics: any) {
+        const logDir = path.join(__dirname, '../../logs');
+        if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+        }
+        
+        const logFile = path.join(logDir, 'llm_calls.log');
+        fs.appendFileSync(logFile, JSON.stringify(metrics) + '\n');
+        
+        const formattedLogFile = path.join(logDir, 'formatted_llm_calls.json');
+        let formattedEntries: any[] = [];
+        if (fs.existsSync(formattedLogFile)) {
+            try {
+                const content = fs.readFileSync(formattedLogFile, 'utf-8');
+                formattedEntries = JSON.parse(content);
+                if (!Array.isArray(formattedEntries)) {
+                    formattedEntries = [];
+                }
+            } catch (e) {
+                formattedEntries = [];
+            }
+        }
+        formattedEntries.push(metrics);
+        fs.writeFileSync(formattedLogFile, JSON.stringify(formattedEntries, null, 2), 'utf-8');
+
+        if (metrics.error) {
+            Logger.warn(`[TELEMETRY] LLM Call Failed | Provider: ${metrics.provider} | Latency: ${metrics.latencyMs}ms | Error: ${metrics.error}`);
+        } else {
+            Logger.info(`[TELEMETRY] LLM Call Succeeded | Provider: ${metrics.provider} | Model: ${metrics.model} | Latency: ${metrics.latencyMs}ms | Tokens: ${metrics.tokensUsed}`);
+        }
+    }
 }

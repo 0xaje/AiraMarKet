@@ -1,34 +1,45 @@
 import { NormalizedSignal } from './signal_ingestion';
+import { llmManager } from './llm/manager';
 import { Logger } from '../utils/logger';
 
 /**
  * AIRA AI Intelligence Service
- * Handles prompt generation, confidence scoring, and outcome prediction.
+ * Handles prompt generation, confidence scoring, and outcome prediction via LLM.
  */
 export class AIService {
     static async generateMarketProposal(signal: NormalizedSignal) {
-        // Structuring the decision proposal from live web signals
-        Logger.info(`[AI_SERVICE] Analyzing signal for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
+        Logger.info(`[AI_SERVICE] Generating proposal via LLM for ${signal.category.toUpperCase()}: ${signal.topic.substring(0, 50)}...`);
         
-        // Calculate a highly realistic and deterministic confidence score based on signal strength & sentiment
-        // Base confidence is signal_strength mapped from [10, 100] to [0.7, 0.95]
-        let baseConfidence = 0.7 + (Math.min(100, Math.max(10, signal.signal_strength)) - 10) * 0.0027; // maps 10-100 to 0.7-0.95
-        
-        // Slightly amplify confidence if the sentiment is bullish or bearish (stronger trend direction)
-        if (signal.sentiment === 'bullish' || signal.sentiment === 'bearish') {
-            baseConfidence += 0.05;
-        }
-        
-        const confidence = parseFloat(Math.min(0.95, Math.max(0.6, baseConfidence)).toFixed(2));
+        const prompt = `
+Task: Formulate a binary decision intelligence proposal from the incoming real-world signal.
+Signal Topic: "${signal.topic}"
+Signal Category: "${signal.category}"
+Signal Source: "${signal.source}"
+Signal Sentiment: "${signal.sentiment}"
+Signal Strength: ${signal.signal_strength}
+
+You MUST evaluate this signal and respond in strict JSON matching this schema:
+{
+  "decision": "APPROVE" | "REJECT",
+  "confidence": <number between 0.0 and 1.0>,
+  "reasoning": "<concise reasoning analysis>",
+  "risks": "<key risk factors identified>",
+  "supportingEvidence": "<factual evidence from sources or context>",
+  "recommendedQuestion": "<clear YES/NO question representing the outcome of the signal. If decision is REJECT, this can be empty>"
+}
+Do not wrap in markdown or add extra text. Only raw JSON.
+`;
+
+        const evaluation = await llmManager.analyze(prompt);
 
         return {
             category: signal.category,
-            title: `Will ${signal.topic.substring(0, 40).trim()}... occur?`,
-            description: `Prediction market based on recent ${signal.sentiment} news: ${signal.topic}`,
+            title: evaluation.recommendedQuestion || `Will ${signal.topic.substring(0, 40).trim()}... occur?`,
+            description: `Decision proposal formulated from signal: ${signal.topic}. Evidence reasoning: ${evaluation.reasoning}. Risks: ${evaluation.risks}`,
             expiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-            confidence,
+            confidence: evaluation.confidence,
             inputSignals: JSON.stringify({ source: signal.source, topic: signal.topic, strength: signal.signal_strength, sentiment: signal.sentiment }),
-            reason: `Generated from ${signal.source} exhibiting a ${signal.sentiment} sentiment score of ${signal.signal_strength}.`
+            reason: evaluation.reasoning
         };
     }
 }
