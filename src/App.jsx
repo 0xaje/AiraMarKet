@@ -14,6 +14,7 @@ import Feed from './components/Feed';
 import CreatorLab from './components/CreatorLab';
 import Terminal from './components/Terminal';
 import Portfolio from './components/Portfolio';
+import Explorer from './components/Explorer';
 
 function App() {
   const navigate = useNavigate();
@@ -93,6 +94,12 @@ function App() {
             >
               Leaderboard
             </button>
+            <button 
+              className={`font-semibold text-sm pb-1 transition-all ${currentView === 'explorer' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary'}`}
+              onClick={() => navigate('/explorer')}
+            >
+              Explorer
+            </button>
           </nav>
         </div>
         <div className="flex items-center gap-2 md:gap-6">
@@ -149,6 +156,7 @@ function App() {
         <Route path="/terminal" element={<Terminal />} />
         <Route path="/leaderboard" element={<Leaderboard profileData={profileData} />} />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/explorer" element={<Explorer />} />
       </Routes>
 
       {/* Mobile Bottom Navigation */}

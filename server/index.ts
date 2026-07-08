@@ -1,6 +1,13 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 import { Logger } from './utils/logger';
 import { NetworkValidationService } from './services/networkValidationService';
 import { activeChainConfig } from '../config/chains';
@@ -155,6 +162,61 @@ const server = http.createServer(async (req, res) => {
                 res.end('Failed');
             }
         });
+        return;
+    }
+
+    if (req.method === 'GET' && req.url === '/api/explorer/data') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        try {
+            const { DbAdapter } = await import('./services/db_adapter');
+            const prisma = DbAdapter.getClient();
+
+            const proposals = await prisma.pendingMarket.findMany({
+                include: { evaluations: true },
+                orderBy: { createdAt: 'desc' }
+            });
+
+            const evidencePackages = await prisma.evidencePackage.findMany({
+                orderBy: { createdAt: 'desc' }
+            });
+
+            const logDir = path.join(__dirname, '../logs');
+            
+            let transparency = [];
+            try {
+                const filePath = path.join(logDir, 'formatted_transparency.json');
+                if (fs.existsSync(filePath)) {
+                    transparency = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                }
+            } catch (e) {}
+
+            let ipfsUploads = [];
+            try {
+                const filePath = path.join(logDir, 'formatted_ipfs_uploads.json');
+                if (fs.existsSync(filePath)) {
+                    ipfsUploads = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                }
+            } catch (e) {}
+
+            let consensusAudits = [];
+            try {
+                const filePath = path.join(logDir, 'formatted_consensus_audits.json');
+                if (fs.existsSync(filePath)) {
+                    consensusAudits = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                }
+            } catch (e) {}
+
+            res.end(JSON.stringify({
+                proposals,
+                evidencePackages,
+                transparency,
+                ipfsUploads,
+                consensusAudits
+            }));
+        } catch (e: any) {
+            res.writeHead(500);
+            res.end(JSON.stringify({ error: e.message }));
+        }
         return;
     }
 
