@@ -13,7 +13,12 @@ export class EvidenceValidator {
             'confidence',
             'metadata',
             'modelVersion',
-            'timestamp'
+            'timestamp',
+            'promptHash',
+            'agentIds',
+            'provider',
+            'cid',
+            'sha256Hash'
         ];
 
         // 1. Check for required properties
@@ -32,6 +37,15 @@ export class EvidenceValidator {
         if (typeof payload.metadata !== 'object') return false;
         if (typeof payload.modelVersion !== 'string') return false;
         if (typeof payload.timestamp !== 'string') return false;
+        
+        if (typeof payload.promptHash !== 'string' || payload.promptHash.length !== 64) return false;
+        if (!Array.isArray(payload.agentIds)) return false;
+        if (typeof payload.provider !== 'string') return false;
+        if (typeof payload.cid !== 'string') return false;
+        if (typeof payload.sha256Hash !== 'string' || payload.sha256Hash.length !== 64) return false;
+
+        // Check metadata items
+        if (typeof payload.metadata.protocolVersion !== 'string') return false;
 
         return true;
     }

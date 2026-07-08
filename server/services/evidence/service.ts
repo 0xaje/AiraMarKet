@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { EvidenceSerializer } from './serializer';
 import { EvidenceValidator } from './validator';
 import { ipfsManager } from '../ipfs/manager';
@@ -22,26 +23,57 @@ export interface EvidencePackagePayload {
     confidence: number;
     metadata: {
         protocol: string;
-        version: string;
+        protocolVersion: string;
         release: string;
         build: string;
     };
     modelVersion: string;
     timestamp: string;
+    promptHash: string;
+    agentIds: string[];
+    provider: string;
+    cid: string;
+    sha256Hash: string; // Cryptographic index hash of all other attributes
+}
+
+export interface GeneratePackageOptions {
+    timestamp?: string;
+    cid?: string;
+    promptHash?: string;
+    provider?: string;
+    protocolVersion?: string;
+    modelVersion?: string;
 }
 
 export class EvidenceService {
     /**
-     * Compiles, serializes, uploads to IPFS via manager, and validates a unified protocol Evidence Package.
+     * Compiles, serializes deterministically, hashes, and validates a unified protocol Evidence Package.
+     * Guarantees identical inputs yield identical SHA-256 hashes.
      */
     static async generatePackage(
         signal: any,
         evaluations: any[],
         consensusReasoning: string,
-        consensusConfidence: number
+        consensusConfidence: number,
+        options: GeneratePackageOptions = {}
     ): Promise<{ payload: EvidencePackagePayload; hash: string }> {
         
-        const payload: EvidencePackagePayload = {
+        // 1. Establish deterministic attributes
+        const timestamp = options.timestamp || signal.timestamp || new Date().toISOString();
+        const protocolVersion = options.protocolVersion || 'v2.4.0';
+        const modelVersion = options.modelVersion || 'gpt-4o / gemini-1.5-flash / llama3-local';
+        const provider = options.provider || 'Local IPFS Node';
+        const agentIds = (evaluations || []).map(e => e.agentName).sort();
+
+        // Calculate prompt hash from evaluations content if not explicitly supplied
+        let promptHash = options.promptHash;
+        if (!promptHash) {
+            const combinedAgentInputs = (evaluations || []).map(e => `${e.agentName}:${e.reasoning}`).sort().join('|');
+            promptHash = crypto.createHash('sha256').update(combinedAgentInputs).digest('hex');
+        }
+
+        // 2. Build preliminary payload WITHOUT the sha256Hash property
+        const prelimPayload: Omit<EvidencePackagePayload, 'sha256Hash'> = {
             normalizedSignal: {
                 category: signal.category || 'misc',
                 topic: signal.topic || '',
@@ -60,31 +92,54 @@ export class EvidenceService {
             confidence: consensusConfidence,
             metadata: {
                 protocol: 'AIRA Protocol',
-                version: '2.4.0',
+                protocolVersion,
                 release: 'v2',
                 build: '124'
             },
-            modelVersion: 'gpt-4o / gemini-1.5-flash / llama3-local',
-            timestamp: new Date().toISOString()
+            modelVersion,
+            timestamp,
+            promptHash,
+            agentIds,
+            provider,
+            cid: options.cid || 'PENDING_UPLOAD' // Temporary placeholder for pre-upload hashing target
         };
 
-        // 1. Schema Validation
-        if (!EvidenceValidator.validate(payload)) {
+        // 3. Serialize preliminaries and generate deterministic target hash
+        let serialized = EvidenceSerializer.serialize(prelimPayload);
+        const calculatedHash = EvidenceSerializer.generateHash(serialized);
+
+        // 4. Determine final CID. If not explicitly passed, upload preliminary payload to IPFS
+        let finalCid = options.cid;
+        if (!finalCid) {
+            // Upload to IPFS via manager (records upload latency and provider used)
+            finalCid = await ipfsManager.upload(prelimPayload);
+        }
+
+        // 5. Construct final complete payload including CID and sha256Hash
+        // To keep hash reproduction deterministic, we compute the sha256Hash of the FINAL object containing the CID
+        const finalPayloadWithoutHash: Omit<EvidencePackagePayload, 'sha256Hash'> = {
+            ...prelimPayload,
+            cid: finalCid
+        };
+
+        const finalSerialized = EvidenceSerializer.serialize(finalPayloadWithoutHash);
+        const finalHash = EvidenceSerializer.generateHash(finalSerialized);
+
+        const finalPayload: EvidencePackagePayload = {
+            ...finalPayloadWithoutHash,
+            sha256Hash: finalHash
+        };
+
+        // 6. Schema Validation
+        if (!EvidenceValidator.validate(finalPayload)) {
             throw new Error('[EVIDENCE_SERVICE] Evidence Package payload schema validation failed.');
         }
 
-        // 2. Deterministic Alphabetical Serialization
-        const serialized = EvidenceSerializer.serialize(payload);
+        Logger.success(`[EVIDENCE_SERVICE] Verifiable Evidence Package upgraded successfully. Hash: ${finalHash}`);
 
-        // 3. Upload to IPFS via Pluggable Manager (computes and verifies CIDv0/CIDv1)
-        const cid = await ipfsManager.upload(payload);
-
-        Logger.success(`[EVIDENCE_SERVICE] Verifiable Evidence Package uploaded successfully to IPFS. CID: ${cid}`);
-
-        // Return the final prepared IPFS URI reference alongside the payload
         return {
-            payload,
-            hash: `ipfs://${cid}`
+            payload: finalPayload,
+            hash: `ipfs://${finalCid}`
         };
     }
 }
