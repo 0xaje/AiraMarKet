@@ -1,5 +1,6 @@
 import { EvidenceSerializer } from './serializer';
 import { EvidenceValidator } from './validator';
+import { ipfsManager } from '../ipfs/manager';
 import { Logger } from '../../utils/logger';
 
 export interface EvidencePackagePayload {
@@ -31,7 +32,7 @@ export interface EvidencePackagePayload {
 
 export class EvidenceService {
     /**
-     * Compiles, serializes, hashes, and validates a unified protocol Evidence Package.
+     * Compiles, serializes, uploads to IPFS via manager, and validates a unified protocol Evidence Package.
      */
     static async generatePackage(
         signal: any,
@@ -75,15 +76,15 @@ export class EvidenceService {
         // 2. Deterministic Alphabetical Serialization
         const serialized = EvidenceSerializer.serialize(payload);
 
-        // 3. Cryptographic Hash Generation
-        const hash = EvidenceSerializer.generateHash(serialized);
+        // 3. Upload to IPFS via Pluggable Manager (computes and verifies CIDv0/CIDv1)
+        const cid = await ipfsManager.upload(payload);
 
-        Logger.success(`[EVIDENCE_SERVICE] Verifiable Evidence Package compiled successfully. SHA-256 Hash: ${hash}`);
+        Logger.success(`[EVIDENCE_SERVICE] Verifiable Evidence Package uploaded successfully to IPFS. CID: ${cid}`);
 
         // Return the final prepared IPFS URI reference alongside the payload
         return {
             payload,
-            hash: `ipfs://${hash}`
+            hash: `ipfs://${cid}`
         };
     }
 }
