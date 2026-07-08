@@ -1,12 +1,14 @@
 import { eventBus, SystemEvents } from '../core/event_bus';
 import { Logger } from '../utils/logger';
 import { EvidenceService } from './evidence/service';
+import { AGENT_REGISTRY } from '../config/agent_consensus';
+import { TransparencyLogger } from './transparency_logger';
 
 export class ConsensusService {
     private votesCache = new Map<string, any[]>();
     private QUORUM = 3;
-    private APPROVAL_THRESHOLD = 0.66; // 66% approval (2 out of 3)
-    private CONFIDENCE_THRESHOLD = 0.75; // Average confidence >= 0.75
+    private APPROVAL_THRESHOLD = 0.66; // 66% weighted score
+    private CONFIDENCE_THRESHOLD = 0.75; // 0.75 weighted confidence
 
     constructor() {
         eventBus.on(SystemEvents.EVALUATION_SUBMITTED, this.handleEvaluation.bind(this));
@@ -32,17 +34,77 @@ export class ConsensusService {
     private async processConsensus(signalId: string, votes: any[]) {
         Logger.info(`[CONSENSUS_SERVICE] Quorum met for signal ${signalId}. Processing consensus...`);
 
-        const approvals = votes.filter(v => v.vote === 'APPROVE');
-        const approvalRatio = approvals.length / votes.length;
+        let totalWeight = 0;
+        let weightedApprovalSum = 0;
+        let weightedConfidenceSum = 0;
+        let totalReputationWeight = 0;
+        let weightedReputationSum = 0;
 
-        if (approvalRatio >= this.APPROVAL_THRESHOLD) {
-            const avgConfidence = approvals.reduce((sum, v) => sum + v.confidence, 0) / approvals.length;
+        const auditTrail: any[] = [];
 
-            if (avgConfidence >= this.CONFIDENCE_THRESHOLD) {
-                Logger.success(`[CONSENSUS_SERVICE] Consensus APPROVED for signal ${signalId} (Ratio: ${approvalRatio.toFixed(2)}, Avg Confidence: ${avgConfidence.toFixed(2)})`);
+        for (const vote of votes) {
+            const params = AGENT_REGISTRY[vote.agentName] || {
+                weight: 1.0,
+                historicalAccuracy: 0.80,
+                reputation: 80,
+                confidenceAdjustment: 1.0
+            };
+
+            const adjustedConfidence = Math.min(1.0, vote.confidence * params.confidenceAdjustment);
+            const isApproved = vote.vote === 'APPROVE';
+            
+            // Core contributions math
+            const contributionWeight = params.weight * params.historicalAccuracy;
+            totalWeight += contributionWeight;
+            
+            if (isApproved) {
+                weightedApprovalSum += contributionWeight;
+            }
+            
+            weightedConfidenceSum += adjustedConfidence * params.weight;
+            totalReputationWeight += params.weight;
+            weightedReputationSum += params.reputation * params.weight;
+
+            auditTrail.push({
+                agentName: vote.agentName,
+                vote: vote.vote,
+                rawConfidence: vote.confidence,
+                adjustedConfidence,
+                weight: params.weight,
+                accuracy: params.historicalAccuracy,
+                reputation: params.reputation,
+                contributionWeight
+            });
+        }
+
+        // Consolidated metrics
+        const weightedScore = totalWeight > 0 ? (weightedApprovalSum / totalWeight) : 0;
+        const weightedConfidence = totalReputationWeight > 0 ? (weightedConfidenceSum / totalReputationWeight) : 0;
+        const avgReputation = totalReputationWeight > 0 ? (weightedReputationSum / totalReputationWeight) : 80;
+        
+        // Compound Approval Probability formula
+        const approvalProbability = weightedScore * (0.5 + 0.5 * weightedConfidence) * (avgReputation / 100);
+
+        // Record metrics to telemetry log
+        TransparencyLogger.logConsensusAudit({
+            signalId,
+            weightedScore,
+            weightedConfidence,
+            approvalProbability,
+            auditTrail,
+            timestamp: new Date().toISOString()
+        });
+
+        if (weightedScore >= this.APPROVAL_THRESHOLD) {
+            if (weightedConfidence >= this.CONFIDENCE_THRESHOLD) {
+                Logger.success(`[CONSENSUS_SERVICE] Weighted consensus APPROVED for signal ${signalId} (Score: ${weightedScore.toFixed(2)}, Confidence: ${weightedConfidence.toFixed(2)}, Probability: ${(approvalProbability * 100).toFixed(1)}%)`);
 
                 // Aggregate metadata from the first approving vote
-                const baseVote = approvals[0];
+                const approvals = votes.filter(v => v.vote === 'APPROVE');
+                const baseVote = approvals[0] || votes[0];
+
+                const consensusReasoning = `Weighted consensus APPROVED (Weighted Score: ${weightedScore.toFixed(4)}, Weighted Confidence: ${weightedConfidence.toFixed(4)}, Probability: ${(approvalProbability * 100).toFixed(1)}%). Node votes: ` + 
+                    votes.map(v => `${v.agentName}: ${v.vote} (Conf: ${v.confidence.toFixed(2)})`).join(', ');
 
                 // Compile the final verifiable, immutable Evidence Package
                 const evidence = await EvidenceService.generatePackage(
@@ -50,12 +112,16 @@ export class ConsensusService {
                         category: baseVote.category,
                         topic: baseVote.title,
                         source: 'Multi-Agent Audits',
-                        signal_strength: Math.floor(avgConfidence * 100),
+                        signal_strength: Math.floor(weightedConfidence * 100),
                         sentiment: baseVote.sentiment
                     },
                     votes,
-                    `Consensus approved with ${approvals.length}/${votes.length} approvals`,
-                    avgConfidence
+                    consensusReasoning,
+                    weightedConfidence,
+                    {
+                        protocolVersion: 'v2.4.0',
+                        provider: 'Local IPFS Node'
+                    }
                 );
 
                 const consolidatedProposal = {
@@ -63,7 +129,7 @@ export class ConsensusService {
                     title: baseVote.title,
                     category: baseVote.category,
                     expiry: String(baseVote.expiry),
-                    confidence: Number(avgConfidence.toFixed(4)),
+                    confidence: Number(weightedConfidence.toFixed(4)),
                     sentiment: baseVote.sentiment || 'BULLISH',
                     status: 'PENDING_APPROVAL',
                     ipfsHash: evidence.hash,
@@ -76,16 +142,15 @@ export class ConsensusService {
                     }))
                 };
 
-                // Emit MARKET_APPROVED event to trigger decision proposal generation lifecycle
+                // Emit event
                 eventBus.emit(SystemEvents.MARKET_APPROVED, consolidatedProposal);
             } else {
-                Logger.warn(`[CONSENSUS_SERVICE] Consensus REJECTED for signal ${signalId}: Average confidence ${avgConfidence.toFixed(2)} is below threshold ${this.CONFIDENCE_THRESHOLD}`);
+                Logger.warn(`[CONSENSUS_SERVICE] Weighted consensus REJECTED for signal ${signalId}: Weighted confidence ${weightedConfidence.toFixed(2)} is below threshold ${this.CONFIDENCE_THRESHOLD}`);
             }
         } else {
-            Logger.warn(`[CONSENSUS_SERVICE] Consensus REJECTED for signal ${signalId}: Approval ratio ${approvalRatio.toFixed(2)} is below threshold ${this.APPROVAL_THRESHOLD}`);
+            Logger.warn(`[CONSENSUS_SERVICE] Weighted consensus REJECTED for signal ${signalId}: Weighted score ${weightedScore.toFixed(2)} is below threshold ${this.APPROVAL_THRESHOLD}`);
         }
     }
 }
 
 export const consensusService = new ConsensusService();
-

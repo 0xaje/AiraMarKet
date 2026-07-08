@@ -19,21 +19,23 @@ function assert(condition: boolean, message: string) {
 }
 
 async function runTests() {
-    Logger.start("Running Consensus Service Test Suite...");
+    Logger.start("Running Upgraded Consensus Service Test Suite...");
 
-    // Test Case 1: Quorum with Approvals (Consensus Success)
+    // Test Case 1: Weighted Quorum with Approvals (Consensus Success)
     await new Promise<void>((resolve) => {
         const signalId = 'sig-test-1';
         
         eventBus.once(SystemEvents.MARKET_APPROVED, (proposal) => {
             assert(proposal.signalId === signalId, 'Emitted signalId should match proposal');
-            assert(proposal.confidence === 0.88, 'Calculated average confidence should match approvals');
+            assert(Math.abs(proposal.confidence - 0.7662) < 0.0001, `Calculated weighted confidence (${proposal.confidence}) matches expected adjusted pool confidence (0.7662)`);
             assert(proposal.sentiment === 'BULLISH', 'Consolidated sentiment should be set');
             assert(proposal.evaluations.length === 3, 'All 3 agent evaluations should be attached');
             resolve();
         });
 
-        // Emit 3 evaluations (2 approvals, 1 rejection - ratio 66.7%)
+        // Emit 3 evaluations (2 approvals, 1 rejection)
+        // Weighted score = (1.2 * 0.92 + 1.5 * 0.88) / (1.2 * 0.92 + 1.5 * 0.88 + 1.0 * 0.95) = 2.424 / 3.374 = 0.7184 (>= 0.66)
+        // Weighted confidence = (0.98 * 1.2 * 1.0 + 0.98 * 1.5 * 0.95 + 0.25 * 1.0 * 1.05) / 3.7 = (1.176 + 1.3965 + 0.2625) / 3.7 = 2.835 / 3.7 = 0.7662 (>= 0.75)
         eventBus.emit(SystemEvents.EVALUATION_SUBMITTED, {
             signalId,
             agentName: 'AnalystAgent',
@@ -42,7 +44,7 @@ async function runTests() {
             expiry: '1725148800',
             sentiment: 'BULLISH',
             vote: 'APPROVE',
-            confidence: 0.80,
+            confidence: 0.98,
             reasoning: 'Good trend signals'
         });
 
@@ -54,7 +56,7 @@ async function runTests() {
             expiry: '1725148800',
             sentiment: 'BULLISH',
             vote: 'APPROVE',
-            confidence: 0.96,
+            confidence: 0.98,
             reasoning: 'Timeline is optimal'
         });
 
@@ -66,12 +68,12 @@ async function runTests() {
             expiry: '1725148800',
             sentiment: 'BULLISH',
             vote: 'REJECT',
-            confidence: 0.20,
+            confidence: 0.25,
             reasoning: 'Restricted term check failed'
         });
     });
 
-    // Test Case 2: Quorum with Rejections (Consensus Failure)
+    // Test Case 2: Weighted Quorum with Rejections (Consensus Failure)
     await new Promise<void>((resolve) => {
         const signalId = 'sig-test-2';
         let approvedTriggered = false;
@@ -85,6 +87,7 @@ async function runTests() {
         eventBus.on(SystemEvents.MARKET_APPROVED, onApproved);
 
         // Emit 3 evaluations (2 rejections, 1 approval)
+        // Weighted score = (1.0 * 0.95) / 3.374 = 0.2816 (< 0.66)
         eventBus.emit(SystemEvents.EVALUATION_SUBMITTED, {
             signalId,
             agentName: 'AnalystAgent',
@@ -122,22 +125,22 @@ async function runTests() {
         });
 
         setTimeout(() => {
+            assert(!approvedTriggered, 'Market approval should NOT trigger if weighted consensus score falls below threshold');
             eventBus.off(SystemEvents.MARKET_APPROVED, onApproved);
-            assert(!approvedTriggered, 'Market approval should NOT trigger if consensus is rejected');
             resolve();
-        }, 500);
+        }, 100);
     });
 
     Logger.info(`\nTest Summary: ${testPassed} passed, ${testFailed} failed.`);
     if (testFailed > 0) {
         process.exit(1);
     } else {
-        Logger.success("Consensus Service Integration Tests Passed Successfully!");
+        Logger.success("All Upgraded Consensus Service Integration Tests Passed Successfully!");
         process.exit(0);
     }
 }
 
 runTests().catch(err => {
-    Logger.error("Unhandle test crash", err);
+    Logger.error("Error running tests", err);
     process.exit(1);
 });

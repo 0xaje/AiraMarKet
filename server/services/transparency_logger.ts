@@ -112,4 +112,32 @@ export class TransparencyLogger {
             Logger.info(`[TELEMETRY] IPFS Upload Succeeded | Provider: ${metrics.provider} | CID: ${metrics.cid} | Latency: ${metrics.latencyMs}ms`);
         }
     }
+
+    static logConsensusAudit(metrics: any) {
+        const logDir = path.join(__dirname, '../../logs');
+        if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+        }
+        
+        const logFile = path.join(logDir, 'consensus_audits.log');
+        fs.appendFileSync(logFile, JSON.stringify(metrics) + '\n');
+        
+        const formattedLogFile = path.join(logDir, 'formatted_consensus_audits.json');
+        let formattedEntries: any[] = [];
+        if (fs.existsSync(formattedLogFile)) {
+            try {
+                const content = fs.readFileSync(formattedLogFile, 'utf-8');
+                formattedEntries = JSON.parse(content);
+                if (!Array.isArray(formattedEntries)) {
+                    formattedEntries = [];
+                }
+            } catch (e) {
+                formattedEntries = [];
+            }
+        }
+        formattedEntries.push(metrics);
+        fs.writeFileSync(formattedLogFile, JSON.stringify(formattedEntries, null, 2), 'utf-8');
+
+        Logger.success(`[TELEMETRY] Weighted Consensus Audit Logs written for signal: ${metrics.signalId} | Score: ${metrics.weightedScore.toFixed(4)} | Confidence: ${metrics.weightedConfidence.toFixed(4)} | Probability: ${(metrics.approvalProbability * 100).toFixed(1)}%`);
+    }
 }
