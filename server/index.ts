@@ -14,6 +14,7 @@ import { SignalIngestionService } from './services/signal_ingestion';
 import * as http from 'http';
 import { TransparencyLogger } from './services/transparency_logger';
 import { MarketCache } from './services/market_cache';
+import { reputationService } from './services/reputation_service';
 import { exec } from 'child_process';
 import { ProviderFactory } from '../services/providerFactory';
 import { indexer } from './indexer';
@@ -154,6 +155,24 @@ const server = http.createServer(async (req, res) => {
                 res.end('Failed');
             }
         });
+        return;
+    }
+
+    if (req.method === 'GET' && req.url === '/api/reputation') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        const stats = await reputationService.getAllReputations();
+        res.end(JSON.stringify(stats));
+        return;
+    }
+
+    if (req.method === 'GET' && req.url?.startsWith('/api/reputation/')) {
+        const agentName = req.url.split('/').pop();
+        if (!agentName) {
+            res.writeHead(400); res.end('Invalid agent name'); return;
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        const stats = await reputationService.getReputation(agentName);
+        res.end(JSON.stringify(stats));
         return;
     }
 

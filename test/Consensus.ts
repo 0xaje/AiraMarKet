@@ -1,6 +1,12 @@
 import { eventBus, SystemEvents } from '../server/core/event_bus';
 import { consensusService } from '../server/services/consensus_service';
 import { Logger } from '../server/utils/logger';
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Force initialize consensusService listeners
 consensusService;
@@ -20,6 +26,11 @@ function assert(condition: boolean, message: string) {
 
 async function runTests() {
     Logger.start("Running Upgraded Consensus Service Test Suite...");
+
+    const logFile = path.join(__dirname, '../logs/agent_reputation.json');
+    if (fs.existsSync(logFile)) {
+        fs.unlinkSync(logFile);
+    }
 
     // Test Case 1: Weighted Quorum with Approvals (Consensus Success)
     await new Promise<void>((resolve) => {
