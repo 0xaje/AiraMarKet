@@ -26,7 +26,8 @@ export class AnalystAgent {
                 category: signal.category || proposal.category || 'misc',
                 expiry: proposal.expiry,
                 sentiment: signal.sentiment.toUpperCase(),
-                rawConfidence: proposal.confidence
+                rawConfidence: proposal.confidence,
+                intelligenceReport: proposal.intelligenceReport
             });
         } catch (error) {
             Logger.error(`[ANALYST_AGENT] Error generating proposal for signal ${signalId}`, error);
@@ -69,7 +70,8 @@ Do not include markdown blocks. Raw JSON only.
                 sentiment: proposal.sentiment,
                 vote: evaluation.decision,
                 confidence: evaluation.confidence,
-                reasoning: evaluation.reasoning
+                reasoning: evaluation.reasoning,
+                intelligenceReport: proposal.intelligenceReport
             });
         } catch (error) {
             Logger.error(`[ANALYST_AGENT] Error running LLM evaluation for signal ${proposal.signalId}`, error);
@@ -84,7 +86,8 @@ Do not include markdown blocks. Raw JSON only.
                 sentiment: proposal.sentiment,
                 vote: 'REJECT',
                 confidence: 0.10,
-                reasoning: `LLM evaluation pipeline failed: ${error}`
+                reasoning: `LLM evaluation pipeline failed: ${error}`,
+                intelligenceReport: proposal.intelligenceReport
             });
         }
     }

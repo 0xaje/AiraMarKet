@@ -5,6 +5,10 @@ export interface LlmEvaluationResponse {
     risks: string;
     supportingEvidence: string;
     recommendedQuestion?: string;
+    summary?: string;
+    supportingEvidenceList?: string[];
+    contradictingEvidenceList?: string[];
+    riskFactorsList?: string[];
 }
 
 export interface LlmCallMetrics {

@@ -141,7 +141,8 @@ export class ConsensusService {
                     vote: v.vote,
                     confidence: v.confidence,
                     reasoning: v.reasoning
-                }))
+                })),
+                intelligenceReport: baseVote.intelligenceReport
             };
 
             // Emit event

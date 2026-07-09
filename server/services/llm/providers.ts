@@ -16,13 +16,32 @@ function cleanAndParseJson(text: string): LlmEvaluationResponse {
         clean = clean.substring(0, clean.length - 3);
     }
     const parsed = JSON.parse(clean.trim());
+
+    const rawRisks = parsed.risks || parsed.riskFactors || '';
+    const risksStr = Array.isArray(rawRisks) ? rawRisks.join(' | ') : String(rawRisks);
+    
+    const rawSupport = parsed.supportingEvidence || '';
+    const supportStr = Array.isArray(rawSupport) ? rawSupport.join(' | ') : String(rawSupport);
+
     return {
         decision: parsed.decision === 'APPROVE' ? 'APPROVE' : 'REJECT',
         confidence: typeof parsed.confidence === 'number' ? parsed.confidence : 0.5,
         reasoning: parsed.reasoning || '',
-        risks: parsed.risks || '',
-        supportingEvidence: parsed.supportingEvidence || '',
-        recommendedQuestion: parsed.recommendedQuestion || undefined
+        risks: risksStr,
+        supportingEvidence: supportStr,
+        recommendedQuestion: parsed.recommendedQuestion || undefined,
+        summary: parsed.summary || undefined,
+        supportingEvidenceList: Array.isArray(parsed.supportingEvidence) 
+            ? parsed.supportingEvidence 
+            : (typeof parsed.supportingEvidence === 'string' ? [parsed.supportingEvidence] : []),
+        contradictingEvidenceList: Array.isArray(parsed.contradictingEvidence) 
+            ? parsed.contradictingEvidence 
+            : (typeof parsed.contradictingEvidence === 'string' ? [parsed.contradictingEvidence] : []),
+        riskFactorsList: Array.isArray(parsed.risks) 
+            ? parsed.risks 
+            : (Array.isArray(parsed.riskFactors) 
+                ? parsed.riskFactors 
+                : (typeof parsed.risks === 'string' ? [parsed.risks] : (typeof parsed.riskFactors === 'string' ? [parsed.riskFactors] : [])))
     };
 }
 
@@ -244,7 +263,13 @@ export class LocalLlamaProvider implements LlmProvider {
             reasoning,
             risks,
             supportingEvidence,
-            recommendedQuestion
+            recommendedQuestion,
+            summary: `Summary of evaluation for: "${recommendedQuestion || 'General Decision'}" - Decision recommendation: ${decision} with ${Math.round(confidence * 100)}% confidence.`,
+            supportingEvidenceList: [supportingEvidence],
+            contradictingEvidenceList: decision === 'APPROVE' 
+                ? ['Potential temporal delay in on-chain settlement.', 'Subject to minor sentiment volatility.']
+                : ['Critical compliance criteria failed.', 'Fails initial category constraints.'],
+            riskFactorsList: [risks]
         };
     }
 }

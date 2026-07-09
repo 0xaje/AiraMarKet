@@ -32,9 +32,17 @@ async function runTests() {
     const validPayload = {
         normalizedSignal: { category: 'crypto', topic: 'Ethereum fees drop', source: 'Etherscan', signal_strength: 95, sentiment: 'bullish' },
         originalSource: 'Etherscan',
+        signalSources: ['Etherscan'],
+        aiInputs: JSON.stringify({ category: 'crypto', topic: 'Ethereum fees drop', source: 'Etherscan', signal_strength: 95, sentiment: 'bullish' }),
         agentOutputs: [{ agentName: 'AnalystAgent', vote: 'APPROVE', confidence: 0.90, reasoning: 'Strong indicators' }],
         reasoning: 'Consensus approved',
         confidence: 0.90,
+        consensus: {
+            weightedScore: 0.95,
+            weightedConfidence: 0.90,
+            approvalProbability: 0.95,
+            averagedReputation: 85
+        },
         metadata: { protocol: 'AIRA', protocolVersion: 'v2.4.0', release: 'v2', build: '100' },
         modelVersion: 'gpt-4o',
         timestamp: new Date().toISOString(),

@@ -10,10 +10,9 @@ This report documents the smart contract deployment, explorer verification, and 
 *   **Target Network**: `GIWA Sepolia Testnet`
 *   **Chain ID**: `91342`
 *   **Deployer Account**: `0xbf6301D7bca9F23A63A2d1Ed513d5120Dbb2288E`
-*   **Signer Balance**: `0.004976 GIWA`
-*   **Deployed Contract Address**: [`0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4`](https://sepolia-explorer.giwa.io/address/0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4)
-*   **Deployment Tx Hash**: `0xfeffed1ce8dadd72b9d27b8f460e37884076b9dcb9963e8c575a1185bc656bc2`
-*   **Explorer Verification Link**: [GIWA Explorer Code Verification](https://sepolia-explorer.giwa.io/address/0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4#code)
+*   **Deployed Contract Address**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+*   **Deployment Tx Hash**: `0x8aeee03dfa7b4cedd0a802dfb54db580e3f9c0449b7aafb9fb1d3cbdad801be4`
+*   **Explorer Verification Link**: [GIWA Explorer Code Verification](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D#code)
 
 ---
 
@@ -30,14 +29,14 @@ This report documents the smart contract deployment, explorer verification, and 
 ```bash
 $ npx hardhat run scripts/deploy.cjs --network giwa
 Deploying contracts with the account: 0xbf6301D7bca9F23A63A2d1Ed513d5120Dbb2288E
-Deploy transaction submitted. Hash: 0xfeffed1ce8dadd72b9d27b8f460e37884076b9dcb9963e8c575a1185bc656bc2
-AiraMarketProtocol deployed to: 0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4
+Deploy transaction submitted. Hash: 0x8aeee03dfa7b4cedd0a802dfb54db580e3f9c0449b7aafb9fb1d3cbdad801be4
+AiraMarketProtocol deployed to: 0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D
 
-$ npx hardhat verify --network giwa 0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4
+$ npx hardhat verify --network giwa 0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D
 Successfully submitted source code for contract
-contracts/AiraMarket.sol:AiraMarketProtocol at 0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4
+contracts/AiraMarket.sol:AiraMarketProtocol at 0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D
 for verification on the block explorer. Waiting for verification result...
 
 Successfully verified contract AiraMarketProtocol on the block explorer.
-https://sepolia-explorer.giwa.io/address/0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4#code
+https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D#code
 ```

@@ -197,7 +197,7 @@ export default function Terminal() {
         <div className="sahara-panel p-4 rounded-xl flex items-center justify-between gap-4 bg-surface shrink-0">
           <div className="flex items-center gap-4">
             <div className="w-11 h-11 bg-surface-variant rounded-xl flex items-center justify-center border border-outline-variant flex-shrink-0">
-              <span className="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+              <span className="material-symbols-outlined text-primary text-xl">terminal</span>
             </div>
             <div>
               <h1 className="font-bold text-sm sm:text-base text-on-surface tracking-tight mb-0.5">{activeMarket.title}</h1>
@@ -209,7 +209,7 @@ export default function Terminal() {
           </div>
           <div className="flex gap-6 items-center">
             <div className="text-right">
-              <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-0.5 font-mono">AI CONFIDENCE</p>
+              <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-0.5 font-mono">CONSENSUS CONFIDENCE</p>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-sm text-primary font-bold">{activeMarket.confidence}%</span>
                 <div className="h-1 w-16 bg-surface-variant rounded-full overflow-hidden">

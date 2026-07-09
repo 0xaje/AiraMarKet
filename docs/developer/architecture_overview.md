@@ -1,10 +1,10 @@
 # System Architecture Overview
-### Technical Design & Core Boundaries
+### A Verifiable AI Decision Layer powered by GIWA
 
 ---
 
 ## 1. High-Level Architecture Design
-The AIRA Protocol splits functionality into a decoupled design:
+The AIRA Protocol is a general-purpose, verifiable AI decision layer that decouples off-chain cognitive processing from immutable blockchain settlement:
 *   **Off-Chain Cognitive Processing**: The Ingestion Feed gathers real-world signals, compiling them into **Evidence Packages** which are audited via Multi-Agent Analysis in the Multi-Agent Consensus Engine.
 *   **On-Chain State Settlement**: Smart contracts govern all custody, tokens, and payouts. This guarantees safety of user funds even if the off-chain system experiences downtime.
 
@@ -57,7 +57,7 @@ flowchart TD
 Smart contract interactions dynamically target these deployed network instances:
 
 *   **GIWA Sepolia Testnet** (`Chain ID: 91342`):
-    *   **Registry Address**: [`0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4`](https://sepolia-explorer.giwa.io/address/0x4DbBd27F6e557860564bD1aa8e0596d62a2735C4)
+    *   **Registry Address**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
     *   **Status**: ✅ **Live & Verified on Explorer**
 *   **Mantle Sepolia Testnet** (`Chain ID: 5003`):
     *   **Registry Address**: [`0xdd277ccb8cda72d652cdca4df09df5f2522fc846`](https://explorer.sepolia.mantle.xyz/address/0xdd277ccb8cda72d652cdca4df09df5f2522fc846)

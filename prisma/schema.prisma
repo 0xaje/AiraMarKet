@@ -8,16 +8,19 @@ generator client {
 }
 
 model PendingMarket {
-  id          Int               @id @default(autoincrement())
-  signalId    String            @unique
-  title       String
-  category    String
-  expiry      String
-  confidence  Float
-  sentiment   String
-  status      String
-  evaluations AgentEvaluation[]
-  createdAt   DateTime          @default(now())
+  id                 Int                 @id @default(autoincrement())
+  signalId           String              @unique
+  title              String
+  category           String
+  expiry             String
+  confidence         Float
+  sentiment          String
+  status             String
+  ipfsHash           String?
+  evaluations        AgentEvaluation[]
+  intelligenceReport IntelligenceReport?
+  debateSession      DebateSession?
+  createdAt          DateTime            @default(now())
 }
 
 model AgentEvaluation {
@@ -73,4 +76,45 @@ model EvidencePackage {
   aiReasoningRef     String   // References or descriptors of initial AI reasoning
   confidenceInputs   Float    // Sourced confidence inputs/scores
   createdAt          DateTime @default(now())
+}
+
+model IntelligenceReport {
+  id                    Int           @id @default(autoincrement())
+  pendingMarketId       Int           @unique
+  pendingMarket         PendingMarket @relation(fields: [pendingMarketId], references: [id], onDelete: Cascade)
+  signalId              String        @unique
+  summary               String
+  supportingEvidence    String        // JSON array represented as string
+  contradictingEvidence String        // JSON array represented as string
+  confidence            Float
+  riskFactors           String        // JSON array represented as string
+  reasoning             String
+  recommendedDecision   String
+  createdAt             DateTime      @default(now())
+}
+
+model DebateSession {
+  id              Int          @id @default(autoincrement())
+  signalId        String       @unique
+  pendingMarketId Int?         @unique
+  pendingMarket   PendingMarket? @relation(fields: [pendingMarketId], references: [id], onDelete: Cascade)
+  status          String       // e.g. "INITIATED", "RISK_REVIEW", "COMPLIANCE_REVIEW", "ANALYST_RESPONSE", "CONCLUDED"
+  turns           DebateTurn[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model DebateTurn {
+  id               Int           @id @default(autoincrement())
+  sessionId        Int
+  session          DebateSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  agentName        String        // "AnalystAgent", "RiskAgent", "ComplianceAgent"
+  role             String        // "PROPOSER", "REVIEWER", "RESPONDER"
+  arguments        String        // JSON string represented as string (string[])
+  counterArguments String        // JSON string represented as string (string[])
+  questions        String        // JSON string represented as string (string[])
+  responses        String        // JSON string represented as string (string[])
+  vote             String?       // "APPROVE", "REJECT" (for final position)
+  confidence       Float?
+  createdAt        DateTime      @default(now())
 }

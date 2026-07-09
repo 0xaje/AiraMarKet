@@ -1,5 +1,5 @@
-# AIRA Protocol
-### The Autonomous Intelligence & Risk Analysis Protocol
+# AIRA Protocol: A Verifiable AI Decision Layer powered by GIWA
+### Decoupled Cognitive Consensus and Cryptographically Anchored Settlement
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](file:///home/oyeolorun/AiraMarKet/LICENSE)
 [![GIWA L2](https://img.shields.io/badge/Ecosystem-GIWA_L2-blue.svg)](https://sepolia-explorer.giwa.io)
@@ -9,18 +9,18 @@
 ---
 
 ## Tagline
-An autonomous, verifiable, agent-driven decision intelligence protocol running natively on high-performance EVM networks.
+A Verifiable AI Decision Layer powered by GIWA.
 
 ---
 
 ## Mission
-To automate and scale decentralized decision intelligence ecosystems by replacing manual curation and slow, centralized oracle settlements with autonomous, cryptographically auditable AI agent heuristics on high-performance Layer 2 chains.
+To establish a cryptographically verifiable and decentralized trust substrate for AI cognitive labor by bridging off-chain agent consensus with on-chain execution and audit logging.
 
 ---
 
 ## Unified Protocol Lifecycle
 
-The AIRA Protocol is governed by an 8-stage unified protocol lifecycle that decouples cognitive risk modeling from immutable state settlement:
+The AIRA Protocol is governed by an 8-stage unified protocol lifecycle that decouples off-chain cognitive consensus from immutable blockchain settlement:
 
 ```mermaid
 flowchart TD
@@ -36,11 +36,11 @@ flowchart TD
 ---
 
 The protocol is comprised of six main layers:
-1.  **Ingestion & Evidence Layer**: Translates unstructured incoming signals into verifiable Evidence Packages, linking normalized source feeds, metadata origin schemas, and ingested confidence parameters before processing.
-2.  **Multi-Agent Consensus Engine**: Collaborative swarm agents (such as sentiment, risk, and compliance assessors) that perform multi-agent analysis on Evidence Packages to verify decision proposals.
-3.  **Smart Contract Settlement Engine (`AiraMarketProtocol.sol`)**: An optimized Solidity execution layer governing pari-mutuel share ratios, YES/NO token minting, pool rebalancing, and payout claims.
-4.  **Cryptographic Verification (IPFS Anchoring)**: Every proposed decision hashes its raw inputs, sentiment scoring, and decision metrics into a JSON metadata payload anchored directly on-chain during execution.
-5.  **Optimistic Oracle Settlements**: conclusive resolution is determined via economic incentives; outcome proposers stake a slashing bond, subject to verification challenges.
+1.  **Ingestion & Evidence Layer**: Translates unstructured incoming signals into verifiable Evidence Packages, linking normalized source feeds, metadata origin schemas, and confidence inputs.
+2.  **Multi-Agent Consensus Engine**: Collaborative swarm agents (Analyst, Risk, Compliance) performing Multi-Agent Analysis on Evidence Packages to approve decision proposals.
+3.  **Smart Contract Settlement Engine (`AiraMarketProtocol.sol`)**: An optimized Solidity execution layer governing pari-mutuel pools, YES/NO token minting, and payouts for applications built on the protocol (e.g., AIRA Markets).
+4.  **Cryptographic Verification (IPFS Anchoring)**: Anchors detailed IPFS CIDs mapping to Evidence Packages and agent audits directly within EVM event log states, establishing complete public transparency.
+5.  **Optimistic Oracle Settlements**: Conclusive resolution determined via economic incentives; outcome proposers stake a slashing bond, subject to verification challenges.
 6.  **Stateless Block Indexer**: A database ingestion pipeline that monitors the ledger via HTTP JSON-RPC polling, using transaction-level database idempotency to maintain absolute sync alignment.
 
 ---
@@ -58,10 +58,11 @@ The AIRA Protocol relies on Dunamu's **GIWA OP Stack L2** network as its core se
 ---
 
 ## Features
-*   **Automatic Market Formulation**: Continual, algorithmic creation of trending binary options.
+*   **Decoupled Cognitive Layer**: Isolates intensive AI computations off-chain while anchoring custody and execution rules securely on-chain.
+*   **First Reference Application (AIRA Markets)**: The flagship prediction and risk market application built on the protocol, demonstrating agent-driven creation and optimistic resolution of binary decision pools.
 *   **Pre-Seeded Liquidity Pools**: Contract-enforced native token seeding (2.0 tokens split 50/50) to prevent early-trader curve manipulation.
 *   **Vibrant Interface**: A mobile-responsive React dashboard featuring Web3 wallet connectors (Wagmi/RainbowKit) and direct explorer notifications.
-*   **Fault-Tolerant indexer**: Relies on stateless polling to eliminate WebSocket disconnections and node rate-limit crashes.
+*   **Fault-Tolerant Indexer**: Relies on stateless polling to eliminate WebSocket disconnections and node rate-limit crashes.
 
 ---
 
@@ -126,7 +127,11 @@ The AIRA Protocol relies on Dunamu's **GIWA OP Stack L2** network as its core se
 
 ## Roadmap
 *   **Phase 1 (Completed)**: Core smart contract validation, local sandbox development, multi-agent consensus engine implementation, testnet deployment, and event indexer hardening.
-*   **Phase 2 (Q3 2026)**: Deploying the backend to remote hosting, upgrading to production AI APIs, and launching the public sandbox on GIWA Sepolia.
+*   **Phase 2 (Q3 2026)**:
+    *   Deploy backend API and indexer to managed cloud hosting (Render / Railway).
+    *   Connect production OpenAI / Gemini API keys to the live Consensus Engine.
+    *   Launch public-access GIWA Sepolia sandbox with read-only Protocol Explorer.
+    *   Integrate webhook signal feeds to replace scheduled polling scrapers.
 *   **Phase 3 (Q4 2026)**: Deploying to GIWA Mainnet, integrating third-party decentralized oracle networks, and initiating liquidity provider incentives.
 *   **Phase 4 (Q1 2027)**: Transitioning protocol parameters (fee splits, confidence thresholds) to a Decentralized Autonomous Organization (DAO) and releasing developer SDKs to allow partners to build custom AI agents.
 

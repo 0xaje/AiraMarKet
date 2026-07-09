@@ -15,7 +15,7 @@ export class DbAdapter {
         try {
             const client = this.getClient();
             const records = await client.pendingMarket.findMany({
-                include: { evaluations: true },
+                include: { evaluations: true, intelligenceReport: true },
                 orderBy: { createdAt: 'asc' }
             });
             return records;
@@ -37,6 +37,7 @@ export class DbAdapter {
                     confidence: Number(proposal.confidence || 0),
                     sentiment: proposal.sentiment || '',
                     status: proposal.status || 'PENDING_APPROVAL',
+                    ipfsHash: proposal.ipfsHash || null,
                     evaluations: {
                         create: (proposal.evaluations || []).map((e: any) => ({
                             agentName: e.agentName,
@@ -44,12 +45,58 @@ export class DbAdapter {
                             confidence: Number(e.confidence),
                             reasoning: e.reasoning
                         }))
-                    }
+                    },
+                    intelligenceReport: proposal.intelligenceReport ? {
+                        create: {
+                            signalId: proposal.signalId,
+                            summary: proposal.intelligenceReport.summary,
+                            supportingEvidence: Array.isArray(proposal.intelligenceReport.supportingEvidence)
+                                ? JSON.stringify(proposal.intelligenceReport.supportingEvidence)
+                                : String(proposal.intelligenceReport.supportingEvidence || '[]'),
+                            contradictingEvidence: Array.isArray(proposal.intelligenceReport.contradictingEvidence)
+                                ? JSON.stringify(proposal.intelligenceReport.contradictingEvidence)
+                                : String(proposal.intelligenceReport.contradictingEvidence || '[]'),
+                            confidence: Number(proposal.intelligenceReport.confidence || 0),
+                            riskFactors: Array.isArray(proposal.intelligenceReport.riskFactors)
+                                ? JSON.stringify(proposal.intelligenceReport.riskFactors)
+                                : String(proposal.intelligenceReport.riskFactors || '[]'),
+                            reasoning: proposal.intelligenceReport.reasoning,
+                            recommendedDecision: proposal.intelligenceReport.recommendedDecision
+                        }
+                    } : undefined
                 }
             });
-            Logger.success(`[DB_ADAPTER] Stored proposal in database successfully: ${proposal.title}`);
+            Logger.success(`[DB_ADAPTER] Stored proposal and intelligence report in database successfully: ${proposal.title}`);
         } catch (error) {
             Logger.error('[DB_ADAPTER] Error writing to database', error);
+        }
+    }
+
+    static async saveIntelligenceReport(report: any) {
+        try {
+            const client = this.getClient();
+            await client.intelligenceReport.create({
+                data: {
+                    pendingMarketId: report.pendingMarketId,
+                    signalId: report.signalId,
+                    summary: report.summary,
+                    supportingEvidence: Array.isArray(report.supportingEvidence)
+                        ? JSON.stringify(report.supportingEvidence)
+                        : String(report.supportingEvidence || '[]'),
+                    contradictingEvidence: Array.isArray(report.contradictingEvidence)
+                        ? JSON.stringify(report.contradictingEvidence)
+                        : String(report.contradictingEvidence || '[]'),
+                    confidence: Number(report.confidence || 0),
+                    riskFactors: Array.isArray(report.riskFactors)
+                        ? JSON.stringify(report.riskFactors)
+                        : String(report.riskFactors || '[]'),
+                    reasoning: report.reasoning,
+                    recommendedDecision: report.recommendedDecision
+                }
+            });
+            Logger.success(`[DB_ADAPTER] Stored IntelligenceReport in database successfully for signalId: ${report.signalId}`);
+        } catch (error) {
+            Logger.error('[DB_ADAPTER] Error writing IntelligenceReport to database', error);
         }
     }
 

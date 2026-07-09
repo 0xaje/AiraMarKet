@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
   <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>AIRA Protocol | Verifiable Decision Intelligence</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <style>
       /* Day and Night Colors (CSS Custom Properties) */
@@ -26,24 +26,7 @@
           --surface-container-highest: #e8e5e2;
           --on-surface-variant: #6b5f56;
       }
-      html.dark {
-          --primary: #e98243;
-          --primary-light: #251d19;
-          --primary-muted: #3d342f;
-          --text-main: #f7f4f0;
-          --text-muted: #a59e97;
-          --background: #130f0c;
-          --surface: #1d1815;
-          --outline: #3d342f;
-          --outline-variant: #2a221f;
-          --surface-variant: #251d19;
-          --surface-bright: #1b1714;
-          --surface-container-low: #1c1714;
-          --surface-container-high: #2d2521;
-          --surface-container-highest: #382e29;
-          --on-surface-variant: #a59e97;
-      }
-      
+
       html, body, #root {
           margin: 0;
           padding: 0;
@@ -57,7 +40,7 @@
       body {
           background-color: var(--background);
           color: var(--text-main);
-          font-family: 'Outfit', sans-serif;
+          font-family: 'Inter', sans-serif;
       }
       .serif-heading {
           font-family: 'Playfair Display', serif;
@@ -167,15 +150,14 @@
     </style>
     <script id="tailwind-config">
       tailwind.config = {
-          darkMode: "class",
           theme: {
               extend: {
                   fontFamily: {
-                      sans: ["Outfit", "sans-serif"],
+                      sans: ["Inter", "sans-serif"],
                       serif: ["Playfair Display", "serif"],
                       mono: ["JetBrains Mono", "monospace"],
-                      display: ["Outfit", "sans-serif"],
-                      body: ["Outfit", "sans-serif"]
+                      display: ["Inter", "sans-serif"],
+                      body: ["Inter", "sans-serif"]
                   },
                   colors: {
                       primary: "var(--primary)",

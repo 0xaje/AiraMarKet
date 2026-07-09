@@ -71,7 +71,8 @@ Do not include markdown blocks. Raw JSON only.
             sentiment: proposal.sentiment,
             vote,
             confidence,
-            reasoning
+            reasoning,
+            intelligenceReport: proposal.intelligenceReport
         });
     }
 }

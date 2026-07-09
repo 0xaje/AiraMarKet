@@ -1,11 +1,11 @@
 # AIRA Protocol: System Architecture
-### Decoupled Cognitive Ingestion and Immutable Blockchain Settlement
+### A Verifiable AI Decision Layer powered by GIWA
 
 ---
 
 ## 1. High-Level Architecture
 
-The AIRA Protocol is governed by an 8-stage unified protocol lifecycle that decouples off-chain cognitive risk modeling from on-chain smart contract settlement:
+AIRA is a general-purpose, verifiable AI decision layer that decouples off-chain cognitive agent consensus from immutable smart contract settlement. It executes an 8-stage unified lifecycle to transform unstructured external signals into cryptographically anchored execution outputs on-chain:
 
 ```mermaid
 flowchart TD
@@ -53,9 +53,9 @@ The protocol relies on several core services, each defined by strict boundaries 
 
 ---
 
-## 3. Data Flow
+## 3. Data Flow: Protocol Decision Pipeline & Sandbox Instantiation
 
-The lifecycle of converting real-world information into an on-chain contract state follows a structured pipeline:
+The lifecycle of converting real-world information into a verifiable decision state follows a structured pipeline, culminating in the initialization of the AIRA Markets reference application's prediction pool:
 
 ```mermaid
 sequenceDiagram
@@ -74,15 +74,15 @@ sequenceDiagram
     Engine->>IPFS: Upload Evidence Package and agent signatures/metadata
     IPFS-->>Engine: Return Content Identifier (IPFS CID)
     Engine->>Admin: Queue approved decision proposal with IPFS CID for human audit
-    Admin->>Contract: Sign and dispatch createMarket() transaction (GIWA Settlement)
-    Contract->>Contract: Lock 2.0 Native Token seed (50/50 YES/NO pool)
+    Admin->>Contract: Sign and dispatch createMarket() transaction (AIRA Markets Instantiation)
+    Contract->>Contract: Lock 2.0 Native Token seed (Initial Pari-Mutuel Liquidity)
 ```
 
 ---
 
-## 4. Event Flow
+## 4. Event Flow: AIRA Markets Application Sync Loop
 
-To keep the client user interface responsive, on-chain state updates are synchronized to the local cache via an event-driven indexing loop:
+To keep the client interface for the AIRA Markets sandbox responsive, on-chain trading and pool state updates are synchronized to the local cache via an event-driven indexing loop:
 
 ```mermaid
 sequenceDiagram
@@ -115,7 +115,7 @@ sequenceDiagram
 *   **Why it exists**: Abstracts low-level smart contract functions and database queries into a seamless Web3 dashboard.
 
 ### III. Smart Contracts (Settlement Engine)
-*   **Responsibility**: Serves as the ultimate trust anchor. Enforces pool ratios, handles YES/NO token minting, holds deposited funds, and locks optimistic dispute bonds.
+*   **Responsibility**: Serves as the ultimate trust anchor. Handles secure asset custody and execution logic for applications built on the protocol, such as managing pool ratios, minting option shares, holding deposited funds, and locking optimistic dispute bonds for the AIRA Markets sandbox.
 *   **Why it exists**: Guarantees that asset custody, trade math, and winnings distributions are executed transparently and immune to manipulation.
 
 ### IV. Indexer (Blockchain Sync)
@@ -138,6 +138,8 @@ The architecture is designed to support three key future enhancements:
 1.  **Multi-Engine Consensus**: Upgrading the Consensus Engine to require consensus voting (e.g., 3 out of 5 agents approving a proposal) before it is queued.
 2.  **MPC Administrative Signing**: Replacing the single-signature Admin validation with a Multi-Party Computation (MPC) or Multi-Sig threshold structure to eliminate single-point-of-failure vulnerabilities.
 3.  **Zero-Knowledge Reasoning Proofs**: Integrating ZK-provers to cryptographically verify that the off-chain AI processed the exact news inputs without revealing proprietary LLM prompts.
+
+> **Current Status**: The above are planned `Roadmap` features. The protocol currently operates with single-admin ECDSA signing on GIWA Sepolia Testnet. When LLM API keys are not configured, the Consensus Engine runs in structured-simulation mode with deterministic mock responses.
 
 ---
 

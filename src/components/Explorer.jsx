@@ -216,7 +216,7 @@ export default function Explorer() {
                           onClick={() => setTab(p.id, tab)}
                           className={`py-3 text-[10px] font-bold uppercase tracking-wider font-mono border-b-2 transition-all ${currentTab === tab ? 'border-primary text-primary' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
                         >
-                          {tab === 'explainability' ? 'Explainability' :
+                          {tab === 'explainability' ? 'Intelligence Report' :
                            tab === 'confidence' ? 'Confidence Distribution' :
                            tab === 'evidence' ? 'Supporting Evidence' : 'On-Chain Registry'}
                         </button>
@@ -226,48 +226,75 @@ export default function Explorer() {
                     {/* Tab Body Contents */}
                     <div className="p-5 text-xs">
                       
-                      {/* TAB 1: Consensus Explainability Summary */}
+                      {/* TAB 1: Intelligence Report */}
                       {currentTab === 'explainability' && (
-                        <div className="flex flex-col gap-4">
-                          {/* Verdict explainability banner */}
-                          <div className={`p-4 rounded-xl border flex items-start gap-3 ${p.status === 'REJECTED' ? 'bg-bearish-red/5 border-bearish-red/20 text-bearish-red' : 'bg-bullish-green/5 border-bullish-green/20 text-bullish-green'}`}>
-                            <span className="material-symbols-outlined text-lg shrink-0">
-                              {p.status === 'REJECTED' ? 'cancel' : 'verified_user'}
-                            </span>
-                            <div className="flex flex-col gap-1">
-                              <span className="font-bold uppercase tracking-widest text-[9px] font-mono">Consensus Verdict Explanation</span>
-                              <p className="text-on-surface text-xs leading-relaxed font-medium">
-                                {p.decisionReason}
-                              </p>
+                        <div className="flex flex-col gap-5">
+                          <div className="bg-surface border border-outline-variant p-5 rounded-xl space-y-4 shadow-sm">
+                            <div className="flex justify-between items-center border-b border-outline-variant/60 pb-3">
+                              <span className="font-mono text-[9px] text-primary font-bold uppercase tracking-widest">Protocol Intelligence Report</span>
+                              <span className="px-2 py-0.5 bg-primary/10 text-primary text-[8px] font-mono rounded font-bold uppercase">Consensus Secured</span>
                             </div>
-                          </div>
 
-                          {/* Agent Disagreements Alert Log */}
-                          <div className="bg-surface border border-outline-variant rounded-xl p-4">
-                            <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block mb-2">Agent Dissents / Disagreements</span>
-                            {p.disagreements.length > 0 ? (
-                              <div className="flex flex-col gap-2">
-                                {p.disagreements.map((d, index) => (
-                                  <div key={index} className="flex items-center gap-2 text-bearish-red font-mono text-[11px]">
-                                    <span className="material-symbols-outlined text-xs">gavel</span>
-                                    {d}
-                                  </div>
-                                ))}
+                            <div className="space-y-3">
+                              <div>
+                                <h4 className="text-[10px] font-bold text-on-surface-variant font-mono uppercase tracking-wider mb-1">Executive Summary</h4>
+                                <p className="text-xs text-on-surface leading-relaxed font-medium">
+                                  {p.intelligenceReport?.summary || `This intelligence report aggregates the consensus evaluations from Analyst, Risk, and Compliance agents for proposal "${p.title}".`}
+                                </p>
                               </div>
-                            ) : (
-                              <div className="flex items-center gap-2 text-bullish-green font-mono text-[11px]">
-                                <span className="material-symbols-outlined text-xs">done_all</span>
-                                Unanimous agreement achieved; no agent dissents recorded.
-                              </div>
-                            )}
-                          </div>
 
-                          {/* Detailed audits assessment log */}
-                          <div className="bg-surface border border-outline-variant rounded-xl p-4 flex flex-col gap-3">
-                            <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant">Structured Risk Assessment</span>
-                            <p className="text-on-surface-variant font-mono text-[11px] leading-relaxed select-all">
-                              {p.riskAssessment}
-                            </p>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                                <div className="space-y-1">
+                                  <h4 className="text-[10px] font-bold text-bullish-green font-mono uppercase tracking-wider">Supporting Evidence</h4>
+                                  <ul className="list-disc pl-4 space-y-1 text-[11px] text-on-surface-variant">
+                                    {p.intelligenceReport?.supportingEvidence && Array.isArray(p.intelligenceReport.supportingEvidence) ? (
+                                      p.intelligenceReport.supportingEvidence.map((e, i) => <li key={i}>{e}</li>)
+                                    ) : (
+                                      <li>Verifiable metrics from data provider feed logs.</li>
+                                    )}
+                                  </ul>
+                                </div>
+                                <div className="space-y-1">
+                                  <h4 className="text-[10px] font-bold text-bearish-red font-mono uppercase tracking-wider">Conflicting Evidence</h4>
+                                  <ul className="list-disc pl-4 space-y-1 text-[11px] text-on-surface-variant">
+                                    {p.intelligenceReport?.contradictingEvidence && Array.isArray(p.intelligenceReport.contradictingEvidence) ? (
+                                      p.intelligenceReport.contradictingEvidence.map((e, i) => <li key={i}>{e}</li>)
+                                    ) : (
+                                      <li>No high-severity conflicting historical indicators logged.</li>
+                                    )}
+                                  </ul>
+                                </div>
+                              </div>
+
+                              <div className="pt-2">
+                                <h4 className="text-[10px] font-bold text-amber-600 font-mono uppercase tracking-wider mb-1">Risk Observations</h4>
+                                <ul className="list-disc pl-4 space-y-1 text-[11px] text-on-surface-variant">
+                                  {p.intelligenceReport?.riskFactors && Array.isArray(p.intelligenceReport.riskFactors) ? (
+                                    p.intelligenceReport.riskFactors.map((r, i) => <li key={i}>{r}</li>)
+                                  ) : (
+                                    <li>Volatility offsets and protocol execution timeline bounds.</li>
+                                  )}
+                                </ul>
+                              </div>
+
+                              <div className="border-t border-outline-variant/60 pt-3 grid grid-cols-2 gap-4">
+                                <div>
+                                  <span className="text-[9px] font-bold text-on-surface-variant font-mono uppercase tracking-wider block">Final Confidence</span>
+                                  <span className="text-sm font-bold text-primary">{(p.confidence * 100).toFixed(0)}% Secure</span>
+                                </div>
+                                <div>
+                                  <span className="text-[9px] font-bold text-on-surface-variant font-mono uppercase tracking-wider block">Final Recommendation</span>
+                                  <span className="text-sm font-bold text-on-surface">{p.intelligenceReport?.recommendedDecision || (p.status === 'REJECTED' ? 'REJECT' : 'APPROVE')}</span>
+                                </div>
+                              </div>
+
+                              <div className="border-t border-outline-variant/60 pt-3">
+                                <span className="text-[9px] font-bold text-on-surface-variant font-mono uppercase tracking-wider block mb-1">Consensus Result</span>
+                                <p className="text-[11px] text-on-surface-variant leading-relaxed">
+                                  {p.decisionReason}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       )}

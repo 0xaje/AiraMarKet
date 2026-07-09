@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DebateSession",
+  "type": "object",
+  "properties": {
+    "signalId": {
+      "type": "string",
+      "description": "Unique identifier of the matching real-world signal"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["INITIATED", "RISK_REVIEW", "COMPLIANCE_REVIEW", "ANALYST_RESPONSE", "CONCLUDED"],
+      "description": "The current state of the interactive debate loop"
+    },
+    "turns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "agentName": {
+            "type": "string",
+            "description": "The name of the agent submitting the debate turn"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["PROPOSER", "REVIEWER", "RESPONDER"],
+            "description": "The conversational role of the agent in this turn"
+          },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Claims and points supporting the agent's position"
+          },
+          "counterArguments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Objections or responses targeting other agents' arguments"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Questions directed to other agents in the debate session"
+          },
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Answers to questions raised by other agents in prior turns"
+          },
+          "vote": {
+            "type": "string",
+            "enum": ["APPROVE", "REJECT"],
+            "description": "The recommended final decision (optional until responder phase)"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "The agent's confidence score for their final position"
+          }
+        },
+        "required": ["agentName", "role", "arguments", "counterArguments", "questions", "responses"]
+      },
+      "description": "The sequence of debate turns submitted by cognitive agents"
+    }
+  },
+  "required": ["signalId", "status", "turns"]
+}

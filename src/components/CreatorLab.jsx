@@ -171,8 +171,8 @@ export default function CreatorLab() {
         <div className="col-span-12 lg:col-span-4 flex flex-col justify-between h-auto bg-surface-variant/20 border border-outline-variant rounded-xl p-5 order-2 lg:order-1">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-primary-container text-primary font-mono text-[9px] tracking-widest uppercase font-bold animate-pulse">
-              <span className="material-symbols-outlined text-[13px]">auto_awesome</span>
-              NEURAL ENGINE ACTIVE
+              <span className="material-symbols-outlined text-[13px]">terminal</span>
+              DECISION ENGINE ACTIVE
             </div>
             <h2 className="serif-heading text-2xl md:text-3xl lg:text-4xl text-on-surface tracking-tight leading-tight">
               Intelligent Decisions, <br/><span className="text-primary italic">Deployed Instantly.</span>
@@ -185,10 +185,10 @@ export default function CreatorLab() {
           <div className="space-y-3 mt-6">
             <div className="bg-surface p-4 rounded-lg border border-outline-variant flex items-center gap-4 shadow-sm">
               <div className="w-9 h-9 rounded bg-primary-container flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-primary text-lg">psychology</span>
+                <span className="material-symbols-outlined text-primary text-lg">analytics</span>
               </div>
               <div>
-                <p className="font-mono text-[8px] text-on-surface-variant mb-0.5 uppercase tracking-widest font-bold">AI Probability</p>
+                <p className="font-mono text-[8px] text-on-surface-variant mb-0.5 uppercase tracking-widest font-bold">Consensus Accuracy</p>
                 <p className="font-bold text-xs text-on-surface">94.2% Accuracy Vector</p>
               </div>
             </div>
@@ -229,7 +229,7 @@ export default function CreatorLab() {
                 ) : (
                   <>
                     <div className="w-8 h-8 shrink-0 rounded bg-primary-container flex items-center justify-center border border-primary/20">
-                      <span className="material-symbols-outlined text-primary text-sm">smart_toy</span>
+                      <span className="material-symbols-outlined text-primary text-sm">memory</span>
                     </div>
                     <div className="market-card p-5 md:p-6 rounded-xl w-full max-w-2xl relative shadow-sm bg-surface">
                       <div className="flex items-center justify-between mb-4 pb-3 border-b border-outline-variant">
@@ -394,7 +394,7 @@ export default function CreatorLab() {
           <form onSubmit={handleSendCreator} className="mt-4 shrink-0">
             <div className="relative bg-surface-container-low border border-outline-variant rounded-xl p-1 flex items-center gap-3 focus-within:border-primary transition-colors">
               <div className="p-2 ml-1 text-primary">
-                <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+                <span className="material-symbols-outlined text-[18px]">terminal</span>
               </div>
               <input 
                 className="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-on-surface-variant/50 py-2.5 text-xs outline-none" 

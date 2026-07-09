@@ -13,6 +13,8 @@ export interface EvidencePackagePayload {
         sentiment: string;
     };
     originalSource: string;
+    signalSources: string[];
+    aiInputs: string;
     agentOutputs: Array<{
         agentName: string;
         vote: string;
@@ -21,6 +23,12 @@ export interface EvidencePackagePayload {
     }>;
     reasoning: string;
     confidence: number;
+    consensus: {
+        weightedScore: number;
+        weightedConfidence: number;
+        approvalProbability: number;
+        averagedReputation: number;
+    };
     metadata: {
         protocol: string;
         protocolVersion: string;
@@ -43,6 +51,14 @@ export interface GeneratePackageOptions {
     provider?: string;
     protocolVersion?: string;
     modelVersion?: string;
+    consensus?: {
+        weightedScore: number;
+        weightedConfidence: number;
+        approvalProbability: number;
+        averagedReputation: number;
+    };
+    aiInputs?: string;
+    signalSources?: string[];
 }
 
 export class EvidenceService {
@@ -72,6 +88,16 @@ export class EvidenceService {
             promptHash = crypto.createHash('sha256').update(combinedAgentInputs).digest('hex');
         }
 
+        // Establish consensus details
+        const consensus = options.consensus || {
+            weightedScore: typeof signal.signal_strength === 'number' ? signal.signal_strength / 100 : 0.5,
+            weightedConfidence: consensusConfidence,
+            approvalProbability: 0.5,
+            averagedReputation: 80
+        };
+        const aiInputs = options.aiInputs || JSON.stringify(signal);
+        const signalSources = options.signalSources || [signal.source || 'Unknown API'];
+
         // 2. Build preliminary payload WITHOUT the sha256Hash property
         const prelimPayload: Omit<EvidencePackagePayload, 'sha256Hash'> = {
             normalizedSignal: {
@@ -82,6 +108,8 @@ export class EvidenceService {
                 sentiment: signal.sentiment || 'neutral'
             },
             originalSource: signal.source || 'Unknown API',
+            signalSources,
+            aiInputs,
             agentOutputs: (evaluations || []).map(e => ({
                 agentName: e.agentName,
                 vote: e.vote,
@@ -90,6 +118,7 @@ export class EvidenceService {
             })),
             reasoning: consensusReasoning,
             confidence: consensusConfidence,
+            consensus,
             metadata: {
                 protocol: 'AIRA Protocol',
                 protocolVersion,

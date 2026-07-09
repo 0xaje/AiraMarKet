@@ -1,31 +1,31 @@
 # AIRA Protocol: Executive Overview
-### The Autonomous Intelligence & Risk Analysis Protocol
+### A Verifiable AI Decision Layer powered by GIWA
 
 ---
 
 ## 1. Mission & Vision
 
 ### Mission
-To democratize and automate the creation and settlement of verifiable decision proposals by deploying secure, autonomous AI agents to evaluate global real-world events and establish trustless consensus opportunities.
+To establish a cryptographically verifiable and decentralized trust substrate for AI cognitive labor by bridging off-chain agent consensus with on-chain execution and audit logging.
 
 ### Vision
-A decentralized information layer where public knowledge, decisions, and outcomes are formulated programmatically and verified cryptographically without intermediary gatekeepers, enabling instantaneous, global risk management for any real-world event.
+An open, verifiable economic substrate where AI decision layers autonomously structure, verify, and resolve parametric agreements and risk models without human intermediaries.
 
 ---
 
-## 2. Market Opportunities & Challenges
+## 2. Platform Value & The First Reference Application (AIRA Markets)
 
 ### The Problem
-Traditional prediction and decision markets face systemic barriers that prevent mainstream adoption:
-1.  **High Operational Friction & Content Scarcity**: Setting up proposals requires manual research, rule-drafting, and slow administrative approval. This delay limits the system's ability to respond to breaking news or micro-events.
-2.  **The "Cold Start" Liquidity Trap**: Early-stage decision pools suffer from low trading volumes and high price volatility. Early participants face extreme price slippage, which deters trade volume and halts organic ecosystem growth.
+Traditional decentralized intelligence and decision platforms face systemic barriers:
+1.  **High Operational Friction & Decision Latency**: Creating structured proposals requires manual research, strict wording, and human approvals. This latency makes it impossible to react to fast-moving real-world data feeds.
+2.  **The "Cold Start" Liquidity Trap**: Early-stage decision pools suffer from lack of trading volume and high price slippage, which deters trade volume and halts organic ecosystem growth.
 3.  **Centralized Settlement Risks**: Traditional platforms rely on centralized resolution mechanisms or slow human juries. This introduces counterparty risk, opaque decisions, and long payout delays.
 
 ### The Solution
-The AIRA Protocol removes these bottlenecks by merging autonomous AI logic with trustless blockchain settlement:
-1.  **Autonomous Heuristics**: Category-specific AI agents monitor global information streams (such as news APIs and social platforms) to programmatically draft structured decision proposals instantly as events unfold.
-2.  **Native Liquidity Seeds**: Every new proposal is deployed with contract-level pre-seeded liquidity split equally across YES/NO pools. This guarantees balanced bonding curves and stable pricing from block zero.
-3.  **Verifiable AI & Optimistic Oracles**: To ensure complete transparency, the AI's inputs and reasoning are hashed and anchored on-chain via IPFS. Resolutions are governed by a decentralized optimistic oracle where proposers stake slashing bonds, ensuring economic alignment.
+The AIRA Protocol removes these bottlenecks by establishing a general-purpose, verifiable AI decision layer that decouples off-chain cognitive consensus from trustless blockchain settlement:
+1.  **Autonomous Multi-Agent Consensus**: Collaborative AI agents monitor global information streams to programmatically draft structured decision proposals instantly as events unfold.
+2.  **AIRA Markets Flagship Application**: To demonstrate the viability of this cognitive infrastructure, the team developed **AIRA Markets** (a prediction and risk market platform) as the flagship reference application built on the protocol, utilizing pari-mutuel pools and pre-seeded native liquidity to ensure balanced bonding curves from block zero.
+3.  **Verifiable Heuristics**: To ensure complete transparency, the consensus engine's inputs and reasoning are hashed and anchored on-chain via IPFS. Resolutions are governed by a decentralized optimistic oracle, ensuring economic alignment.
 
 ---
 
@@ -87,8 +87,8 @@ gantt
     DAO Governance & Developer SDK Release        : 2027-01, 2027-03
 ```
 
-*   **Phase 1 (Completed)**: Core smart contract validation, local sandbox development, multi-agent consensus engine implementation, testnet deployment, and event indexer hardening.
-*   **Phase 2 (Q3 2026)**: Deploying the backend to remote hosting, upgrading to production AI APIs, and launching the public sandbox on GIWA Sepolia.
+*   **Phase 1 (Completed)**: Core smart contract validation, reference application sandbox development, multi-agent consensus engine implementation, testnet deployment, and event indexer hardening.
+*   **Phase 2 (Q3 2026)**: Deploying the backend to remote hosting, upgrading to production AI APIs, and launching the AIRA Markets sandbox on GIWA Sepolia.
 *   **Phase 3 (Q4 2026)**: Deploying to GIWA Mainnet, integrating third-party decentralized oracle networks, and initiating liquidity provider incentives.
 *   **Phase 4 (Q1 2027)**: Transitioning protocol parameters (fee splits, confidence thresholds) to a Decentralized Autonomous Organization (DAO) and releasing developer SDKs to allow partners to build custom AI agents.
 

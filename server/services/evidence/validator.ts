@@ -8,9 +8,12 @@ export class EvidenceValidator {
         const requiredFields = [
             'normalizedSignal',
             'originalSource',
+            'signalSources',
+            'aiInputs',
             'agentOutputs',
             'reasoning',
             'confidence',
+            'consensus',
             'metadata',
             'modelVersion',
             'timestamp',
@@ -31,9 +34,12 @@ export class EvidenceValidator {
         // 2. Enforce strict types
         if (typeof payload.normalizedSignal !== 'object') return false;
         if (typeof payload.originalSource !== 'string') return false;
+        if (!Array.isArray(payload.signalSources)) return false;
+        if (typeof payload.aiInputs !== 'string') return false;
         if (!Array.isArray(payload.agentOutputs)) return false;
         if (typeof payload.reasoning !== 'string') return false;
         if (typeof payload.confidence !== 'number') return false;
+        if (typeof payload.consensus !== 'object') return false;
         if (typeof payload.metadata !== 'object') return false;
         if (typeof payload.modelVersion !== 'string') return false;
         if (typeof payload.timestamp !== 'string') return false;
@@ -46,6 +52,12 @@ export class EvidenceValidator {
 
         // Check metadata items
         if (typeof payload.metadata.protocolVersion !== 'string') return false;
+
+        // Check consensus items
+        if (typeof payload.consensus.weightedScore !== 'number') return false;
+        if (typeof payload.consensus.weightedConfidence !== 'number') return false;
+        if (typeof payload.consensus.approvalProbability !== 'number') return false;
+        if (typeof payload.consensus.averagedReputation !== 'number') return false;
 
         return true;
     }

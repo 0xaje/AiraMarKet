@@ -31,8 +31,6 @@ function App() {
   const showChainWarning = isConnected && connectedChainId !== activeChainId;
 
   // Global State (Zustand)
-  const isDarkMode = useAppStore(state => state.isDarkMode);
-  const toggleTheme = useAppStore(state => state.toggleTheme);
   const profileData = useAppStore(state => state.profileData);
   const toast = useAppStore(state => state.toast);
   const hideToast = useAppStore(state => state.hideToast);
@@ -68,7 +66,7 @@ function App() {
               className={`font-semibold text-sm pb-1 transition-all ${currentView === 'landing' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary'}`}
               onClick={() => navigate('/landing')}
             >
-              Markets
+              AIRA Protocol
             </button>
             <button 
               className={`font-semibold text-sm pb-1 transition-all ${currentView === 'feed' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary'}`}
@@ -109,13 +107,6 @@ function App() {
               <ConnectButton showBalance={false} chainStatus="none" />
             </div>
             
-            <button 
-              className="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all p-1.5 rounded-full hover:bg-surface-variant/40 flex items-center justify-center text-lg sm:text-xl"
-              onClick={toggleTheme}
-              title={isDarkMode ? "Switch to Day Mode" : "Switch to Night Mode"}
-            >
-              {isDarkMode ? 'light_mode' : 'dark_mode'}
-            </button>
             <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full border-2 border-outline-variant p-0.5 shrink-0" onClick={() => navigate('/portfolio')} title="View Portfolio">
               <img 
                 alt="User avatar" 
@@ -166,7 +157,7 @@ function App() {
           onClick={() => navigate('/landing')}
         >
           <span className="material-symbols-outlined text-xl">dashboard</span>
-          <span className="text-[8px] font-bold uppercase tracking-widest font-mono">Markets</span>
+          <span className="text-[8px] font-bold uppercase tracking-widest font-mono">AIRA Protocol</span>
         </button>
         <button 
           className={`flex flex-col items-center gap-1 transition-all ${currentView === 'feed' ? 'text-primary font-bold' : 'text-on-surface-variant opacity-60'}`}

@@ -172,7 +172,7 @@ const server = http.createServer(async (req, res) => {
             const prisma = DbAdapter.getClient();
 
             const proposals = await prisma.pendingMarket.findMany({
-                include: { evaluations: true },
+                include: { evaluations: true, intelligenceReport: true },
                 orderBy: { createdAt: 'desc' }
             });
 
@@ -192,12 +192,27 @@ const server = http.createServer(async (req, res) => {
 
                 const supportingEvidence = `Signal ID: ${p.signalId} | Category: ${p.category} | Expire: ${p.expiry}`;
 
+                let parsedReport = null;
+                if (p.intelligenceReport) {
+                    try {
+                        parsedReport = {
+                            ...p.intelligenceReport,
+                            supportingEvidence: JSON.parse(p.intelligenceReport.supportingEvidence),
+                            contradictingEvidence: JSON.parse(p.intelligenceReport.contradictingEvidence),
+                            riskFactors: JSON.parse(p.intelligenceReport.riskFactors)
+                        };
+                    } catch (e) {
+                        parsedReport = p.intelligenceReport;
+                    }
+                }
+
                 return {
                     ...p,
                     decisionReason,
                     disagreements,
                     riskAssessment,
-                    supportingEvidence
+                    supportingEvidence,
+                    intelligenceReport: parsedReport
                 };
             });
 
@@ -277,6 +292,82 @@ const server = http.createServer(async (req, res) => {
             res.writeHead(500);
             res.end(JSON.stringify({ error: e.message }));
         }
+        return;
+    }
+
+    if (req.method === 'GET' && req.url === '/api/v1/intelligence-reports') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        try {
+            const { DbAdapter } = await import('./services/db_adapter');
+            const prisma = DbAdapter.getClient();
+            const reports = await prisma.intelligenceReport.findMany({
+                orderBy: { createdAt: 'desc' }
+            });
+            const parsedReports = reports.map(report => {
+                try {
+                    return {
+                        ...report,
+                        supportingEvidence: JSON.parse(report.supportingEvidence),
+                        contradictingEvidence: JSON.parse(report.contradictingEvidence),
+                        riskFactors: JSON.parse(report.riskFactors)
+                    };
+                } catch (e) {
+                    return report;
+                }
+            });
+            res.end(JSON.stringify(parsedReports));
+        } catch (e: any) {
+            res.writeHead(500);
+            res.end(JSON.stringify({ error: e.message }));
+        }
+        return;
+    }
+
+    if (req.method === 'GET' && req.url?.startsWith('/api/v1/intelligence-report/')) {
+        const signalId = req.url.split('/').pop();
+        if (!signalId) {
+            res.writeHead(400); res.end('Invalid signal ID'); return;
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        try {
+            const { DbAdapter } = await import('./services/db_adapter');
+            const prisma = DbAdapter.getClient();
+            const report = await prisma.intelligenceReport.findUnique({
+                where: { signalId }
+            });
+            if (!report) {
+                res.writeHead(404);
+                res.end(JSON.stringify({ error: 'Intelligence report not found' }));
+                return;
+            }
+            res.end(JSON.stringify({
+                ...report,
+                supportingEvidence: JSON.parse(report.supportingEvidence),
+                contradictingEvidence: JSON.parse(report.contradictingEvidence),
+                riskFactors: JSON.parse(report.riskFactors)
+            }));
+        } catch (e: any) {
+            res.writeHead(500);
+            res.end(JSON.stringify({ error: e.message }));
+        }
+        return;
+    }
+
+    if (req.method === 'POST' && req.url === '/api/v1/intelligence-report') {
+        let body = '';
+        req.on('data', chunk => body += chunk.toString());
+        req.on('end', async () => {
+            try {
+                const payload = JSON.parse(body);
+                const { DbAdapter } = await import('./services/db_adapter');
+                await DbAdapter.saveIntelligenceReport(payload);
+                res.writeHead(201, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ status: 'Report saved verifiably' }));
+            } catch (err: any) {
+                res.writeHead(400);
+                res.end(JSON.stringify({ error: 'Invalid JSON or fields missing', details: err.message }));
+            }
+        });
         return;
     }
 

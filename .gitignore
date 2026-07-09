@@ -81,3 +81,12 @@ private_key*
 # Social Media & Promotional files
 social_media_captions.md
 
+# Developer scratch / sprint notes
+sprint_*.md
+
+# Runtime logs directory
+logs/
+
+# Prisma generated client (committed via schema only)
+# prisma/generated/
+
