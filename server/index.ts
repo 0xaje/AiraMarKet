@@ -404,6 +404,35 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    // IPFS Upload endpoint — uploads an evidence package and returns a real CID
+    if (req.method === 'POST' && req.url === '/api/ipfs/upload') {
+        let body = '';
+        req.on('data', (chunk: Buffer) => { body += chunk.toString(); });
+        req.on('end', async () => {
+            try {
+                const payload = JSON.parse(body);
+                const { IpfsManager } = await import('./services/ipfs/manager');
+                const cid = await IpfsManager.getInstance().upload({
+                    title: payload.title || 'Untitled',
+                    category: payload.category || 'GENERAL',
+                    confidence: payload.confidence || '80%',
+                    inputSignals: payload.inputSignals || '',
+                    reason: payload.reason || '',
+                    timestamp: payload.timestamp || new Date().toISOString(),
+                    source: 'CreatorLab'
+                });
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ cid }));
+            } catch (err) {
+                Logger.error('IPFS upload failed', err);
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'IPFS upload unavailable', cid: '' }));
+            }
+        });
+        return;
+    }
+
+
     if (req.method === 'GET' && req.url?.startsWith('/api/portfolio/')) {
         const address = req.url.split('/').pop()?.toLowerCase();
         if (!address) {

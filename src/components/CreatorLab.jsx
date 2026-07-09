@@ -82,7 +82,8 @@ export default function CreatorLab() {
           });
         }
       } catch (err) {
-        console.error("No live AI suggestions available");
+        // FIX #11: Silenced noisy console.error — this fires on every page load when server is starting
+        console.warn('[CreatorLab] Live trending unavailable, using local suggestions.');
       }
     };
     const interval = setInterval(fetchPending, 5000);
@@ -113,16 +114,38 @@ export default function CreatorLab() {
 
     try {
       const expirySeconds = BigInt(Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60));
-      const mockIpfsCID = `ipfs://Qm${Date.now()}VerifiableAILog`; // Hackathon MVP verifiability
-      
+
+      // FIX #1: Fetch a real IPFS CID from the backend evidence service before deploying
+      let ipfsCID = '';
+      try {
+        const ipfsRes = await fetch(`${import.meta.env.VITE_API_URL}/api/ipfs/upload`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title: market.title,
+            category: market.category,
+            confidence: market.likelihood,
+            inputSignals: market.inputSignals,
+            reason: market.reason,
+            timestamp: new Date().toISOString()
+          })
+        });
+        if (ipfsRes.ok) {
+          const ipfsData = await ipfsRes.json();
+          ipfsCID = ipfsData.cid || '';
+        }
+      } catch (ipfsErr) {
+        console.warn('[IPFS] Upload service unavailable, proceeding without CID:', ipfsErr);
+      }
+
       const { parseEther } = await import('viem');
       
       const hash = await writeContractAsync({
         address: getContractAddress(),
         abi: getContractAbi(),
         functionName: 'createMarket',
-        args: [market.title, market.category, expirySeconds, mockIpfsCID],
-        value: parseEther("2.0") // 2 initial liquidity seed
+        args: [market.title, market.category, expirySeconds, ipfsCID],
+        value: parseEther("2.0")
       });
       
       useAppStore.getState().showToast("Transaction Pending", "Waiting for network confirmation...", "info", hash);
@@ -134,10 +157,11 @@ export default function CreatorLab() {
             txHash: hash,
             title: market.title,
             category: market.category,
-            inputSignals: market.inputSignals || "Manual Override",
-            reason: market.reason || "Manual Deployment",
+            inputSignals: market.inputSignals || "Manual Deployment",
+            reason: market.reason || "Admin verified via wallet signature",
             confidence: market.likelihood || "80%",
-            decision: "User physically signed and approved via Wagmi"
+            ipfsCID,
+            decision: "Admin approved and signed via Wagmi"
         })
       });
 
@@ -157,12 +181,13 @@ export default function CreatorLab() {
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background/80 backdrop-blur-md">
           <div className="sahara-card p-10 rounded-2xl max-w-md text-center space-y-6 bg-surface border-2 border-primary/20">
             <span className="material-symbols-outlined text-primary text-6xl animate-bounce">rocket_launch</span>
-            <h3 className="serif-heading text-2xl text-on-surface">NEURAL DEPLOYER</h3>
-            <p className="text-sm text-on-surface-variant font-medium animate-pulse">Structuring liquidity pool contract...</p>
+            {/* FIX #2: Replaced "NEURAL DEPLOYER" with infrastructure-grade label */}
+            <h3 className="serif-heading text-2xl text-on-surface">Deploying to GIWA Ledger</h3>
+            <p className="text-sm text-on-surface-variant font-medium animate-pulse">Uploading evidence package and signing on-chain transaction...</p>
             <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
               <div className="h-full bg-primary animate-marquee w-[60%]"></div>
             </div>
-            <p className="text-[10px] font-mono text-on-surface-variant/60 uppercase">Securing transactions on {getActiveNetworkName()}...</p>
+            <p className="text-[10px] font-mono text-on-surface-variant/60 uppercase">Broadcasting to {getActiveNetworkName()}...</p>
           </div>
         </div>
       )}
@@ -183,31 +208,34 @@ export default function CreatorLab() {
           </div>
 
           <div className="space-y-3 mt-6">
+            {/* FIX #3: Replaced invented 94.2% with an honest, verifiable protocol fact */}
             <div className="bg-surface p-4 rounded-lg border border-outline-variant flex items-center gap-4 shadow-sm">
               <div className="w-9 h-9 rounded bg-primary-container flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-primary text-lg">analytics</span>
               </div>
               <div>
-                <p className="font-mono text-[8px] text-on-surface-variant mb-0.5 uppercase tracking-widest font-bold">Consensus Accuracy</p>
-                <p className="font-bold text-xs text-on-surface">94.2% Accuracy Vector</p>
+                <p className="font-mono text-[8px] text-on-surface-variant mb-0.5 uppercase tracking-widest font-bold">Consensus Quorum</p>
+                <p className="font-bold text-xs text-on-surface">66% Agent Approval Threshold</p>
               </div>
             </div>
+            {/* FIX #5: ETH → GIWA native denomination */}
             <div className="bg-surface p-4 rounded-lg border border-outline-variant flex items-center gap-4 shadow-sm">
               <div className="w-9 h-9 rounded bg-surface-variant flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-primary text-lg">link</span>
               </div>
               <div>
                 <p className="font-mono text-[8px] text-on-surface-variant mb-0.5 uppercase tracking-widest font-bold">Network Fee</p>
-                <p className="font-bold text-xs text-on-surface">~0.002 ETH Gas Bound</p>
+                <p className="font-bold text-xs text-on-surface">~0.002 GIWA Gas Estimate</p>
               </div>
             </div>
+            {/* FIX #4: "Secure Multi-Oracle" → accurate testnet label */}
             <div className="bg-surface p-4 rounded-lg border border-outline-variant flex items-center gap-4 shadow-sm">
               <div className="w-9 h-9 rounded bg-surface-container-high flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-primary text-lg">verified_user</span>
               </div>
               <div>
-                <p className="font-mono text-[8px] text-on-surface-variant mb-0.5 uppercase tracking-widest font-bold">Ledger Oracle</p>
-                <p className="font-bold text-xs text-on-surface">Secure Multi-Oracle</p>
+                <p className="font-mono text-[8px] text-on-surface-variant mb-0.5 uppercase tracking-widest font-bold">Settlement Oracle</p>
+                <p className="font-bold text-xs text-on-surface">Optimistic Oracle (GIWA Testnet)</p>
               </div>
             </div>
           </div>
@@ -237,7 +265,7 @@ export default function CreatorLab() {
                           <span className="font-mono text-primary text-[9px] tracking-widest uppercase font-bold">Proposal</span>
                           <span className="px-1.5 py-0.5 bg-bullish-green/10 text-bullish-green text-[8px] rounded font-bold font-mono">{ProtocolMetadata.protocolName.toUpperCase()} APPROVED</span>
                         </div>
-                        <span className="font-mono text-on-surface-variant text-[9px]">2.14ms Ticker</span>
+                        {/* FIX #8: Removed fake "2.14ms Ticker" invented performance metric */}
                       </div>
                       <div className="space-y-4">
                         <h3 className="serif-heading text-base md:text-lg text-on-surface leading-tight font-extrabold">{msg.title}</h3>
@@ -263,7 +291,8 @@ export default function CreatorLab() {
 
                         <div className="py-3 border-y border-outline-variant space-y-2">
                           <div className="flex justify-between items-end mb-1 text-[9px]">
-                            <span className="font-mono text-on-surface-variant uppercase tracking-widest font-bold">Neural Sentiment (Probability)</span>
+                            {/* FIX: Renamed "Neural Sentiment" to infrastructure-grade label */}
+                            <span className="font-mono text-on-surface-variant uppercase tracking-widest font-bold">Consensus Probability</span>
                             <div className="flex gap-3 font-mono font-bold">
                               <span className="text-bullish-green font-mono">YES {msg.yesProb}%</span>
                               <span className="text-bearish-red font-mono">NO {msg.noProb}%</span>
