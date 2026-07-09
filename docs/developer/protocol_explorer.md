@@ -87,8 +87,8 @@ To audit the authenticity of any decision, the Explorer UI provides an interacti
        ▼
 4. Compare locally computed Hash with on-chain Hash from GIWA logs
        │
-       ├─► MATCH:   "Decision Integrity Verified ✔"
-       └─► MISMATCH: "Decision Integrity Compromised ❌"
+       ├─► MATCH:   "Decision Integrity Verified [OK]"
+       └─► MISMATCH: "Decision Integrity Compromised [FAIL]"
 ```
 
 ---

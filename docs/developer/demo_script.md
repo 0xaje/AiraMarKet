@@ -118,5 +118,5 @@ This is the climax of the presentation where the presenter proves that the off-c
   [Local IPFS Hash]: e407ac250ab1a318d1a4dbc8296c7606f32f04b6f3fdf9420f13d80bee71b0dc
   [On-Chain Hash]:   e407ac250ab1a318d1a4dbc8296c7606f32f04b6f3fdf9420f13d80bee71b0dc
   
-  Status: VERIFIED ✔ (Integrity intact. Off-chain reasoning matches blockchain ledger.)
+  Status: VERIFIED [OK] — Integrity intact. Off-chain reasoning matches blockchain ledger.
 ```
