@@ -1,5 +1,5 @@
 # AIRA Protocol: Vision and Philosophy
-### A Verifiable AI Decision Layer powered by GIWA
+### Transparent AI Decisions. Verifiable on GIWA.
 
 ---
 

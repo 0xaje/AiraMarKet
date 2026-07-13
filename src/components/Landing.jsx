@@ -104,7 +104,7 @@ if (match) {
         
         {/* Hero Title */}
         <h1 className="serif-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.08] mb-6 text-on-surface tracking-tight font-black max-w-4xl">
-          A Verifiable AI <span className="italic text-primary bg-gradient-to-r from-primary to-amber-600 bg-clip-text text-transparent">Decision Layer</span> Powered by GIWA.
+          Transparent AI <span className="italic text-primary bg-gradient-to-r from-primary to-amber-600 bg-clip-text text-transparent">Decisions</span>. Verifiable on GIWA.
         </h1>
         
         {/* Tagline / Subtitle */}

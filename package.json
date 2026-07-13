@@ -2,7 +2,7 @@
   "name": "airamarket",
   "private": true,
   "version": "0.0.0",
-  "description": "AIRA Protocol: A Verifiable AI Decision Layer powered by GIWA, with AIRA Markets as its flagship prediction market sandbox application.",
+  "description": "AIRA Protocol: Transparent AI Decisions. Verifiable on GIWA, with AIRA Markets as its flagship prediction market sandbox application.",
   "type": "module",
   "scripts": {
     "dev": "vite",

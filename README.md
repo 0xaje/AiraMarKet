@@ -1,4 +1,4 @@
-# AIRA Protocol: A Verifiable AI Decision Layer powered by GIWA
+# AIRA Protocol: Transparent AI Decisions. Verifiable on GIWA.
 ### Decoupled Cognitive Consensus and Cryptographically Anchored Settlement
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](file:///home/oyeolorun/AiraMarKet/LICENSE)
@@ -9,7 +9,7 @@
 ---
 
 ## Tagline
-A Verifiable AI Decision Layer powered by GIWA.
+Transparent AI Decisions. Verifiable on GIWA.
 
 ---
 
