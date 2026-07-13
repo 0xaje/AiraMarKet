@@ -24,8 +24,8 @@ A standardized registry prevents configuration drift and assures developers that
 
 | Network | Chain ID | Contract Address | Status | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Mantle Sepolia Testnet** | `5003` | `0xdd277ccb8cda72d652cdca4df09df5f2522fc846` | ✅ **Live Production** | Fully operational and verified on-chain. |
-| **GIWA Sepolia Testnet** | `91342` | `0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D` | ✅ **Live Production** | Fully operational and verified on-chain. |
+| **Mantle Sepolia Testnet** | `5003` | `0xdd277ccb8cda72d652cdca4df09df5f2522fc846` | **Live Production** | Fully operational and verified on-chain. |
+| **GIWA Sepolia Testnet** | `91342` | `0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D` | **Live Production** | Fully operational and verified on-chain. |
 
 ---
 
