@@ -7,14 +7,22 @@ import { Logger } from '../../utils/logger';
 // -------------------------------------------------------------
 function cleanAndParseJson(text: string): LlmEvaluationResponse {
     let clean = text.trim();
-    if (clean.startsWith('```json')) {
-        clean = clean.substring(7);
-    } else if (clean.startsWith('```')) {
-        clean = clean.substring(3);
+    
+    // Extract JSON block if surrounded by markdown or conversational text
+    const jsonMatch = clean.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+        clean = jsonMatch[0];
+    } else {
+        if (clean.startsWith('```json')) {
+            clean = clean.substring(7);
+        } else if (clean.startsWith('```')) {
+            clean = clean.substring(3);
+        }
+        if (clean.endsWith('```')) {
+            clean = clean.substring(0, clean.length - 3);
+        }
     }
-    if (clean.endsWith('```')) {
-        clean = clean.substring(0, clean.length - 3);
-    }
+
     const parsed = JSON.parse(clean.trim());
 
     const rawRisks = parsed.risks || parsed.riskFactors || '';
@@ -77,6 +85,7 @@ export class OpenAiProvider implements LlmProvider {
         );
 
         const text = response.data.choices[0].message.content;
+        return cleanAndParseJson(text);
     }
 }
 
