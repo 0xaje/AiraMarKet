@@ -88,7 +88,7 @@ export default function Terminal() {
            useAppStore.getState().showToast("Invalid Market", "Market ID missing. Ensure this market is verified on-chain.", "error");
            return;
        }
-       const txValue = parseEther(tradeSize.toString());
+       const txValue = parseEther((tradeSize / 1000).toString());
        
        let gasLimit = undefined;
        try {

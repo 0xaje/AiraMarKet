@@ -145,7 +145,7 @@ export default function CreatorLab() {
         abi: getContractAbi(),
         functionName: 'createMarket',
         args: [market.title, market.category, expirySeconds, ipfsCID],
-        value: parseEther("2.0")
+        value: parseEther("0.02")
       });
       
       useAppStore.getState().showToast("Transaction Pending", "Waiting for network confirmation...", "info", hash);
