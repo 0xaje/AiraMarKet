@@ -68,7 +68,8 @@ export class DbAdapter {
             });
             Logger.success(`[DB_ADAPTER] Stored proposal and intelligence report in database successfully: ${proposal.title}`);
         } catch (error: any) {
-            if (error && error.code === 'P2002') {
+            const errStr = String(error?.message || error);
+            if ((error && error.code === 'P2002') || errStr.includes('Unique constraint failed')) {
                 Logger.warn(`[DB_ADAPTER] Skipping duplicate proposal write (signalId: ${proposal.signalId} already exists)`);
             } else {
                 Logger.error('[DB_ADAPTER] Error writing to database', error);
@@ -118,7 +119,8 @@ export class DbAdapter {
             });
             Logger.success(`[DB_ADAPTER] Stored EvidencePackage in database successfully for signalId: ${pkg.signalId}`);
         } catch (error: any) {
-            if (error && error.code === 'P2002') {
+            const errStr = String(error?.message || error);
+            if ((error && error.code === 'P2002') || errStr.includes('Unique constraint failed')) {
                 Logger.warn(`[DB_ADAPTER] Skipping duplicate EvidencePackage write (signalId: ${pkg.signalId} already exists)`);
             } else {
                 Logger.error('[DB_ADAPTER] Error writing EvidencePackage to database', error);

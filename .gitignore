@@ -90,3 +90,7 @@ logs/
 # Prisma generated client (committed via schema only)
 # prisma/generated/
 
+# Antigravity/Gemini agent config
+.gemini/
+.agents/
+.agent/
