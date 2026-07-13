@@ -209,12 +209,12 @@ export default function Explorer() {
                   <div className="border-t border-outline-variant/40 bg-surface-variant/5">
                     
                     {/* Visual Tab Selection Header */}
-                    <div className="flex border-b border-outline-variant/40 bg-surface-variant/20 px-5 gap-4">
+                    <div className="flex border-b border-outline-variant/40 bg-surface-variant/20 px-5 gap-4 overflow-x-auto no-scrollbar whitespace-nowrap">
                       {['explainability', 'confidence', 'evidence', 'registry'].map((tab) => (
                         <button
                           key={tab}
                           onClick={() => setTab(p.id, tab)}
-                          className={`py-3 text-[10px] font-bold uppercase tracking-wider font-mono border-b-2 transition-all ${currentTab === tab ? 'border-primary text-primary' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
+                          className={`py-3 text-[10px] font-bold uppercase tracking-wider font-mono border-b-2 transition-all shrink-0 ${currentTab === tab ? 'border-primary text-primary' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
                         >
                           {tab === 'explainability' ? 'Intelligence Report' :
                            tab === 'confidence' ? 'Confidence Distribution' :

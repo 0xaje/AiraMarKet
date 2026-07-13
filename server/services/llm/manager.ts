@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { LlmProvider, LlmEvaluationResponse, LlmCallMetrics } from './types';
-import { OpenAiProvider, GeminiProvider, AnthropicProvider, LocalLlamaProvider } from './providers';
+import { OpenAiProvider, OpenRouterProvider, GeminiProvider, AnthropicProvider, LocalLlamaProvider } from './providers';
 import { TransparencyLogger } from '../transparency_logger';
 import { Logger } from '../../utils/logger';
 
@@ -12,6 +12,7 @@ export class LlmManager {
     private constructor() {
         // Order of preferred providers (fallbacks)
         this.providers = [
+            new OpenRouterProvider(),
             new OpenAiProvider(),
             new GeminiProvider(),
             new AnthropicProvider(),

@@ -194,7 +194,7 @@ export default function Terminal() {
   return (
     <main className="pt-24 pb-24 md:pb-4 px-4 w-full min-h-[calc(100vh-100px)] grid grid-cols-12 gap-4 max-w-[1600px] mx-auto flex-grow z-10">
       <div className="col-span-12 lg:col-span-8 xl:col-span-9 flex flex-col gap-4 h-auto">
-        <div className="sahara-panel p-4 rounded-xl flex items-center justify-between gap-4 bg-surface shrink-0">
+        <div className="sahara-panel p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface shrink-0">
           <div className="flex items-center gap-4">
             <div className="w-11 h-11 bg-surface-variant rounded-xl flex items-center justify-center border border-outline-variant flex-shrink-0">
               <span className="material-symbols-outlined text-primary text-xl">terminal</span>
@@ -207,8 +207,8 @@ export default function Terminal() {
               </div>
             </div>
           </div>
-          <div className="flex gap-6 items-center">
-            <div className="text-right">
+          <div className="flex gap-6 items-center w-full sm:w-auto justify-between sm:justify-end border-t border-outline-variant/30 pt-3 sm:border-0 sm:pt-0">
+            <div className="text-left sm:text-right">
               <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-0.5 font-mono">CONSENSUS CONFIDENCE</p>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-sm text-primary font-bold">{activeMarket.confidence}%</span>

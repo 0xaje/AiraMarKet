@@ -245,7 +245,7 @@ export default function Feed() {
       </main>
 
       {/* Mobile Stream Feed */}
-      <main className="md:hidden pt-44 pb-24 px-4 w-full flex flex-col gap-4 z-10">
+      <main className="md:hidden pt-52 pb-24 px-4 w-full flex flex-col gap-4 z-10">
         {feedCategories.filter(c => c.id === activeCategoryTab).map((col) => {
           const cardsInCol = feedCards.filter(card => card.category === col.id && card.status === activeFeedFilter);
           return (

@@ -77,6 +77,42 @@ export class OpenAiProvider implements LlmProvider {
         );
 
         const text = response.data.choices[0].message.content;
+    }
+}
+
+// -------------------------------------------------------------
+// OpenRouter Provider (google/gemini-2.5-flash)
+// -------------------------------------------------------------
+export class OpenRouterProvider implements LlmProvider {
+    name = 'OpenRouter';
+    model = 'google/gemini-2.5-flash';
+
+    isActive(): boolean {
+        return !!process.env.OPENROUTER_API_KEY;
+    }
+
+    async analyze(prompt: string): Promise<LlmEvaluationResponse> {
+        const apiKey = process.env.OPENROUTER_API_KEY;
+        if (!apiKey) throw new Error('OpenRouter API Key is missing');
+
+        const response = await axios.post(
+            'https://openrouter.ai/api/v1/chat/completions',
+            {
+                model: this.model,
+                messages: [{ role: 'user', content: prompt }],
+                response_format: { type: 'json_object' },
+                max_tokens: 1000
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${apiKey}`
+                },
+                timeout: 8000
+            }
+        );
+
+        const text = response.data.choices[0].message.content;
         return cleanAndParseJson(text);
     }
 }
