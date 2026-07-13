@@ -3,10 +3,12 @@ import { AiraMarketProtocolDeployment as giwaDeployment } from './91342/AiraMark
 
 const deployments: Record<number, Record<string, { address: string; abi: any }>> = {
   5003: {
-    AiraMarketProtocol: mantleSepoliaDeployment
+    AiraMarketProtocol: mantleSepoliaDeployment,
+    marketProtocol: mantleSepoliaDeployment
   },
   91342: {
-    AiraMarketProtocol: giwaDeployment
+    AiraMarketProtocol: giwaDeployment,
+    marketProtocol: giwaDeployment
   }
 };
 
