@@ -22,7 +22,7 @@ export default function Explorer() {
 
   const fetchExplorerData = async () => {
     try {
-      const res = await fetch('/api/explorer/data');
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/explorer/data`);
       if (res.ok) {
         const json = await res.json();
         setData({
