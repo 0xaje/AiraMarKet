@@ -84,6 +84,8 @@ social_media_captions.md
 
 # Developer scratch / sprint notes
 sprint_*.md
+scratch/
+*.scratch
 
 # Runtime logs directory
 logs/
