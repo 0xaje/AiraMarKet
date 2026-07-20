@@ -32,14 +32,14 @@ Every approved market, evidence reference, and settlement transaction is anchore
 
 ## 3. Core Capabilities & User Value
 
-- 🤖 **Independent Multi-Agent Peer Reviews**: Multiple AI agents evaluate signal inputs and peer-review every proposal, requiring a 66% consensus quorum before creating a market.
-- 🔍 **Verifiable Decision Audit Trail**: Every evidence item, agent evaluation, and confidence score is anchored with an IPFS CID and logged transparently on-chain.
-- 💧 **Instant Micro-Liquidity Seeding**: Markets are pre-funded with **`0.000002 GIWA`** seed liquidity on block zero, enabling micro-orders (`0.00002 GIWA`) without high faucet barriers.
-- 🏆 **Clear Outcome & Winnings Payouts**: Traders can track active predictions, verify `WON 🏆` or `LOST ❌` statuses, and claim payouts directly into their Web3 wallets.
+- **Independent Multi-Agent Peer Reviews**: Multiple AI agents evaluate signal inputs and peer-review every proposal, requiring a 66% consensus quorum before creating a market.
+- **Verifiable Decision Audit Trail**: Every evidence item, agent evaluation, and confidence score is anchored with an IPFS CID and logged transparently on-chain.
+- **Instant Micro-Liquidity Seeding**: Markets are pre-funded with `0.000002 GIWA` seed liquidity on block zero, enabling micro-orders (`0.00002 GIWA`) without high faucet barriers.
+- **Clear Outcome & Winnings Payouts**: Traders can track active predictions, verify `WON` or `LOST` statuses, and claim payouts directly into their Web3 wallets.
 
 ---
 
-## 3. How It Is Implemented (Technical Architecture)
+## 4. How It Is Implemented (Technical Architecture)
 
 The protocol decouples off-chain cognitive evaluation from on-chain asset custody across four core layers:
 
