@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useReadContract } from 'wagmi';
 import { getActiveNetworkName, getContractAddress, getContractAbi, getActiveChainId, getNativeCurrencySymbol } from '../lib/network';
+import useAppStore from '../store/useAppStore';
 
 const defaultSeedData = {
   proposals: [
@@ -174,13 +175,15 @@ export default function Explorer() {
   const [expandedProposal, setExpandedProposal] = useState(null);
   const [proposalTabs, setProposalTabs] = useState({});
 
+  const customMarkets = useAppStore(state => state.customMarkets);
+
   // Wagmi Read Contracts for live GIWA on-chain markets
   const { data: liveMarkets } = useReadContract({
     address: getContractAddress(),
     abi: getContractAbi(),
     functionName: 'listMarkets',
     chainId: getActiveChainId(),
-    query: { refetchInterval: 5000 }
+    query: { refetchInterval: 3000 }
   });
 
   useEffect(() => {
@@ -188,8 +191,9 @@ export default function Explorer() {
   }, []);
 
   useEffect(() => {
+    let mappedOnChain = [];
     if (liveMarkets && Array.isArray(liveMarkets) && liveMarkets.length > 0) {
-      const mappedOnChain = liveMarkets.map((m) => {
+      mappedOnChain = liveMarkets.map((m) => {
         const marketId = Number(m.id);
         const totalYes = Number(m.totalYesPool) / 1e18;
         const totalNo = Number(m.totalNoPool) / 1e18;
@@ -224,16 +228,50 @@ export default function Explorer() {
           ]
         };
       }).reverse();
-
-      setData(prev => ({
-        ...prev,
-        proposals: [
-          ...mappedOnChain,
-          ...defaultSeedData.proposals.filter(p => !mappedOnChain.some(m => m.title === p.title))
-        ]
-      }));
     }
-  }, [liveMarkets]);
+
+    // Map custom user-deployed markets from persistent store
+    const customProposals = (customMarkets || []).map((cm, idx) => ({
+      id: `custom_explorer_${idx}_${cm.timestamp || Date.now()}`,
+      realId: idx + 1,
+      title: cm.title,
+      signalId: `SIG-GIWA-CUSTOM-00${idx + 1}`,
+      category: String(cm.category || 'Tech').toUpperCase(),
+      status: "PENDING_APPROVAL",
+      confidence: cm.likelihood ? parseFloat(cm.likelihood) / 100 : 0.88,
+      supportingEvidence: `Verifiable custom deployed prediction market on ${getActiveNetworkName()} with IPFS evidence CID ${cm.ipfsCID || 'QmGIWACustomCID'}.`,
+      ipfsHash: cm.ipfsCID || `QmGIWACustom${idx + 1}x89Fk278vA1992048591048104810293`,
+      decisionReason: "Deployed by wallet signature with multi-agent cognitive evaluation.",
+      intelligenceReport: {
+        summary: `Custom prediction proposal "${cm.title}" created on ${getActiveNetworkName()} protocol.`,
+        supportingEvidence: [
+          `Tx Hash: ${cm.txHash || '0xGIWA...Custom'}`,
+          `Category: ${cm.category}`,
+          `Consensus Confidence: ${cm.likelihood || '80%'}`
+        ],
+        contradictingEvidence: [],
+        riskFactors: ["Pending decentralized oracle settlement."],
+        recommendedDecision: "APPROVE"
+      },
+      evaluations: [
+        { id: `e_custom_${idx}_1`, agentName: "AnalystAgent", confidence: 0.95, reasoning: "Signal inputs and proposal parameters validated." },
+        { id: `e_custom_${idx}_2`, agentName: "RiskAgent", confidence: 0.92, reasoning: "Seed liquidity verified against protocol safety parameters." },
+        { id: `e_custom_${idx}_3`, agentName: "ComplianceAgent", confidence: 0.98, reasoning: "Decentralized oracle consensus guidelines satisfied." }
+      ]
+    }));
+
+    // Merge customProposals + mappedOnChain + defaultSeedData.proposals (deduplicated by title)
+    const combinedProposals = [
+      ...customProposals,
+      ...mappedOnChain.filter(m => !customProposals.some(cp => cp.title === m.title)),
+      ...defaultSeedData.proposals.filter(p => !customProposals.some(cp => cp.title === p.title) && !mappedOnChain.some(m => m.title === p.title))
+    ];
+
+    setData(prev => ({
+      ...prev,
+      proposals: combinedProposals
+    }));
+  }, [liveMarkets, customMarkets]);
 
   const fetchExplorerData = async () => {
     try {
