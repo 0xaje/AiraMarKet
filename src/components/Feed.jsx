@@ -74,7 +74,7 @@ export default function Feed() {
   const customMarkets = useAppStore(state => state.customMarkets);
   const [activeFeedFilter, setActiveFeedFilter] = useState('ACTIVE');
   const [feedCards, setFeedCards] = useState(defaultSeedCards);
-  const [activeCategoryTab, setActiveCategoryTab] = useState('TECH');
+  const [activeCategoryTab, setActiveCategoryTab] = useState('ALL');
 
   const handleCategoryClick = (catId) => {
     setActiveCategoryTab(catId);
@@ -222,6 +222,14 @@ export default function Feed() {
         </div>
         <div className="hidden md:block h-6 w-px bg-outline-variant/80"></div>
         <div className="flex items-center gap-1.5 overflow-x-auto max-w-[280px] sm:max-w-md no-scrollbar">
+          <button 
+            key="ALL"
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-bold font-mono tracking-wider transition-all uppercase shrink-0 ${activeCategoryTab === 'ALL' ? 'bg-primary/10 text-primary border border-primary/20' : 'text-on-surface-variant hover:text-primary border border-transparent'}`}
+            onClick={() => setActiveCategoryTab('ALL')}
+          >
+            <span className="material-symbols-outlined text-[13px] leading-none">apps</span>
+            <span>ALL</span>
+          </button>
           {feedCategories.map((col) => (
             <button 
               key={col.id}
@@ -355,7 +363,7 @@ export default function Feed() {
 
       {/* Mobile Stream Feed */}
       <main className="md:hidden pt-52 pb-24 px-4 w-full flex flex-col gap-4 z-10">
-        {feedCategories.filter(c => c.id === activeCategoryTab).map((col) => {
+        {(activeCategoryTab === 'ALL' ? feedCategories : feedCategories.filter(c => c.id === activeCategoryTab)).map((col) => {
           const cardsInCol = feedCards.filter(card => card.category === col.id && card.status === activeFeedFilter);
           return (
             <div key={col.id} className="w-full flex flex-col bg-surface border border-outline-variant rounded-xl shadow-xs animate-subtle-fade">
