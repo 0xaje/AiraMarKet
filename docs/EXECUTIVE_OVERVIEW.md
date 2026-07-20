@@ -12,7 +12,7 @@ Traditional prediction markets and decentralized decision platforms face three m
 3. **Lack of Decision Visibility**: Users have little visibility into how AI reached a conclusion or what evidence was evaluated.
 
 ### **The AIRA Solution**
-AIRA solves these challenges by using **multiple AI agents to independently evaluate every proposal before it reaches the blockchain**. 
+**AIRA allows multiple AI agents to independently analyze a prediction, explain their reasoning, reach consensus, preserve supporting evidence, and anchor that evidence on GIWA.**
 
 Instead of trusting a single prompt or an opaque black box, specialized AI agents evaluate real-world signals, calculate risk parameters, and verify compliance rules. Every decision audit trail is anchored on-chain to **GIWA Sepolia L2**, giving users complete visibility into how conclusions were reached.
 

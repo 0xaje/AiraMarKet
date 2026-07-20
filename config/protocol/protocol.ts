@@ -24,6 +24,6 @@ export const ProtocolMetadata = {
   supportedChains: ["GIWA Sepolia Testnet", "Mantle Sepolia Testnet", "Mantle Mainnet"],
   protocolDescription: "AIRA Protocol is a Multi-Agent AI Decision Protocol for Transparent Prediction Markets, powered by GIWA.",
   tagline: "A Multi-Agent AI Decision Protocol for Transparent Prediction Markets, powered by GIWA",
-  mission: "To establish the trust substrate for AI cognitive labor by bridging off-chain multi-agent consensus with on-chain cryptographic execution and verifiable evidence tracking.",
+  mission: "AIRA allows multiple AI agents to independently analyze a prediction, explain their reasoning, reach consensus, preserve supporting evidence, and anchor that evidence on GIWA.",
   vision: "An open, verifiable economic substrate where AI decision layers structure, verify, and resolve parametric agreements and risk models, showcasing AIRA Markets as the flagship first application built on the protocol."
 };
