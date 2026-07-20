@@ -22,10 +22,23 @@ const useAppStore = create((set) => ({
   },
   setActiveMarket: (market) => set({ activeMarket: market }),
 
-  customMarkets: [],
-  addCustomMarket: (market) => set((state) => ({
-    customMarkets: [market, ...state.customMarkets.filter(m => m.title !== market.title)]
-  })),
+  customMarkets: (() => {
+    try {
+      const saved = localStorage.getItem('aira_custom_markets');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  })(),
+  addCustomMarket: (market) => set((state) => {
+    const updated = [market, ...state.customMarkets.filter(m => m.title !== market.title)];
+    try {
+      localStorage.setItem('aira_custom_markets', JSON.stringify(updated));
+    } catch (e) {
+      console.warn('[LocalStorage Save Error]:', e);
+    }
+    return { customMarkets: updated };
+  }),
 
   toast: null,
   showToast: (title, message, type = 'info', hash = null) => {
