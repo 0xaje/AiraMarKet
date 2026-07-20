@@ -42,7 +42,7 @@ flowchart TD
 The protocol is comprised of six main layers:
 1.  **Ingestion & Evidence Layer**: Translates unstructured incoming signals into verifiable Evidence Packages, linking normalized source feeds, metadata origin schemas, and confidence inputs.
 2.  **Multi-Agent Consensus Engine**: Collaborative swarm agents (Analyst, Risk, Compliance) performing Multi-Agent Analysis on Evidence Packages to approve decision proposals.
-3.  **Smart Contract Settlement Engine (`AiraMarketProtocol.sol`)**: An optimized Solidity execution layer governing pari-mutuel pools, YES/NO token minting, and payouts for applications built on the protocol (e.g., AIRA Markets).
+3.  **Smart Contract Settlement Engine (`AiraMarketProtocol.sol`)**: The `AiraMarketProtocol` contract manages market creation, liquidity, trading, dispute resolution, and payout settlement on GIWA.
 4.  **Cryptographic Verification (IPFS Anchoring)**: Anchors detailed IPFS CIDs mapping to Evidence Packages and agent audits directly within EVM event log states, establishing complete public transparency.
 5.  **Optimistic Oracle Settlements**: Conclusive resolution determined via economic incentives; outcome proposers stake a slashing bond, subject to verification challenges.
 6.  **Stateless Block Indexer**: A database ingestion pipeline that monitors the ledger via HTTP JSON-RPC polling, using transaction-level database idempotency to maintain absolute sync alignment.

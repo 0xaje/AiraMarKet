@@ -61,8 +61,8 @@ flowchart TD
    - **`ComplianceAgent`**: Enforces oracle dispute rules, timelocks, and protocol compliance.
 
 2. **On-Chain Settlement Engine (`AiraMarketProtocol.sol`)**:
+   - The `AiraMarketProtocol` contract manages market creation, liquidity, trading, dispute resolution, and payout settlement on GIWA.
    - Deployed at `0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D` on GIWA Sepolia L2 (Chain ID: `91342`).
-   - Governs pari-mutuel pool minting (`buyYes`, `buyNo`), resolution timelocks (`proposeResolution`, `executeResolution`), and proportional winnings transfers (`claimWinnings`).
 
 3. **Storage & Audit Layer**:
    - Supports IPFS evidence anchoring for metadata logs and cryptographic multihash verification.
