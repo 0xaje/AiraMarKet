@@ -47,7 +47,7 @@ Instead of trusting a single prompt or an opaque black box, specialized AI agent
 
 AIRA uses GIWA as its execution and verification layer.
 
-Every approved market, evidence reference, and settlement transaction is anchored on GIWA, providing transparent, low-cost, and auditable execution for AI-assisted decision making.
+Every approved market, evidence package, and settlement transaction is verifiably anchored on GIWA, creating a transparent execution trail from AI reasoning to on-chain settlement.
 
 ---
 
