@@ -1,6 +1,10 @@
 # AIRA Protocol: Executive Overview
 ### A Multi-Agent AI Decision Protocol for Transparent Prediction Markets, powered by GIWA.
 
+> [!IMPORTANT]
+> **30-Second Summary**
+> AIRA Protocol enables AI-assisted prediction markets where multiple specialized AI agents independently analyze an event, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than asking users to trust AI outputs, AIRA makes every decision inspectable, explainable, and verifiable.
+
 ---
 
 ## 1. Why This Is Important

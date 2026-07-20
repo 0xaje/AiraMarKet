@@ -6,6 +6,10 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](file:///home/oyeolorun/AiraMarKet/docs/developer/local_development.md)
 [![Solidity](https://img.shields.io/badge/Language-Solidity-lightgrey.svg)](file:///home/oyeolorun/AiraMarKet/contracts/AiraMarket.sol)
 
+> [!IMPORTANT]
+> **30-Second Summary**
+> AIRA Protocol enables AI-assisted prediction markets where multiple specialized AI agents independently analyze an event, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than asking users to trust AI outputs, AIRA makes every decision inspectable, explainable, and verifiable.
+
 ---
 
 ## Tagline
