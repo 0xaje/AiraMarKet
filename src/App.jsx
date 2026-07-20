@@ -114,7 +114,78 @@ function App() {
             )}
             
             <div className="relative flex items-center shrink-0">
-              <ConnectButton showBalance={false} chainStatus="none" />
+              <ConnectButton.Custom>
+                {({
+                  account,
+                  chain,
+                  openAccountModal,
+                  openChainModal,
+                  openConnectModal,
+                  authenticationStatus,
+                  mounted,
+                }) => {
+                  const ready = mounted && authenticationStatus !== 'loading';
+                  const connected =
+                    ready &&
+                    account &&
+                    chain &&
+                    (!authenticationStatus ||
+                      authenticationStatus === 'authenticated');
+
+                  return (
+                    <div
+                      {...(!ready && {
+                        'aria-hidden': true,
+                        'style': {
+                          opacity: 0,
+                          pointerEvents: 'none',
+                          userSelect: 'none',
+                        },
+                      })}
+                    >
+                      {(() => {
+                        if (!connected) {
+                          return (
+                            <button
+                              onClick={openConnectModal}
+                              type="button"
+                              className="px-2.5 py-1.5 sm:px-4 sm:py-2 bg-primary hover:bg-primary/90 text-white font-extrabold text-[11px] sm:text-xs font-mono rounded-lg shadow-md transition-all active:scale-95 flex items-center gap-1 sm:gap-1.5 shrink-0"
+                            >
+                              <span className="material-symbols-outlined text-sm sm:text-base">account_balance_wallet</span>
+                              <span>Connect</span>
+                            </button>
+                          );
+                        }
+
+                        if (chain.unsupported) {
+                          return (
+                            <button
+                              onClick={openChainModal}
+                              type="button"
+                              className="px-2.5 py-1.5 bg-bearish-red text-white font-bold text-[10px] sm:text-xs font-mono rounded-lg transition-all flex items-center gap-1"
+                            >
+                              Wrong Network
+                            </button>
+                          );
+                        }
+
+                        return (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={openAccountModal}
+                              type="button"
+                              className="px-2.5 py-1.5 sm:px-3 sm:py-2 bg-surface-variant/80 hover:bg-surface-variant border border-outline-variant text-on-surface font-bold text-[10px] sm:text-xs font-mono rounded-lg transition-all flex items-center gap-1.5"
+                            >
+                              <span className="w-2 h-2 rounded-full bg-bullish-green animate-pulse"></span>
+                              <span>{account.displayName}</span>
+                            </button>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  );
+                }}
+              </ConnectButton.Custom>
             </div>
             
             <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full border-2 border-outline-variant p-0.5 shrink-0" onClick={() => navigate('/portfolio')} title="View Portfolio">
