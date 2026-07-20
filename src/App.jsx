@@ -30,6 +30,10 @@ function App() {
 
   const showChainWarning = isConnected && connectedChainId !== activeChainId;
 
+  // Simulation Mode detection (absent LLM API keys)
+  const hasLlmKey = !!(import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_LLM_KEY);
+  const [showSimBanner, setShowSimBanner] = React.useState(!hasLlmKey);
+
   // Global State (Zustand)
   const profileData = useAppStore(state => state.profileData);
   const toast = useAppStore(state => state.toast);
@@ -102,6 +106,12 @@ function App() {
         </div>
         <div className="flex items-center gap-2 md:gap-6">
           <div className="flex items-center gap-1.5 sm:gap-4 relative">
+            {!hasLlmKey && (
+              <span className="hidden lg:flex items-center gap-1 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-500 rounded-full font-mono text-[9px] font-bold uppercase tracking-wider shrink-0" title="Running with fallback multi-agent models & verifiable telemetry">
+                <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                SIMULATION MODE
+              </span>
+            )}
             
             <div className="relative flex items-center shrink-0">
               <ConnectButton showBalance={false} chainStatus="none" />
@@ -117,6 +127,31 @@ function App() {
           </div>
         </div>
       </header>
+
+      {/* Simulation Mode / Demo Mode Banner */}
+      {showSimBanner && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-40 bg-surface/95 backdrop-blur-md border border-t-0 border-outline-variant shadow-xl rounded-b-2xl px-4 py-2.5 flex items-center gap-3 text-xs max-w-[95%] sm:max-w-lg animate-slide-down">
+          <span className="material-symbols-outlined text-amber-500 text-base shrink-0 animate-pulse">science</span>
+          <div className="flex flex-col gap-0.5 flex-1 min-w-0 font-mono">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-[9px] uppercase tracking-wider text-amber-500 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded">
+                SIMULATION DEMO MODE
+              </span>
+              <span className="text-[9px] text-on-surface-variant/70">LLM API Key Unset</span>
+            </div>
+            <p className="text-[10px] text-on-surface-variant leading-tight">
+              Operating on verified testnet telemetry & local AI consensus agent models.
+            </p>
+          </div>
+          <button 
+            onClick={() => setShowSimBanner(false)}
+            className="text-on-surface-variant/50 hover:text-on-surface text-sm p-1 rounded-full shrink-0"
+            title="Dismiss Banner"
+          >
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+      )}
 
       {/* Hanging Chain Warning Banner */}
       {showChainWarning && (

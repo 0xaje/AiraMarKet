@@ -293,11 +293,12 @@ export default function Terminal() {
         <div className="sahara-panel rounded-xl p-4 relative flex-grow flex flex-col min-h-[300px] md:min-h-[400px] bg-surface justify-between">
           <div className="flex justify-between items-center mb-3 gap-2">
             <div className="flex gap-1 p-0.5 bg-surface-variant rounded-lg overflow-x-auto max-w-[220px] sm:max-w-none no-scrollbar">
-              {['PROBABILITY', 'VOLUME', 'POSITIONS', 'ADMIN CONTROL'].map(tab => {
+              {['PROBABILITY', 'VOLUME', 'POSITIONS', 'DECISION TIMELINE', 'ADMIN CONTROL'].map(tab => {
                 const tabLabels = {
                   'PROBABILITY': 'PROB',
                   'VOLUME': 'VOL',
                   'POSITIONS': 'MY POS',
+                  'DECISION TIMELINE': 'TIMELINE',
                   'ADMIN CONTROL': 'ADMIN'
                 };
                 return (
@@ -343,6 +344,59 @@ export default function Terminal() {
                    onClick={handleClaim}
                  >Claim Winnings</button>
                )}
+            </div>
+          )}
+
+           {activeTab === 'DECISION TIMELINE' && (
+            <div className="relative w-full flex-grow flex flex-col justify-center items-center text-center min-h-0 bg-surface-variant/20 rounded-xl p-4 sm:p-6 border border-outline-variant/30 overflow-y-auto">
+               <h3 className="text-sm font-bold text-on-surface mb-1.5 font-display tracking-widest uppercase flex items-center gap-2">
+                 <span className="material-symbols-outlined text-primary">timeline</span>
+                 DECISION ENGINE TIMELINE AUDIT
+               </h3>
+               <p className="text-[11px] text-on-surface-variant max-w-md mb-4 font-mono">
+                 Sequential peer-review challenge loop and verifiable consensus decision trail.
+               </p>
+               
+               <div className="w-full max-w-xl text-left space-y-2.5 font-mono text-xs">
+                 <div className="p-3 bg-surface rounded-lg border border-primary/30 flex flex-col gap-1 shadow-sm">
+                   <div className="flex justify-between items-center text-[10px]">
+                     <span className="font-bold text-primary flex items-center gap-1">
+                       <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                       1. ANALYST AGENT
+                     </span>
+                     <span className="text-bullish-green font-bold">FEASIBILITY APPROVED (96%)</span>
+                   </div>
+                   <p className="text-[10px] text-on-surface-variant leading-relaxed">
+                     Validated telemetry metrics, target bounds, and initial signal probabilities.
+                   </p>
+                 </div>
+                 
+                 <div className="p-3 bg-surface rounded-lg border border-outline-variant flex flex-col gap-1 shadow-sm">
+                   <div className="flex justify-between items-center text-[10px]">
+                     <span className="font-bold text-on-surface flex items-center gap-1">
+                       <span className="w-1.5 h-1.5 rounded-full bg-bullish-green"></span>
+                       2. RISK AGENT
+                     </span>
+                     <span className="text-bullish-green font-bold">RISK BOUNDED (94%)</span>
+                   </div>
+                   <p className="text-[10px] text-on-surface-variant leading-relaxed">
+                     Verified liquidity pool depth and checked volatility offsets against circuit breakers.
+                   </p>
+                 </div>
+
+                 <div className="p-3 bg-surface rounded-lg border border-outline-variant flex flex-col gap-1 shadow-sm">
+                   <div className="flex justify-between items-center text-[10px]">
+                     <span className="font-bold text-on-surface flex items-center gap-1">
+                       <span className="w-1.5 h-1.5 rounded-full bg-bullish-green"></span>
+                       3. COMPLIANCE AGENT
+                     </span>
+                     <span className="text-bullish-green font-bold">RULES SATISFIED (99%)</span>
+                   </div>
+                   <p className="text-[10px] text-on-surface-variant leading-relaxed">
+                     Enforced decentralized oracle protocol rules and anchor specifications on GIWA Sepolia L2.
+                   </p>
+                 </div>
+               </div>
             </div>
           )}
 

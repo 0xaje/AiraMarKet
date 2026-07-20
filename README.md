@@ -126,12 +126,17 @@ The AIRA Protocol relies on Dunamu's **GIWA OP Stack L2** network as its core se
 ---
 
 ## Roadmap
-*   **Phase 1 (Completed)**: Core smart contract validation, local sandbox development, multi-agent consensus engine implementation, testnet deployment, and event indexer hardening.
-*   **Phase 2 (Q3 2026)**:
-    *   Deploy backend API and indexer to managed cloud hosting (Render / Railway).
-    *   Connect production OpenAI / Gemini API keys to the live Consensus Engine.
-    *   Launch public-access GIWA Sepolia sandbox with read-only Protocol Explorer.
-    *   Integrate webhook signal feeds to replace scheduled polling scrapers.
+*   **Phase 1 (Completed)**: Core smart contract validation, local sandbox development, multi-agent consensus engine implementation, testnet deployment on GIWA Sepolia L2, and event indexer hardening.
+*   **Phase 2 (Q3 2026 - Production API & Infrastructure Scaling)**:
+    *   **Milestone 2.1: Cloud Infrastructure Deployment**
+        *   `[ ]` Sub-milestone 2.1.1: Deploy PostgreSQL indexer and Node.js API server to managed cloud infrastructure (Render / Railway) with zero-downtime health probes.
+        *   `[ ]` Sub-milestone 2.1.2: Enforce TLS 1.3 encryption, CORS domain whitelisting, and strict request rate-limiting middleware.
+    *   **Milestone 2.2: Production LLM Provider Integration**
+        *   `[ ]` Sub-milestone 2.2.1: Wire production Gemini 1.5 Pro & OpenAI GPT-4o API keys into the Consensus Engine provider pipeline with automatic fallback models.
+        *   `[ ]` Sub-milestone 2.2.2: Implement response caching, token usage tracking, and multi-agent latency optimization.
+    *   **Milestone 2.3: Live Telemetry Webhooks & Explorer Upgrades**
+        *   `[ ]` Sub-milestone 2.3.1: Connect real-time Webhook telemetry ingestors (Chainlink Functions & Pyth Oracles) to replace polling scrapers.
+        *   `[ ]` Sub-milestone 2.3.2: Upgrade public Protocol Explorer (`/explorer`) with WebSocket event subscriptions for real-time GIWA L2 block mining alerts.
 *   **Phase 3 (Q4 2026)**: Deploying to GIWA Mainnet, integrating third-party decentralized oracle networks, and initiating liquidity provider incentives.
 *   **Phase 4 (Q1 2027)**: Transitioning protocol parameters (fee splits, confidence thresholds) to a Decentralized Autonomous Organization (DAO) and releasing developer SDKs to allow partners to build custom AI agents.
 
