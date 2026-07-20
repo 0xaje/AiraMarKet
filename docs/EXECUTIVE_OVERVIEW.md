@@ -67,7 +67,7 @@ flowchart TD
 3. **Storage & Audit Layer**:
    - Supports IPFS evidence anchoring for metadata logs and cryptographic multihash verification.
 
-4. **Frontend Applications**:
+4. **Seven Integrated Application Modules**:
    - **Core Feed (`/feed`)**: 4 category streams with status filters and mobile stream view.
    - **AI Creator Lab (`/creator`)**: Prompt-to-market creator with live wallet signing.
    - **Trading Terminal (`/terminal`)**: Interactive probability charts and Decision Timeline.
