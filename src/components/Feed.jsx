@@ -71,6 +71,7 @@ const defaultSeedCards = [
 export default function Feed() {
   const navigate = useNavigate();
   const setActiveMarket = useAppStore(state => state.setActiveMarket);
+  const customMarkets = useAppStore(state => state.customMarkets);
   const [activeFeedFilter, setActiveFeedFilter] = useState('ACTIVE');
   const [feedCards, setFeedCards] = useState(defaultSeedCards);
   const [activeCategoryTab, setActiveCategoryTab] = useState('TECH');
@@ -142,8 +143,32 @@ export default function Feed() {
       }).reverse();
     }
 
-    setFeedCards([...onChainMapped, ...defaultSeedCards]);
-  }, [liveMarkets]);
+    const customMapped = (customMarkets || []).map((cm, idx) => ({
+      id: `custom_${idx}_${cm.timestamp || Date.now()}`,
+      realId: 1,
+      title: cm.title,
+      category: normalizeCategory(cm.category),
+      rawCategory: cm.category,
+      volume: `0.000002 ${currency}`,
+      yesProb: 50,
+      noProb: 50,
+      yesPrice: 0.5,
+      noPrice: 0.5,
+      confidence: "Live On-Chain",
+      openInterest: `0.000002 ${currency}`,
+      drift: "LIVE",
+      status: "ACTIVE",
+      passport: "https://images.unsplash.com/photo-1639762681485-074b7f4ec651?auto=format&fit=crop&q=80&w=200",
+      bgImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuC7ZaIdCSD76vsMYol9iTeA3P-KQePR-wPwXlEf8HDGAcQXVLcWBTQf2XPSYlrNTDzYlAoOgq4IvPXuEZwitpqGSuLEoPVcX7-ucS_CmB7lUv1rFXuQqETHu6FcP44CbdbNERfV9UdIz-IYo_b2fCqdFHWsDXpdsbtPDhUbvxOqnaE4IuARVDI2c_81H_f9VcBGDMZamrZnDWlCu0pQWjFXdazF0kCZfwjb9g1siJ6jU8kdrt6XYa0L-4gC3h3_zaQkcZajNdL_5mY",
+      nodeIcon: "https://lh3.googleusercontent.com/aida-public/AB6AXuC5mynRnO05PMYjJd4c9pATpp_CQNpzcuGCuynRG5rI2sR6fjElHLEmsj0uuq1_37kGszQW6Lm7Nx73hl71PgeFxr9oOyn14HpIVZkkfbHiEskuSrePFACjwxxNoJdO8xjTP0jpBN1bTi4K6IpZangC3HOfa0rNiJmVinhzBTn0HsixddoBCOCgjXN3d0SNJkz4EKnodR6fkkh14DscesLHVZ0wRgeEQKOqoC8cABi8GQ95kMVMGB4UgCFztlOQANyh7SsvMYkWoNA",
+      nodeName: `${networkName} Oracle`
+    }));
+
+    // Deduplicate onChainMapped items if title is already in customMapped
+    const filteredOnChain = onChainMapped.filter(om => !customMapped.some(cm => cm.title === om.title));
+
+    setFeedCards([...customMapped, ...filteredOnChain, ...defaultSeedCards]);
+  }, [liveMarkets, customMarkets]);
 
   const activateTerminalTrade = (marketTitle, yesPrice, noPrice, confidence, vol, openInterest, drift, realId) => {
     setActiveMarket({

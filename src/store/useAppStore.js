@@ -22,6 +22,11 @@ const useAppStore = create((set) => ({
   },
   setActiveMarket: (market) => set({ activeMarket: market }),
 
+  customMarkets: [],
+  addCustomMarket: (market) => set((state) => ({
+    customMarkets: [market, ...state.customMarkets.filter(m => m.title !== market.title)]
+  })),
+
   toast: null,
   showToast: (title, message, type = 'info', hash = null) => {
     set({ toast: { title, message, type, hash, id: Date.now() } });

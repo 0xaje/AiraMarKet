@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppStore from '../store/useAppStore';
 import { trendingSuggestions } from '../mocks/data';
-import { useAccount, useWriteContract, useChainId, useSwitchChain, useBalance } from 'wagmi';
+import { useAccount, useWriteContract, useChainId, useSwitchChain, useBalance, usePublicClient } from 'wagmi';
 import { getContractAddress, getContractAbi, getNativeCurrencySymbol, getActiveNetworkName, getActiveChainId } from '../lib/network';
 import { ProtocolMetadata } from '../../config/protocol/protocol';
 
@@ -12,6 +12,7 @@ export default function CreatorLab() {
   const { isConnected, address: walletAddress } = useAccount();
   const connectedChainId = useChainId();
   const { switchChainAsync } = useSwitchChain();
+  const publicClient = usePublicClient();
   const { data: balanceData } = useBalance({ address: walletAddress, chainId: getActiveChainId() });
   
   const [creatorInput, setCreatorInput] = useState('');
@@ -185,7 +186,25 @@ export default function CreatorLab() {
         chainId: targetChainId
       });
       
-      useAppStore.getState().showToast("Transaction Pending", "Waiting for network confirmation...", "info", hash);
+      useAppStore.getState().showToast("Transaction Submitted", "Waiting for block confirmation on GIWA Sepolia...", "info", hash);
+
+      // Add to Zustand optimistic market store immediately
+      useAppStore.getState().addCustomMarket({
+        title: market.title,
+        category: market.category,
+        likelihood: market.likelihood || '80%',
+        txHash: hash,
+        timestamp: Date.now()
+      });
+
+      // Wait for block receipt to confirm mining on-chain
+      try {
+        if (publicClient) {
+          await publicClient.waitForTransactionReceipt({ hash, timeout: 30000 });
+        }
+      } catch (receiptErr) {
+        console.warn("[Receipt Wait Warning]:", receiptErr);
+      }
       
       try {
         await fetch(`${import.meta.env.VITE_API_URL}/log-transparency`, {
