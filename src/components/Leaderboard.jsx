@@ -57,7 +57,11 @@ export default function Leaderboard({ profileData }) {
       nodeRole: 'Compliance Audit Node',
       status: 'VERIFIED ON GIWA',
       type: 'Agent'
-    },
+    }
+  ];
+
+  // Registered global testnet participants
+  const globalParticipants = [
     {
       id: 'node_4',
       rank: 4,
@@ -72,22 +76,24 @@ export default function Leaderboard({ profileData }) {
     }
   ];
 
-  // Inject connected user into calibration registry if wallet is connected
+  // Inject connected user into global calibration registry
   const userEntry = walletAddress ? {
-    id: 'user_self',
-    rank: 5,
-    name: profileData?.nickname || 'Connected Participant',
-    role: 'Wallet Signer & Market Creator',
+    id: `user_${walletAddress}`,
+    rank: baseNodes.length + globalParticipants.length + 1,
+    name: profileData?.nickname || 'Connected Predictor',
+    role: 'Wallet Signer & Prediction Participant',
     address: walletAddress,
     avatar: profileData?.picture || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
     calibrationStatus: 'ACTIVE',
-    nodeRole: 'Connected Wallet',
-    status: 'ACTIVE PARTICIPANT',
+    nodeRole: 'Connected Wallet Node',
+    status: 'VERIFIED ON GIWA',
     isUser: true,
     type: 'User'
   } : null;
 
-  const allEntries = userEntry ? [...baseNodes, userEntry] : baseNodes;
+  const allEntries = userEntry 
+    ? [...baseNodes, ...globalParticipants, userEntry] 
+    : [...baseNodes, ...globalParticipants];
 
   const filteredEntries = allEntries.filter(entry => {
     if (filterType === 'SWARM AGENTS') return entry.type === 'Agent';
