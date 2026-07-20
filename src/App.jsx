@@ -256,43 +256,44 @@ function App() {
         <Route path="/explorer" element={<Explorer />} />
       </Routes>
 
-      {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 pb-safe bg-surface/95 backdrop-blur-xl border-t border-outline-variant shadow-lg">
-        <button 
-          className={`flex flex-col items-center gap-1 transition-all ${currentView === 'landing' ? 'text-primary font-bold' : 'text-on-surface-variant opacity-60'}`}
-          onClick={() => navigate('/landing')}
-        >
-          <span className="material-symbols-outlined text-xl">dashboard</span>
-          <span className="text-[8px] font-bold uppercase tracking-widest font-mono">AIRA Protocol</span>
-        </button>
-        <button 
-          className={`flex flex-col items-center gap-1 transition-all ${currentView === 'feed' ? 'text-primary font-bold' : 'text-on-surface-variant opacity-60'}`}
-          onClick={() => navigate('/feed')}
-        >
-          <span className="material-symbols-outlined text-xl">explore</span>
-          <span className="text-[8px] font-bold uppercase tracking-widest font-mono">Core Feed</span>
-        </button>
-        <button 
-          className={`flex flex-col items-center gap-1 transition-all ${currentView === 'creator' ? 'text-primary font-bold' : 'text-on-surface-variant opacity-60'}`}
-          onClick={() => navigate('/creator')}
-        >
-          <span className="material-symbols-outlined text-xl">smart_toy</span>
-          <span className="text-[8px] font-bold uppercase tracking-widest font-mono">AI Creator</span>
-        </button>
-        <button 
-          className={`flex flex-col items-center gap-1 transition-all ${currentView === 'terminal' ? 'text-primary font-bold' : 'text-on-surface-variant opacity-60'}`}
-          onClick={() => navigate('/terminal')}
-        >
-          <span className="material-symbols-outlined text-xl">candlestick_chart</span>
-          <span className="text-[8px] font-bold uppercase tracking-widest font-mono">Terminal</span>
-        </button>
-        <button 
-          className={`flex flex-col items-center gap-1 transition-all ${currentView === 'leaderboard' ? 'text-primary font-bold' : 'text-on-surface-variant opacity-60'}`}
-          onClick={() => navigate('/leaderboard')}
-        >
-          <span className="material-symbols-outlined text-xl">leaderboard</span>
-          <span className="text-[8px] font-bold uppercase tracking-widest font-mono">Top Traders</span>
-        </button>
+      {/* Mobile Bottom Navigation Dock */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface/95 backdrop-blur-xl border-t border-outline-variant shadow-2xl px-2 py-1.5 pb-safe">
+        <div className="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-0.5">
+          {[
+            { id: 'landing', route: '/landing', label: 'HOME', icon: 'grid_view' },
+            { id: 'feed', route: '/feed', label: 'FEED', icon: 'dynamic_feed' },
+            { id: 'creator', route: '/creator', label: 'AI LAB', icon: 'auto_awesome' },
+            { id: 'terminal', route: '/terminal', label: 'TERMINAL', icon: 'candlestick_chart' },
+            { id: 'explorer', route: '/explorer', label: 'EXPLORER', icon: 'manage_search' },
+            { id: 'leaderboard', route: '/leaderboard', label: 'RANKS', icon: 'trophy' },
+            { id: 'portfolio', route: '/portfolio', label: 'PORTFOLIO', icon: 'account_balance' },
+          ].map((item) => {
+            const isActive = currentView === item.id || (item.id === 'landing' && currentView === '');
+            return (
+              <button
+                key={item.id}
+                onClick={() => navigate(item.route)}
+                className={`flex flex-col items-center justify-center px-2.5 py-1.5 rounded-xl transition-all shrink-0 min-w-[62px] ${
+                  isActive 
+                    ? 'bg-primary/15 text-primary border border-primary/30 font-bold shadow-xs' 
+                    : 'text-on-surface-variant/70 hover:text-on-surface hover:bg-surface-variant/40'
+                }`}
+              >
+                <div className="relative flex items-center justify-center">
+                  <span className={`material-symbols-outlined text-lg transition-transform ${isActive ? 'scale-110 text-primary' : ''}`}>
+                    {item.icon}
+                  </span>
+                  {isActive && (
+                    <span className="absolute -bottom-1 w-1 h-1 rounded-full bg-primary animate-pulse"></span>
+                  )}
+                </div>
+                <span className={`text-[8px] font-mono tracking-wider uppercase mt-1 ${isActive ? 'font-black text-primary' : 'font-semibold'}`}>
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </nav>
       {/* Global Toast Notification */}
       {toast && (
