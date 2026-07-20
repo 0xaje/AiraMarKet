@@ -17,16 +17,32 @@ export default function Feed() {
     scrollToColumn(catId);
   };
 
-  // Use wagmi to fetch markets
-  const { data: liveMarkets } = useReadContract({
+  // Helper to normalize any string category to one of the 4 supported columns
+  const normalizeCategory = (catStr) => {
+    if (!catStr) return 'TECH';
+    const c = String(catStr).toUpperCase().trim();
+    if (c === 'CRYPTO' || c.includes('BTC') || c.includes('ETH') || c.includes('COIN') || c.includes('DEFI') || c.includes('TOKEN') || c.includes('FINANCE')) return 'CRYPTO';
+    if (c === 'SPORTS' || c.includes('SPORT') || c.includes('FOOTBALL') || c.includes('SOCCER') || c.includes('GAME') || c.includes('MATCH')) return 'SPORTS';
+    if (c === 'POLITICS' || c.includes('POLITIC') || c.includes('GOV') || c.includes('ELECTION') || c.includes('LAW') || c.includes('MACRO') || c.includes('POLICY')) return 'POLITICS';
+    return 'TECH';
+  };
+
+  // Use wagmi to fetch markets with 2-second refetch interval
+  const { data: liveMarkets, refetch } = useReadContract({
     address: getContractAddress(),
     abi: getContractAbi(),
     functionName: 'listMarkets',
-    watch: true,
+    query: {
+      refetchInterval: 2000
+    }
   });
 
   React.useEffect(() => {
-    if (liveMarkets) {
+    refetch();
+  }, [refetch]);
+
+  React.useEffect(() => {
+    if (liveMarkets && liveMarkets.length > 0) {
       const currency = getNativeCurrencySymbol();
       const networkName = getActiveNetworkName();
       const mappedMarkets = liveMarkets.map((m) => {
@@ -41,14 +57,15 @@ export default function Feed() {
           id: `onchain_${id}`,
           realId: id,
           title: m.title,
-          category: m.category.toUpperCase(),
-          volume: `$${total.toFixed(2)} ${currency}`,
+          category: normalizeCategory(m.category),
+          rawCategory: m.category,
+          volume: `${total.toFixed(4)} ${currency}`,
           yesProb,
           noProb,
           yesPrice: yesProb / 100,
           noPrice: noProb / 100,
           confidence: "Live",
-          openInterest: `${total.toFixed(2)} ${currency}`,
+          openInterest: `${total.toFixed(4)} ${currency}`,
           drift: "LIVE",
           status: m.resolved ? "ENDED" : "ACTIVE",
           passport: "https://images.unsplash.com/photo-1639762681485-074b7f4ec651?auto=format&fit=crop&q=80&w=200",
