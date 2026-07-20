@@ -19,7 +19,7 @@ export default function Terminal() {
   const profileData = useAppStore(state => state.profileData);
   const activeMarket = useAppStore(state => state.activeMarket);
   
-  const [tradeAmount, setTradeAmount] = useState(0.0005);
+  const [tradeAmount, setTradeAmount] = useState(0.00002);
   const [selectedDirection, setSelectedDirection] = useState('YES');
   const [activeTab, setActiveTab] = useState('PROBABILITY');
   const [activeChartRange, setActiveChartRange] = useState('4H');
@@ -463,7 +463,7 @@ export default function Terminal() {
               <span className="font-mono text-primary font-bold text-xs">{tradeAmount} {getNativeCurrencySymbol()}</span>
             </div>
             <div className="grid grid-cols-4 gap-1">
-              {[0.0001, 0.0005, 0.001, 0.002].map(amt => (
+              {[0.00001, 0.00002, 0.00005, 0.0001].map(amt => (
                 <button
                   key={amt}
                   type="button"
@@ -476,9 +476,9 @@ export default function Terminal() {
             </div>
             <input 
               className="w-full h-1 bg-surface-variant rounded-full appearance-none cursor-pointer mt-2" 
-              max="0.005" 
-              min="0.0001" 
-              step="0.0001"
+              max="0.001" 
+              min="0.00001" 
+              step="0.00001"
               type="range" 
               value={tradeAmount}
               onChange={(e) => setTradeAmount(Number(e.target.value))}
