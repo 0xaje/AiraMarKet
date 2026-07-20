@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppStore from '../store/useAppStore';
 import { trendingSuggestions } from '../mocks/data';
-import { useAccount, useWriteContract } from 'wagmi';
-import { getContractAddress, getContractAbi, getNativeCurrencySymbol, getActiveNetworkName } from '../lib/network';
+import { useAccount, useWriteContract, useChainId, useSwitchChain, useBalance } from 'wagmi';
+import { getContractAddress, getContractAbi, getNativeCurrencySymbol, getActiveNetworkName, getActiveChainId } from '../lib/network';
 import { ProtocolMetadata } from '../../config/protocol/protocol';
 
 export default function CreatorLab() {
   const navigate = useNavigate();
   const profileData = useAppStore(state => state.profileData);
-  const { isConnected } = useAccount();
+  const { isConnected, address: walletAddress } = useAccount();
+  const connectedChainId = useChainId();
+  const { switchChainAsync } = useSwitchChain();
+  const { data: balanceData } = useBalance({ address: walletAddress, chainId: getActiveChainId() });
   
   const [creatorInput, setCreatorInput] = useState('');
   const [isProcessingCreator, setIsProcessingCreator] = useState(false);
@@ -110,12 +113,47 @@ export default function CreatorLab() {
       useAppStore.getState().showToast("Wallet Disconnected", "Please connect your wallet first to deploy this market on-chain!", "error");
       return;
     }
+
+    const targetChainId = getActiveChainId();
+    const networkName = getActiveNetworkName();
+    const currencySymbol = getNativeCurrencySymbol();
+
+    // 1. Enforce active chain connection (e.g. GIWA Sepolia Testnet - 91342)
+    if (connectedChainId !== targetChainId) {
+      try {
+        if (switchChainAsync) {
+          useAppStore.getState().showToast("Switching Network", `Prompting wallet to switch to ${networkName}...`, "info");
+          await switchChainAsync({ chainId: targetChainId });
+        } else {
+          useAppStore.getState().showToast("Network Mismatch", `Please switch your wallet network to ${networkName} (Chain ID: ${targetChainId}).`, "error");
+          return;
+        }
+      } catch (switchErr) {
+        useAppStore.getState().showToast("Network Switch Required", `Please switch your wallet to ${networkName} (Chain ID: ${targetChainId}) to deploy this market.`, "error");
+        return;
+      }
+    }
+
+    // 2. Check native balance for 0.002 GIWA seed liquidity requirement
+    const { parseEther } = await import('viem');
+    const requiredSeed = parseEther("0.002");
+
+    if (balanceData && balanceData.value < requiredSeed) {
+      const currentBalanceStr = (Number(balanceData.value) / 1e18).toFixed(4);
+      useAppStore.getState().showToast(
+        "Insufficient Liquidity Seed",
+        `Market creation requires 0.002 ${currencySymbol} seed liquidity + gas. Your wallet currently has ${currentBalanceStr} ${currencySymbol}.`,
+        "error"
+      );
+      return;
+    }
+
     launchingMarketSet(market);
 
     try {
       const expirySeconds = BigInt(Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60));
 
-      // FIX #1: Fetch a real IPFS CID from the backend evidence service before deploying
+      // Fetch IPFS CID from evidence service before deploying
       let ipfsCID = '';
       try {
         const ipfsRes = await fetch(`${import.meta.env.VITE_API_URL}/api/ipfs/upload`, {
@@ -137,39 +175,50 @@ export default function CreatorLab() {
       } catch (ipfsErr) {
         console.warn('[IPFS] Upload service unavailable, proceeding without CID:', ipfsErr);
       }
-
-      const { parseEther } = await import('viem');
       
       const hash = await writeContractAsync({
         address: getContractAddress(),
         abi: getContractAbi(),
         functionName: 'createMarket',
         args: [market.title, market.category, expirySeconds, ipfsCID],
-        value: parseEther("0.02")
+        value: requiredSeed,
+        chainId: targetChainId
       });
       
       useAppStore.getState().showToast("Transaction Pending", "Waiting for network confirmation...", "info", hash);
       
-      await fetch(`${import.meta.env.VITE_API_URL}/log-transparency`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            txHash: hash,
-            title: market.title,
-            category: market.category,
-            inputSignals: market.inputSignals || "Manual Deployment",
-            reason: market.reason || "Admin verified via wallet signature",
-            confidence: market.likelihood || "80%",
-            ipfsCID,
-            decision: "Admin approved and signed via Wagmi"
-        })
-      });
+      try {
+        await fetch(`${import.meta.env.VITE_API_URL}/log-transparency`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+              txHash: hash,
+              title: market.title,
+              category: market.category,
+              inputSignals: market.inputSignals || "Manual Deployment",
+              reason: market.reason || "Admin verified via wallet signature",
+              confidence: market.likelihood || "80%",
+              ipfsCID,
+              decision: "Admin approved and signed via Wagmi"
+          })
+        });
+      } catch (logErr) {
+        console.warn('[LogTransparency] Backend logging skipped:', logErr);
+      }
 
       useAppStore.getState().showToast("Deploy Complete", `"${market.title}" deployed securely on-chain!`, "success", hash);
       navigate('/feed');
     } catch (err) {
-      console.error(err);
-      useAppStore.getState().showToast("Deployment Failed", err.shortMessage || err.message, "error");
+      console.error("[Deploy Error]:", err);
+      let errorMsg = err.shortMessage || err.message || "Transaction failed during creation.";
+
+      if (errorMsg.includes("User rejected") || errorMsg.includes("user rejected")) {
+        errorMsg = "Transaction was canceled by user in wallet.";
+      } else if (errorMsg.includes("Transaction creation failed") || errorMsg.includes("insufficient funds") || errorMsg.includes("exceeds balance")) {
+        errorMsg = `Transaction creation failed. Please check that your wallet is connected to ${networkName} (Chain ID: ${targetChainId}) and has at least 0.002 ${currencySymbol} testnet tokens for liquidity seed + gas.`;
+      }
+
+      useAppStore.getState().showToast("Deployment Failed", errorMsg, "error");
     } finally {
       launchingMarketSet(null);
     }

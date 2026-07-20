@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppStore from '../store/useAppStore';
-import { useAccount, useWriteContract, useReadContract, usePublicClient } from 'wagmi';
+import { useAccount, useWriteContract, useReadContract, usePublicClient, useChainId, useSwitchChain } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
-import { getContractAddress, getContractAbi } from '../lib/network';
+import { getContractAddress, getContractAbi, getActiveChainId, getActiveNetworkName, getNativeCurrencySymbol } from '../lib/network';
 
 const abi = getContractAbi();
 
 export default function Terminal() {
   const navigate = useNavigate();
   const { isConnected, address: walletAddress } = useAccount();
+  const connectedChainId = useChainId();
+  const { switchChainAsync } = useSwitchChain();
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
 
@@ -83,6 +85,23 @@ export default function Terminal() {
        useAppStore.getState().showToast("Wallet Disconnected", "Please connect your wallet first!", "error");
        return;
     }
+    const targetChainId = getActiveChainId();
+    const networkName = getActiveNetworkName();
+
+    if (connectedChainId !== targetChainId) {
+       try {
+         if (switchChainAsync) {
+           await switchChainAsync({ chainId: targetChainId });
+         } else {
+           useAppStore.getState().showToast("Network Mismatch", `Please switch network to ${networkName} (Chain ID: ${targetChainId})`, "error");
+           return;
+         }
+       } catch (switchErr) {
+         useAppStore.getState().showToast("Network Switch Required", `Please switch wallet to ${networkName} to trade.`, "error");
+         return;
+       }
+    }
+
     try {
        if (!activeMarket.realId) {
            useAppStore.getState().showToast("Invalid Market", "Market ID missing. Ensure this market is verified on-chain.", "error");
@@ -113,13 +132,18 @@ export default function Terminal() {
          functionName: selectedDirection === 'YES' ? 'buyYes' : 'buyNo',
          args: [activeMarket.realId],
          value: txValue,
-         gas: gasLimit
+         gas: gasLimit,
+         chainId: targetChainId
        });
        
        useAppStore.getState().showToast("Position Executed", `Successfully purchased ${selectedDirection} shares.`, "success", hash);
     } catch (err) {
        console.error(err);
-       useAppStore.getState().showToast("Transaction Failed", err.shortMessage || err.message, "error");
+       let msg = err.shortMessage || err.message || "Transaction failed";
+       if (msg.includes("Transaction creation failed") || msg.includes("insufficient funds")) {
+          msg = `Transaction failed. Please ensure your wallet is on ${networkName} and has sufficient funds.`;
+       }
+       useAppStore.getState().showToast("Transaction Failed", msg, "error");
     }
   };
 
