@@ -1,5 +1,5 @@
-# AIRA Protocol: Transparent AI Decisions. Verifiable on GIWA.
-### Decoupled Cognitive Consensus and Cryptographically Anchored Settlement
+# AIRA Protocol
+### A Multi-Agent AI Decision Protocol for Transparent Prediction Markets, powered by GIWA.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](file:///home/oyeolorun/AiraMarKet/LICENSE)
 [![GIWA L2](https://img.shields.io/badge/Ecosystem-GIWA_L2-blue.svg)](https://sepolia-explorer.giwa.io)
@@ -9,7 +9,7 @@
 ---
 
 ## Tagline
-Transparent AI Decisions. Verifiable on GIWA.
+A Multi-Agent AI Decision Protocol for Transparent Prediction Markets, powered by GIWA.
 
 ---
 

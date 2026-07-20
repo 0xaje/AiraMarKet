@@ -1,5 +1,5 @@
 # AIRA Protocol: Executive Overview
-### Transparent AI Decisions. Verifiable on GIWA.
+### A Multi-Agent AI Decision Protocol for Transparent Prediction Markets, powered by GIWA.
 
 ---
 
