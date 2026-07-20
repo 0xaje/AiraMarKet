@@ -18,7 +18,18 @@ export default function Terminal() {
 
   const profileData = useAppStore(state => state.profileData);
   const activeMarket = useAppStore(state => state.activeMarket);
-  
+
+  const currentMarket = (activeMarket && activeMarket.realId) ? activeMarket : {
+    realId: 1,
+    title: 'Will AI Agent Protocol v2 launch on GIWA before Q4?',
+    confidence: '98%',
+    yesPrice: 0.78,
+    noPrice: 0.22,
+    vol: '0.0020 GIWA',
+    openInterest: '0.0020 GIWA',
+    drift: 'LIVE'
+  };
+
   const [tradeAmount, setTradeAmount] = useState(0.00002);
   const [selectedDirection, setSelectedDirection] = useState('YES');
   const [activeTab, setActiveTab] = useState('PROBABILITY');
@@ -67,16 +78,16 @@ export default function Terminal() {
     address: getContractAddress(),
     abi,
     functionName: 'yesShares',
-    args: [activeMarket?.realId || 1, walletAddress],
-    query: { enabled: !!(activeMarket?.realId || 1) && !!walletAddress }
+    args: [currentMarket.realId, walletAddress],
+    query: { enabled: !!currentMarket.realId && !!walletAddress }
   });
 
   const { data: noSharesData, refetch: refetchNo } = useReadContract({
     address: getContractAddress(),
     abi,
     functionName: 'noShares',
-    args: [activeMarket?.realId || 1, walletAddress],
-    query: { enabled: !!(activeMarket?.realId || 1) && !!walletAddress }
+    args: [currentMarket.realId, walletAddress],
+    query: { enabled: !!currentMarket.realId && !!walletAddress }
   });
 
   const handleSendChat = (e) => {
@@ -103,13 +114,13 @@ export default function Terminal() {
   };
 
   const handleClaim = async () => {
-    if(!activeMarket.realId) return;
+    if(!currentMarket.realId) return;
     try {
       const hash = await writeContractAsync({
         address: getContractAddress(),
         abi,
         functionName: 'claimWinnings',
-        args: [activeMarket.realId]
+        args: [currentMarket.realId]
       });
       useAppStore.getState().showToast("Claim Successful", "Winnings have been transferred to your wallet.", "success", hash);
     } catch(e) {
@@ -212,7 +223,7 @@ export default function Terminal() {
           }
         ],
         functionName: 'proposeResolution',
-        args: [activeMarket.realId, outcome],
+        args: [currentMarket.realId, outcome],
         value: parseEther("10.0")
       });
       useAppStore.getState().showToast("Proposal Submitted", "Decentralized outcome proposed. 24h timelock initiated.", "success", hash);
@@ -238,7 +249,7 @@ export default function Terminal() {
           }
         ],
         functionName: 'executeResolution',
-        args: [activeMarket.realId]
+        args: [currentMarket.realId]
       });
       useAppStore.getState().showToast("Resolution Executed", "Market resolved successfully on-chain.", "success", hash);
     } catch(e) {
@@ -246,20 +257,8 @@ export default function Terminal() {
     }
   };
 
-  const currentMarket = activeMarket && activeMarket.realId ? activeMarket : {
-    realId: 1,
-    title: 'Will AI Agent Protocol v2 launch on GIWA before Q4?',
-    confidence: '98%',
-    yesPrice: 0.78,
-    noPrice: 0.22,
-    vol: '0.0020 GIWA',
-    openInterest: '0.0020 GIWA',
-    drift: 'LIVE'
-  };
-
-  const activeSharePrice = (selectedDirection === 'YES' ? currentMarket.yesPrice : currentMarket.noPrice) || 0.5;
-  const estShares = +(tradeSize / activeSharePrice).toFixed(2);
-  const potentialPayout = +(estShares * 1.00).toFixed(2);
+  const safeYesPrice = typeof currentMarket.yesPrice === 'number' ? currentMarket.yesPrice : 0.5;
+  const safeNoPrice = typeof currentMarket.noPrice === 'number' ? currentMarket.noPrice : 0.5;
 
   return (
     <main className="pt-24 pb-24 md:pb-4 px-4 w-full min-h-[calc(100vh-100px)] grid grid-cols-12 gap-4 max-w-[1600px] mx-auto flex-grow z-10">
@@ -358,43 +357,43 @@ export default function Terminal() {
                </p>
                
                <div className="flex flex-col sm:flex-row gap-6 w-full max-w-xl justify-center">
-                 {/* Decentralized Proposal Section */}
-                 <div className="p-5 bg-surface rounded-xl border border-primary/20 flex-grow shadow-sm flex flex-col justify-between">
-                    <div>
-                      <p className="text-[10px] text-primary font-bold mb-1 tracking-widest uppercase font-mono">1. PROPOSE OUTCOME</p>
-                      <p className="text-[11px] text-on-surface-variant mb-4">Propose an outcome to the decentralized oracle. Initiates a 24-hour dispute timelock.</p>
-                    </div>
-                    <div className="flex gap-2 justify-center">
-                      <button 
-                        onClick={() => handleProposeResolution(true)}
-                        className="px-4 py-2 bg-bullish-green/20 hover:bg-bullish-green text-bullish-green hover:text-white font-mono text-[10px] font-bold rounded uppercase tracking-wider transition-all"
-                      >
-                        Propose YES
-                      </button>
-                      <button 
-                        onClick={() => handleProposeResolution(false)}
-                        className="px-4 py-2 bg-bearish-red/20 hover:bg-bearish-red text-bearish-red hover:text-white font-mono text-[10px] font-bold rounded uppercase tracking-wider transition-all"
-                      >
-                        Propose NO
-                      </button>
-                    </div>
-                 </div>
+                  {/* Decentralized Proposal Section */}
+                  <div className="p-5 bg-surface rounded-xl border border-primary/20 flex-grow shadow-sm flex flex-col justify-between">
+                     <div>
+                       <p className="text-[10px] text-primary font-bold mb-1 tracking-widest uppercase font-mono">1. PROPOSE OUTCOME</p>
+                       <p className="text-[11px] text-on-surface-variant mb-4">Propose an outcome to the decentralized oracle. Initiates a 24-hour dispute timelock.</p>
+                     </div>
+                     <div className="flex gap-2 justify-center">
+                       <button 
+                         onClick={() => handleProposeResolution(true)}
+                         className="px-4 py-2 bg-bullish-green/20 hover:bg-bullish-green text-bullish-green hover:text-white font-mono text-[10px] font-bold rounded uppercase tracking-wider transition-all"
+                       >
+                         Propose YES
+                       </button>
+                       <button 
+                         onClick={() => handleProposeResolution(false)}
+                         className="px-4 py-2 bg-bearish-red/20 hover:bg-bearish-red text-bearish-red hover:text-white font-mono text-[10px] font-bold rounded uppercase tracking-wider transition-all"
+                       >
+                         Propose NO
+                       </button>
+                     </div>
+                  </div>
 
-                 {/* Execution Section */}
-                 <div className="p-5 bg-surface rounded-xl border border-outline-variant flex-grow shadow-sm flex flex-col justify-between">
-                    <div>
-                      <p className="text-[10px] text-on-surface-variant font-bold mb-1 tracking-widest uppercase font-mono">2. EXECUTE RESOLUTION</p>
-                      <p className="text-[11px] text-on-surface-variant mb-4">Execute the proposal after the dispute timelock has safely expired without contest.</p>
-                    </div>
-                    <div className="flex gap-2 justify-center">
-                      <button 
-                        onClick={() => handleExecuteResolution()}
-                        className="px-4 py-2 bg-surface-variant hover:bg-on-surface hover:text-surface text-on-surface font-mono text-[10px] font-bold rounded uppercase tracking-wider transition-all w-full"
-                      >
-                        Execute On-Chain
-                      </button>
-                    </div>
-                 </div>
+                  {/* Execution Section */}
+                  <div className="p-5 bg-surface rounded-xl border border-outline-variant flex-grow shadow-sm flex flex-col justify-between">
+                     <div>
+                       <p className="text-[10px] text-on-surface-variant font-bold mb-1 tracking-widest uppercase font-mono">2. EXECUTE RESOLUTION</p>
+                       <p className="text-[11px] text-on-surface-variant mb-4">Execute the proposal after the dispute timelock has safely expired without contest.</p>
+                     </div>
+                     <div className="flex gap-2 justify-center">
+                       <button 
+                         onClick={() => handleExecuteResolution()}
+                         className="px-4 py-2 bg-surface-variant hover:bg-on-surface hover:text-surface text-on-surface font-mono text-[10px] font-bold rounded uppercase tracking-wider transition-all w-full"
+                       >
+                         Execute On-Chain
+                       </button>
+                     </div>
+                  </div>
                </div>
             </div>
           )}
@@ -420,15 +419,15 @@ export default function Terminal() {
           <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-[10px]">
             <div className="p-2.5 bg-surface-variant/30 rounded border border-outline-variant/50">
               <p className="text-[8px] font-bold text-on-surface-variant mb-0.5 uppercase tracking-widest font-mono">Implied Prob.</p>
-              <p className="font-mono text-xs text-primary font-semibold">{(activeMarket.yesPrice * 100).toFixed(1)}%</p>
+              <p className="font-mono text-xs text-primary font-semibold">{(safeYesPrice * 100).toFixed(1)}%</p>
             </div>
             <div className="p-2.5 bg-surface-variant/30 rounded border border-outline-variant/50">
               <p className="text-[8px] font-bold text-on-surface-variant mb-0.5 uppercase tracking-widest font-mono">24h Vol.</p>
-              <p className="font-mono text-xs text-on-surface font-semibold">{activeMarket.vol}</p>
+              <p className="font-mono text-xs text-on-surface font-semibold">{currentMarket.vol || '0.0020 GIWA'}</p>
             </div>
             <div className="p-2.5 bg-surface-variant/30 rounded border border-outline-variant/50">
               <p className="text-[8px] font-bold text-on-surface-variant mb-0.5 uppercase tracking-widest font-mono">Open Interest</p>
-              <p className="font-mono text-xs text-on-surface font-semibold">{activeMarket.openInterest}</p>
+              <p className="font-mono text-xs text-on-surface font-semibold">{currentMarket.openInterest || '0.0020 GIWA'}</p>
             </div>
 
           </div>
@@ -447,14 +446,14 @@ export default function Terminal() {
               onClick={() => setSelectedDirection('YES')}
             >
               <span className="text-bullish-green mb-0.5">YES</span>
-              <span className="font-mono text-[9px] text-on-surface-variant font-bold">${activeMarket.yesPrice.toFixed(2)}</span>
+              <span className="font-mono text-[9px] text-on-surface-variant font-bold">${safeYesPrice.toFixed(2)}</span>
             </button>
             <button 
               className={`flex flex-col items-center justify-center p-2.5 rounded border transition-all active:scale-[0.98] ${selectedDirection === 'NO' ? 'border-bearish-red bg-bearish-red/10 font-bold' : 'border-bearish-red/20 bg-bearish-red/5'}`}
               onClick={() => setSelectedDirection('NO')}
             >
               <span className="text-bearish-red mb-0.5">NO</span>
-              <span className="font-mono text-[9px] text-on-surface-variant font-bold">${activeMarket.noPrice.toFixed(2)}</span>
+              <span className="font-mono text-[9px] text-on-surface-variant font-bold">${safeNoPrice.toFixed(2)}</span>
             </button>
           </div>
           <div className="mb-4 space-y-2">
