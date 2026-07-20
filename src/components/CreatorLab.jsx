@@ -429,7 +429,7 @@ export default function CreatorLab() {
                   <span className="material-symbols-outlined text-primary text-sm animate-spin">sync</span>
                 </div>
                 <div className="bg-surface-variant/40 px-5 py-3 rounded-xl border border-outline-variant max-w-xl">
-                  <p className="text-on-surface-variant leading-relaxed text-xs animate-pulse">{ProtocolMetadata.protocolName} is analyzing sentiment and structuring liquidity contracts...</p>
+                  <p className="text-on-surface-variant leading-relaxed text-xs animate-pulse">{ProtocolMetadata.protocolName} generates structured reasoning through the configured AI provider...</p>
                 </div>
               </div>
             )}
