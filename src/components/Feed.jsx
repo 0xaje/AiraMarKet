@@ -8,6 +8,7 @@ import { getContractAddress, getContractAbi, getNativeCurrencySymbol, getActiveN
 const defaultSeedCards = [
   {
     id: 'seed_tech_1',
+    realId: 1,
     title: 'GPT-5 Autumn Release by OpenAI',
     category: 'TECH',
     volume: '3.4000 GIWA',
@@ -22,6 +23,7 @@ const defaultSeedCards = [
   },
   {
     id: 'seed_crypto_1',
+    realId: 1,
     title: 'Bitcoin $150K Target Before July',
     category: 'CRYPTO',
     volume: '18.9000 GIWA',
@@ -36,6 +38,7 @@ const defaultSeedCards = [
   },
   {
     id: 'seed_sports_1',
+    realId: 1,
     title: 'Real Madrid Champions League Victory',
     category: 'SPORTS',
     volume: '6.2000 GIWA',
@@ -50,6 +53,7 @@ const defaultSeedCards = [
   },
   {
     id: 'seed_politics_1',
+    realId: 1,
     title: 'US Presidential Election Resolution in 24h',
     category: 'POLITICS',
     volume: '45.1000 GIWA',
@@ -143,16 +147,16 @@ export default function Feed() {
 
   const activateTerminalTrade = (marketTitle, yesPrice, noPrice, confidence, vol, openInterest, drift, realId) => {
     setActiveMarket({
-      realId: realId,
+      realId: realId || 1,
       title: marketTitle,
-      confidence: confidence || '92.4',
-      impliedPrice: yesPrice,
+      confidence: confidence || '92.4%',
+      impliedPrice: yesPrice || 0.5,
       closesIn: '04H 22M 11S',
-      vol: vol || '$1.2M',
-      openInterest: openInterest || '$458K',
-      drift: drift || '+0.12%',
-      yesPrice: yesPrice,
-      noPrice: noPrice
+      vol: vol || '0.0020 GIWA',
+      openInterest: openInterest || '0.0020 GIWA',
+      drift: drift || 'LIVE',
+      yesPrice: yesPrice || 0.5,
+      noPrice: noPrice || 0.5
     });
     navigate('/terminal');
   };

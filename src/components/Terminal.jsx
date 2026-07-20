@@ -25,21 +25,57 @@ export default function Terminal() {
   const [chatText, setChatText] = useState('');
   const [messages, setMessages] = useState([]);
 
+  // Auto-fetch latest on-chain market if activeMarket is not set or missing realId
+  const { data: fallbackOnChainMarkets } = useReadContract({
+    address: getContractAddress(),
+    abi,
+    functionName: 'listMarkets',
+    chainId: getActiveChainId(),
+    query: {
+      enabled: !activeMarket || !activeMarket.realId
+    }
+  });
+
+  React.useEffect(() => {
+    if ((!activeMarket || !activeMarket.realId) && fallbackOnChainMarkets && fallbackOnChainMarkets.length > 0) {
+      const latest = fallbackOnChainMarkets[fallbackOnChainMarkets.length - 1];
+      const id = Number(latest.id);
+      const totalYes = Number(latest.totalYesPool) / 1e18;
+      const totalNo = Number(latest.totalNoPool) / 1e18;
+      const total = totalYes + totalNo;
+      const yesProb = total > 0 ? Math.round((totalYes / total) * 100) : 50;
+      const noProb = total > 0 ? Math.round((totalNo / total) * 100) : 50;
+
+      useAppStore.getState().setActiveMarket({
+        realId: id,
+        title: latest.title,
+        confidence: 'Live On-Chain',
+        impliedPrice: yesProb / 100,
+        closesIn: '04H 22M 11S',
+        vol: `${total.toFixed(4)} ${getNativeCurrencySymbol()}`,
+        openInterest: `${total.toFixed(4)} ${getNativeCurrencySymbol()}`,
+        drift: 'LIVE',
+        yesPrice: yesProb / 100,
+        noPrice: noProb / 100
+      });
+    }
+  }, [activeMarket, fallbackOnChainMarkets]);
+
   // Wagmi Read Contracts for positions
   const { data: yesSharesData, refetch: refetchYes } = useReadContract({
     address: getContractAddress(),
     abi,
     functionName: 'yesShares',
-    args: [activeMarket.realId, walletAddress],
-    query: { enabled: !!activeMarket.realId && !!walletAddress }
+    args: [activeMarket?.realId || 1, walletAddress],
+    query: { enabled: !!(activeMarket?.realId || 1) && !!walletAddress }
   });
 
   const { data: noSharesData, refetch: refetchNo } = useReadContract({
     address: getContractAddress(),
     abi,
     functionName: 'noShares',
-    args: [activeMarket.realId, walletAddress],
-    query: { enabled: !!activeMarket.realId && !!walletAddress }
+    args: [activeMarket?.realId || 1, walletAddress],
+    query: { enabled: !!(activeMarket?.realId || 1) && !!walletAddress }
   });
 
   const handleSendChat = (e) => {
@@ -199,19 +235,18 @@ export default function Terminal() {
     }
   };
 
-  if (!activeMarket.realId) {
-    return (
-      <main className="pt-24 pb-24 md:pb-4 px-4 w-full min-h-[calc(100vh-100px)] grid grid-cols-12 gap-4 max-w-[1600px] mx-auto flex-grow z-10">
-        <div className="col-span-12 flex flex-col items-center justify-center h-full w-full bg-surface rounded-xl border border-outline/20 p-8 text-center">
-          <span className="material-symbols-outlined text-4xl text-on-surface-variant mb-4">candlestick_chart</span>
-          <p className="text-on-surface font-mono tracking-widest text-sm">SELECT A MARKET FROM THE FEED TO TRADE</p>
-          <button onClick={() => navigate('/feed')} className="mt-6 px-6 py-2 bg-primary text-white text-xs font-bold uppercase rounded hover:bg-primary/90 transition-all">Go To Feed</button>
-        </div>
-      </main>
-    );
-  }
+  const currentMarket = activeMarket && activeMarket.realId ? activeMarket : {
+    realId: 1,
+    title: 'Will AI Agent Protocol v2 launch on GIWA before Q4?',
+    confidence: '98%',
+    yesPrice: 0.78,
+    noPrice: 0.22,
+    vol: '0.0020 GIWA',
+    openInterest: '0.0020 GIWA',
+    drift: 'LIVE'
+  };
 
-  const activeSharePrice = selectedDirection === 'YES' ? activeMarket.yesPrice : activeMarket.noPrice;
+  const activeSharePrice = (selectedDirection === 'YES' ? currentMarket.yesPrice : currentMarket.noPrice) || 0.5;
   const estShares = +(tradeSize / activeSharePrice).toFixed(2);
   const potentialPayout = +(estShares * 1.00).toFixed(2);
 
@@ -224,7 +259,7 @@ export default function Terminal() {
               <span className="material-symbols-outlined text-primary text-xl">terminal</span>
             </div>
             <div>
-              <h1 className="font-bold text-sm sm:text-base text-on-surface tracking-tight mb-0.5">{activeMarket.title}</h1>
+              <h1 className="font-bold text-sm sm:text-base text-on-surface tracking-tight mb-0.5">{currentMarket.title}</h1>
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
                 <p className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant">MARKET EXPIRY PENDING RESOLUTION</p>
@@ -235,9 +270,9 @@ export default function Terminal() {
             <div className="text-left sm:text-right">
               <p className="text-[8px] font-bold uppercase tracking-widest text-on-surface-variant mb-0.5 font-mono">CONSENSUS CONFIDENCE</p>
               <div className="flex items-center gap-2">
-                <span className="font-mono text-sm text-primary font-bold">{activeMarket.confidence}%</span>
+                <span className="font-mono text-sm text-primary font-bold">{currentMarket.confidence}</span>
                 <div className="h-1 w-16 bg-surface-variant rounded-full overflow-hidden">
-                  <div className="h-full bg-primary" style={{ width: `${activeMarket.confidence}%` }}></div>
+                  <div className="h-full bg-primary" style={{ width: `${currentMarket.confidence}` }}></div>
                 </div>
               </div>
             </div>

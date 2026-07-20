@@ -8,7 +8,18 @@ const useAppStore = create((set) => ({
   },
   setProfileData: (data) => set({ profileData: data }),
   
-  activeMarket: {},
+  activeMarket: {
+    realId: 1,
+    title: 'Will AI Agent Protocol v2 launch on GIWA before Q4?',
+    confidence: '98%',
+    impliedPrice: 0.78,
+    closesIn: '04H 22M 11S',
+    vol: '0.0020 GIWA',
+    openInterest: '0.0020 GIWA',
+    drift: 'LIVE',
+    yesPrice: 0.78,
+    noPrice: 0.22
+  },
   setActiveMarket: (market) => set({ activeMarket: market }),
 
   toast: null,
