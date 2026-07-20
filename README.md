@@ -39,7 +39,7 @@ This approach transforms AI-assisted prediction markets into transparent and ver
 - **AI-assisted proposal generation** with natural language signal analysis.
 - **Multi-agent consensus workflow** (Analyst, Risk, Compliance agents).
 - **Evidence packaging with IPFS support** for auditable multihashes.
-- **On-chain market creation and payout settlement**.
+- **On-chain market creation, optimistic dispute resolution, and payout settlement**.
 - **Protocol Explorer and audit interface**.
 
 ---
