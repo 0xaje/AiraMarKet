@@ -50,13 +50,13 @@ enum DebateStatus {
     {
       id: 'ipfs',
       title: '3. Storage Layer',
-      subtitle: 'Decentralized IPFS Pinning',
-      description: 'Approved Evidence Packages are pinned to IPFS to provide high-availability metadata logs. CIDs are generated using cryptographic multihash formatting.',
+      subtitle: 'IPFS Evidence Anchoring Framework',
+      description: 'Supports IPFS evidence anchoring for high-availability metadata logging and cryptographic multihash verification.',
       badge: 'ipfs registry',
       details: [
-        'Provider Adapters: Sequential failover between Pinata, Web3.Storage, and local node gateways.',
+        'Provider Adapters: Sequential failover support for Pinata, Web3.Storage, and gateway nodes.',
         'CID Validation: Enforces base58 regex patterns before logging metrics.',
-        'Telemetry Logging: Saves latencies, bytes uploaded, and node status.'
+        'Telemetry Logging: Tracks latencies, package sizes, and node status.'
       ],
       code: `// Content Identifier format validation
 const cidRegex = /^(Qm[1-9A-HJ-NP-Za-km-z]{44}|bafy[a-z0-9]{55,59})$/;

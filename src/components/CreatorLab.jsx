@@ -251,7 +251,7 @@ export default function CreatorLab() {
             <span className="material-symbols-outlined text-primary text-6xl animate-bounce">rocket_launch</span>
             {/* FIX #2: Replaced "NEURAL DEPLOYER" with infrastructure-grade label */}
             <h3 className="serif-heading text-2xl text-on-surface">Deploying to GIWA Ledger</h3>
-            <p className="text-sm text-on-surface-variant font-medium animate-pulse">Uploading evidence package and signing on-chain transaction...</p>
+            <p className="text-sm text-on-surface-variant font-medium animate-pulse">Preparing IPFS evidence package and signing on-chain transaction...</p>
             <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
               <div className="h-full bg-primary animate-marquee w-[60%]"></div>
             </div>
