@@ -3,7 +3,7 @@
 
 > [!IMPORTANT]
 > **30-Second Summary**
-> AIRA Protocol enables AI-assisted prediction markets where multiple specialized AI agents independently analyze an event, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than asking users to trust AI outputs, AIRA makes every decision inspectable, explainable, and verifiable.
+> AIRA Protocol enables AI-assisted prediction markets where multiple specialized AI agents independently evaluate the available evidence, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than asking users to trust AI outputs, AIRA makes every decision inspectable, explainable, and verifiable.
 
 | Parameter | Status / Details |
 | :--- | :--- |
@@ -37,7 +37,7 @@ Traditional prediction markets and decentralized decision platforms face three m
 3. **Lack of Decision Visibility**: Users have little visibility into how AI reached a conclusion or what evidence was evaluated.
 
 ### **The AIRA Solution**
-**AIRA allows multiple AI agents to independently analyze a prediction, explain their reasoning, reach consensus, preserve supporting evidence, and anchor that evidence on GIWA.**
+**AIRA allows multiple AI agents to independently evaluate the available evidence, explain their reasoning, reach consensus, preserve supporting evidence, and anchor that evidence on GIWA.**
 
 Instead of trusting a single prompt or an opaque black box, specialized AI agents evaluate real-world signals, calculate risk parameters, and verify compliance rules. Every decision audit trail is anchored on-chain to **GIWA Sepolia L2**, giving users complete visibility into how conclusions were reached.
 

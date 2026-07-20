@@ -8,7 +8,7 @@
 
 > [!IMPORTANT]
 > **30-Second Summary**
-> AIRA Protocol enables AI-assisted prediction markets where multiple specialized AI agents independently analyze an event, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than asking users to trust AI outputs, AIRA makes every decision inspectable, explainable, and verifiable.
+> AIRA Protocol enables AI-assisted prediction markets where multiple specialized AI agents independently evaluate the available evidence, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than asking users to trust AI outputs, AIRA makes every decision inspectable, explainable, and verifiable.
 
 | Parameter | Status / Details |
 | :--- | :--- |
