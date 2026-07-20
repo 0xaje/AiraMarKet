@@ -103,7 +103,7 @@ function App() {
               className={`font-semibold text-sm pb-1 transition-all ${currentView === 'leaderboard' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary'}`}
               onClick={() => navigate('/leaderboard')}
             >
-              Leaderboard
+              Registry
             </button>
             <button 
               className={`font-semibold text-sm pb-1 transition-all ${currentView === 'explorer' ? 'text-primary border-b-2 border-primary' : 'text-on-surface-variant hover:text-primary'}`}
@@ -274,7 +274,7 @@ function App() {
             { id: 'creator', route: '/creator', label: 'AI LAB', icon: 'auto_awesome' },
             { id: 'terminal', route: '/terminal', label: 'TERMINAL', icon: 'candlestick_chart' },
             { id: 'explorer', route: '/explorer', label: 'EXPLORER', icon: 'manage_search' },
-            { id: 'leaderboard', route: '/leaderboard', label: 'RANKS', icon: 'trophy' },
+            { id: 'leaderboard', route: '/leaderboard', label: 'REGISTRY', icon: 'verified_user' },
             { id: 'portfolio', route: '/portfolio', label: 'PORTFOLIO', icon: 'account_balance' },
           ].map((item) => {
             const isActive = currentView === item.id || (item.id === 'landing' && currentView === '');
