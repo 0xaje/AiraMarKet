@@ -7,14 +7,14 @@
 
 Traditional prediction markets and decentralized decision platforms face three major bottlenecks:
 
-1. **Slow Manual Curation**: Creating new prediction markets requires days of manual research, administrative drafting, and central team approval. Fast-moving real-world events pass long before markets can open.
-2. **Opaque & Slow Resolutions**: Settlement relies on single centralized oracles or slow human juries, creating long payout delays and counterparty risks.
-3. **High Capital Barriers**: Early-stage prediction pools lack initial liquidity, creating severe price slippage that deters organic trading.
+1. **Manual Market Creation**: Creating prediction markets is still largely manual, making it slow to react to fast-moving real-world events.
+2. **Hard-to-Verify AI Decisions**: AI-generated decisions are difficult to verify when outputs are produced inside opaque black boxes.
+3. **Lack of Decision Visibility**: Users have little visibility into how AI reached a conclusion or what evidence was evaluated.
 
 ### **The AIRA Solution**
 AIRA solves these challenges by using **multiple AI agents to independently evaluate every proposal before it reaches the blockchain**. 
 
-Instead of trusting a single prompt or a centralized team, specialized AI agents evaluate real-world news feeds, calculate risk parameters, and check protocol rules. Once approved by consensus, the market is deployed to Dunamu's high-performance **GIWA Sepolia L2** with pre-seeded native liquidity so traders can participate instantly.
+Instead of trusting a single prompt or an opaque black box, specialized AI agents evaluate real-world signals, calculate risk parameters, and verify compliance rules. Every decision audit trail is anchored on-chain to **GIWA Sepolia L2**, giving users complete visibility into how conclusions were reached.
 
 ---
 
