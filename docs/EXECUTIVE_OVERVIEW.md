@@ -18,7 +18,15 @@ Instead of trusting a single prompt or an opaque black box, specialized AI agent
 
 ---
 
-## 2. Core Capabilities & User Value
+## 2. Why GIWA?
+
+AIRA uses GIWA as its execution and verification layer.
+
+Every approved market, evidence reference, and settlement transaction is anchored on GIWA, providing transparent, low-cost, and auditable execution for AI-assisted decision making.
+
+---
+
+## 3. Core Capabilities & User Value
 
 - 🤖 **Independent Multi-Agent Peer Reviews**: Multiple AI agents evaluate signal inputs and peer-review every proposal, requiring a 66% consensus quorum before creating a market.
 - 🔍 **Verifiable Decision Audit Trail**: Every evidence item, agent evaluation, and confidence score is anchored with an IPFS CID and logged transparently on-chain.

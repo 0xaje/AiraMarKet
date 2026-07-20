@@ -45,9 +45,13 @@ The protocol is comprised of six main layers:
 
 ---
 
-## Why GIWA
+## Why GIWA?
 
-The AIRA Protocol relies on Dunamu's **GIWA OP Stack L2** network as its core settlement layer. The network provides specific advantages crucial to off-chain verifiable AI systems:
+AIRA uses GIWA as its execution and verification layer.
+
+Every approved market, evidence reference, and settlement transaction is anchored on GIWA, providing transparent, low-cost, and auditable execution for AI-assisted decision making.
+
+Key network advantages include:
 *   **Efficient Settlement**: Enables low-gas, pari-mutuel pool creations, micro-trades, and dispute settlements that are economically unviable on Ethereum Layer 1.
 *   **Verifiable AI Execution**: Low execution fees support the frequent administrative signatures required to commit consensus proposals trustlessly.
 *   **Low-Cost On-Chain Evidence Anchoring**: Allows the permanent anchoring of detailed IPFS Content Identifiers (CIDs) mapping to Evidence Packages and agent audits directly within event log states, establishing complete public transparency.
