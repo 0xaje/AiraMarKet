@@ -5,6 +5,14 @@
 > **30-Second Summary**
 > AIRA Protocol enables AI-assisted prediction markets where multiple specialized AI agents independently analyze an event, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than asking users to trust AI outputs, AIRA makes every decision inspectable, explainable, and verifiable.
 
+| Parameter | Status / Details |
+| :--- | :--- |
+| **Network** | GIWA Sepolia Testnet (Chain ID: `91342`) |
+| **Deployment** | Verified (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`) |
+| **Explorer** | Available ([GIWA Explorer](https://sepolia-explorer.giwa.io)) |
+| **Wallet** | RainbowKit / Wagmi / Viem |
+| **Status** | Live MVP |
+
 ---
 
 ## 1. Why This Is Important
