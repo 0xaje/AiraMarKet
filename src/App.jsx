@@ -34,6 +34,15 @@ function App() {
   const hasLlmKey = !!(import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_LLM_KEY);
   const [showSimBanner, setShowSimBanner] = React.useState(!hasLlmKey);
 
+  React.useEffect(() => {
+    if (!hasLlmKey) {
+      const timer = setTimeout(() => {
+        setShowSimBanner(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [hasLlmKey]);
+
   // Global State (Zustand)
   const profileData = useAppStore(state => state.profileData);
   const toast = useAppStore(state => state.toast);
