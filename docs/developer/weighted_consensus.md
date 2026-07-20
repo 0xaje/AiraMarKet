@@ -8,11 +8,11 @@ This guide documents the implementation, equations, and reputation parameters ut
 
 Agent metrics are configured inside `server/config/agent_consensus.ts`. The default node assignments are:
 
-| Agent Name | Weight | Historical Accuracy | Reputation Score | Confidence Adjustment |
-| :--- | :--- | :--- | :--- | :--- |
-| **AnalystAgent** | `1.2` | `0.92` (92%) | `95` | `1.00` |
-| **RiskAgent** | `1.5` | `0.88` (88%) | `90` | `0.95` |
-| **ComplianceAgent**| `1.0` | `0.95` (95%) | `98` | `1.05` |
+| Agent Name | Domain Focus | Historical Accuracy | Consensus Calibration |
+| :--- | :--- | :--- | :--- |
+| **AnalystAgent** | Signal Ingestion & Probability Modeling | 92% | High |
+| **RiskAgent** | Order Book Depth & Volatility Safeguards | 88% | High |
+| **ComplianceAgent**| Oracle Policy & Dispute Timelock Audits | 95% | High |
 
 ---
 
