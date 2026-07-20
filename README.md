@@ -189,6 +189,8 @@ The following metrics represent verified protocol capabilities and testing outco
     *   `[x]` 5/5 consensus engine integration tests passing
     *   `[x]` Production frontend build compiled and verified
 
+> **AIRA Protocol demonstrates a complete end-to-end MVP built on GIWA Sepolia, combining AI-assisted decision making, transparent evidence workflows, and on-chain execution into a unified protocol ready for technical evaluation.**
+
 ---
 
 ## License

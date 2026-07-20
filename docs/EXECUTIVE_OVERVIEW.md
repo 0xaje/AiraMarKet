@@ -74,3 +74,9 @@ flowchart TD
    - **Protocol Explorer (`/explorer`)**: 4-tab verifiable audit reports per proposal.
    - **Decision Transparency Registry (`/leaderboard`)**: Swarm node calibration metrics.
    - **Portfolio (`/portfolio`)**: Win/Loss outcome verification and 1-click payout claims.
+
+---
+
+## 5. Summary
+
+AIRA Protocol demonstrates a complete end-to-end MVP built on GIWA Sepolia, combining AI-assisted decision making, transparent evidence workflows, and on-chain execution into a unified protocol ready for technical evaluation.
