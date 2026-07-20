@@ -28,6 +28,25 @@ This approach transforms AI-assisted prediction markets into transparent and ver
 
 ---
 
+## End-to-End Decision Lifecycle
+
+`Signal` ➔ `Multi-Agent Analysis` ➔ `Consensus` ➔ `Evidence Package` ➔ `Human Approval` ➔ `IPFS` ➔ `GIWA Transaction` ➔ `Prediction Market` ➔ `Settlement` ➔ `Claim`
+
+```mermaid
+flowchart TD
+    s1[Signal] --> s2[Multi-Agent Analysis]
+    s2 --> s3[Consensus]
+    s3 --> s4[Evidence Package]
+    s4 --> s5[Human Approval]
+    s5 --> s6[IPFS Anchoring]
+    s6 --> s7[GIWA Transaction]
+    s7 --> s8[Prediction Market]
+    s8 --> s9[Optimistic Settlement]
+    s9 --> s10[Winnings Claim]
+```
+
+---
+
 ## 1. Why This Is Important
 
 Traditional prediction markets and decentralized decision platforms face three major bottlenecks:
