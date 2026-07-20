@@ -15,6 +15,19 @@
 
 ---
 
+## What Makes AIRA Different?
+
+Unlike traditional prediction markets that rely on manual market creation or opaque AI systems, AIRA combines:
+
+- **Multi-agent AI reasoning** instead of a single AI response.
+- **Transparent evidence packages** that can be independently inspected.
+- **On-chain verification through GIWA** for settlement and auditability.
+- **Human-in-the-loop approval** before market deployment.
+
+This approach transforms AI-assisted prediction markets into transparent and verifiable decision systems.
+
+---
+
 ## 1. Why This Is Important
 
 Traditional prediction markets and decentralized decision platforms face three major bottlenecks:
