@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAppStore from '../store/useAppStore';
-import { useAccount, useWriteContract, useReadContract, usePublicClient, useChainId, useSwitchChain } from 'wagmi';
+import { useAccount, useWriteContract, useReadContract, usePublicClient, useChainId, useSwitchChain, useBalance } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { getContractAddress, getContractAbi, getActiveChainId, getActiveNetworkName, getNativeCurrencySymbol } from '../lib/network';
 
@@ -14,11 +14,12 @@ export default function Terminal() {
   const { switchChainAsync } = useSwitchChain();
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
+  const { data: balanceData } = useBalance({ address: walletAddress, chainId: getActiveChainId() });
 
   const profileData = useAppStore(state => state.profileData);
   const activeMarket = useAppStore(state => state.activeMarket);
   
-  const [tradeSize, setTradeSize] = useState(500);
+  const [tradeAmount, setTradeAmount] = useState(0.0005);
   const [selectedDirection, setSelectedDirection] = useState('YES');
   const [activeTab, setActiveTab] = useState('PROBABILITY');
   const [activeChartRange, setActiveChartRange] = useState('4H');
@@ -123,6 +124,7 @@ export default function Terminal() {
     }
     const targetChainId = getActiveChainId();
     const networkName = getActiveNetworkName();
+    const currencySymbol = getNativeCurrencySymbol();
 
     if (connectedChainId !== targetChainId) {
        try {
@@ -139,19 +141,26 @@ export default function Terminal() {
     }
 
     try {
-       if (!activeMarket.realId) {
-           useAppStore.getState().showToast("Invalid Market", "Market ID missing. Ensure this market is verified on-chain.", "error");
-           return;
+       const marketId = currentMarket.realId || 1;
+       const txValue = parseEther(tradeAmount.toString());
+
+       if (balanceData && balanceData.value < txValue) {
+          const formattedBal = (Number(balanceData.value) / 1e18).toFixed(4);
+          useAppStore.getState().showToast(
+            "Insufficient Balance",
+            `Trade amount of ${tradeAmount} ${currencySymbol} exceeds your wallet balance (${formattedBal} ${currencySymbol}).`,
+            "error"
+          );
+          return;
        }
-       const txValue = parseEther((tradeSize / 1000).toString());
-       
+
        let gasLimit = undefined;
        try {
          const estimatedGas = await publicClient.estimateContractGas({
            address: getContractAddress(),
            abi,
            functionName: selectedDirection === 'YES' ? 'buyYes' : 'buyNo',
-           args: [activeMarket.realId],
+           args: [marketId],
            account: walletAddress,
            value: txValue
          });
@@ -166,18 +175,20 @@ export default function Terminal() {
          address: getContractAddress(),
          abi,
          functionName: selectedDirection === 'YES' ? 'buyYes' : 'buyNo',
-         args: [activeMarket.realId],
+         args: [marketId],
          value: txValue,
          gas: gasLimit,
          chainId: targetChainId
        });
        
-       useAppStore.getState().showToast("Position Executed", `Successfully purchased ${selectedDirection} shares.`, "success", hash);
+       useAppStore.getState().showToast("Position Executed", `Successfully purchased ${selectedDirection} shares for ${tradeAmount} ${currencySymbol}.`, "success", hash);
     } catch (err) {
        console.error(err);
        let msg = err.shortMessage || err.message || "Transaction failed";
-       if (msg.includes("Transaction creation failed") || msg.includes("insufficient funds")) {
-          msg = `Transaction failed. Please ensure your wallet is on ${networkName} and has sufficient funds.`;
+       if (msg.includes("User rejected") || msg.includes("user rejected")) {
+          msg = "Transaction was canceled by user in wallet.";
+       } else if (msg.includes("Transaction creation failed") || msg.includes("insufficient funds") || msg.includes("exceeds balance")) {
+          msg = `Transaction failed. Please ensure your wallet is connected to ${networkName} and has at least ${tradeAmount} ${currencySymbol} for position size + gas.`;
        }
        useAppStore.getState().showToast("Transaction Failed", msg, "error");
     }
@@ -446,25 +457,38 @@ export default function Terminal() {
               <span className="font-mono text-[9px] text-on-surface-variant font-bold">${activeMarket.noPrice.toFixed(2)}</span>
             </button>
           </div>
-          <div className="mb-4">
-            <div className="flex justify-between items-end mb-2 text-[9px]">
-              <span className="font-bold text-on-surface-variant uppercase tracking-widest font-mono">POSITION SIZE</span>
-              <span className="font-mono text-primary font-bold text-xs">${tradeSize}</span>
+          <div className="mb-4 space-y-2">
+            <div className="flex justify-between items-end mb-1 text-[9px]">
+              <span className="font-bold text-on-surface-variant uppercase tracking-widest font-mono">POSITION SIZE ({getNativeCurrencySymbol()})</span>
+              <span className="font-mono text-primary font-bold text-xs">{tradeAmount} {getNativeCurrencySymbol()}</span>
+            </div>
+            <div className="grid grid-cols-4 gap-1">
+              {[0.0001, 0.0005, 0.001, 0.002].map(amt => (
+                <button
+                  key={amt}
+                  type="button"
+                  className={`py-1 rounded text-[9px] font-mono font-bold border transition-all ${tradeAmount === amt ? 'bg-primary text-white border-primary shadow-xs' : 'bg-surface-variant/30 text-on-surface-variant border-outline-variant/60 hover:border-primary/50'}`}
+                  onClick={() => setTradeAmount(amt)}
+                >
+                  {amt}
+                </button>
+              ))}
             </div>
             <input 
-              className="w-full h-1 bg-surface-variant rounded-full appearance-none cursor-pointer" 
-              max="5000" 
-              min="10" 
+              className="w-full h-1 bg-surface-variant rounded-full appearance-none cursor-pointer mt-2" 
+              max="0.005" 
+              min="0.0001" 
+              step="0.0001"
               type="range" 
-              value={tradeSize}
-              onChange={(e) => setTradeSize(Number(e.target.value))}
+              value={tradeAmount}
+              onChange={(e) => setTradeAmount(Number(e.target.value))}
             />
           </div>
           <button 
             className="w-full py-3 bg-primary text-white font-bold text-[10px] rounded hover:bg-primary/90 transition-all active:scale-[0.97] uppercase tracking-widest"
             onClick={handleTrade}
           >
-            CONFIRM POSITION
+            CONFIRM POSITION ({tradeAmount} {getNativeCurrencySymbol()})
           </button>
         </div>
 
