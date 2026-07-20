@@ -134,15 +134,15 @@ export default function CreatorLab() {
       }
     }
 
-    // 2. Check native balance for 0.002 GIWA seed liquidity requirement
+    // 2. Check native balance for 0.0002 GIWA seed liquidity requirement
     const { parseEther } = await import('viem');
-    const requiredSeed = parseEther("0.002");
+    const requiredSeed = parseEther("0.0002");
 
     if (balanceData && balanceData.value < requiredSeed) {
       const currentBalanceStr = (Number(balanceData.value) / 1e18).toFixed(4);
       useAppStore.getState().showToast(
         "Insufficient Liquidity Seed",
-        `Market creation requires 0.002 ${currencySymbol} seed liquidity + gas. Your wallet currently has ${currentBalanceStr} ${currencySymbol}.`,
+        `Market creation requires 0.0002 ${currencySymbol} seed liquidity + gas. Your wallet currently has ${currentBalanceStr} ${currencySymbol}.`,
         "error"
       );
       return;
@@ -215,7 +215,7 @@ export default function CreatorLab() {
       if (errorMsg.includes("User rejected") || errorMsg.includes("user rejected")) {
         errorMsg = "Transaction was canceled by user in wallet.";
       } else if (errorMsg.includes("Transaction creation failed") || errorMsg.includes("insufficient funds") || errorMsg.includes("exceeds balance")) {
-        errorMsg = `Transaction creation failed. Please check that your wallet is connected to ${networkName} (Chain ID: ${targetChainId}) and has at least 0.002 ${currencySymbol} testnet tokens for liquidity seed + gas.`;
+        errorMsg = `Transaction creation failed. Please check that your wallet is connected to ${networkName} (Chain ID: ${targetChainId}) and has at least 0.0002 ${currencySymbol} testnet tokens for liquidity seed + gas.`;
       }
 
       useAppStore.getState().showToast("Deployment Failed", errorMsg, "error");
