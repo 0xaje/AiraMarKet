@@ -3,13 +3,72 @@ import { useNavigate } from 'react-router-dom';
 import useAppStore from '../store/useAppStore';
 import { feedCategories } from '../mocks/data';
 import { useReadContract } from 'wagmi';
-import { getContractAddress, getContractAbi, getNativeCurrencySymbol, getActiveNetworkName } from '../lib/network';
+import { getContractAddress, getContractAbi, getNativeCurrencySymbol, getActiveNetworkName, getActiveChainId } from '../lib/network';
+
+const defaultSeedCards = [
+  {
+    id: 'seed_tech_1',
+    title: 'GPT-5 Autumn Release by OpenAI',
+    category: 'TECH',
+    volume: '3.4000 GIWA',
+    yesProb: 78,
+    noProb: 22,
+    yesPrice: 0.78,
+    noPrice: 0.22,
+    confidence: '98%',
+    openInterest: '3.4000 GIWA',
+    drift: '+2.4%',
+    status: 'ACTIVE'
+  },
+  {
+    id: 'seed_crypto_1',
+    title: 'Bitcoin $150K Target Before July',
+    category: 'CRYPTO',
+    volume: '18.9000 GIWA',
+    yesProb: 65,
+    noProb: 35,
+    yesPrice: 0.65,
+    noPrice: 0.35,
+    confidence: '97%',
+    openInterest: '18.9000 GIWA',
+    drift: '+5.1%',
+    status: 'ACTIVE'
+  },
+  {
+    id: 'seed_sports_1',
+    title: 'Real Madrid Champions League Victory',
+    category: 'SPORTS',
+    volume: '6.2000 GIWA',
+    yesProb: 58,
+    noProb: 42,
+    yesPrice: 0.58,
+    noPrice: 0.42,
+    confidence: '84%',
+    openInterest: '6.2000 GIWA',
+    drift: '+1.8%',
+    status: 'ACTIVE'
+  },
+  {
+    id: 'seed_politics_1',
+    title: 'US Presidential Election Resolution in 24h',
+    category: 'POLITICS',
+    volume: '45.1000 GIWA',
+    yesProb: 82,
+    noProb: 18,
+    yesPrice: 0.82,
+    noPrice: 0.18,
+    confidence: '99%',
+    openInterest: '45.1000 GIWA',
+    drift: '+8.9%',
+    status: 'ACTIVE'
+  }
+];
 
 export default function Feed() {
   const navigate = useNavigate();
   const setActiveMarket = useAppStore(state => state.setActiveMarket);
   const [activeFeedFilter, setActiveFeedFilter] = useState('ACTIVE');
-  const [feedCards, setFeedCards] = useState([]);
+  const [feedCards, setFeedCards] = useState(defaultSeedCards);
   const [activeCategoryTab, setActiveCategoryTab] = useState('TECH');
 
   const handleCategoryClick = (catId) => {
@@ -27,11 +86,12 @@ export default function Feed() {
     return 'TECH';
   };
 
-  // Use wagmi to fetch markets with 2-second refetch interval
+  // Use wagmi to fetch markets explicitly targeted to active chain ID
   const { data: liveMarkets, refetch } = useReadContract({
     address: getContractAddress(),
     abi: getContractAbi(),
     functionName: 'listMarkets',
+    chainId: getActiveChainId(),
     query: {
       refetchInterval: 2000
     }
@@ -42,10 +102,12 @@ export default function Feed() {
   }, [refetch]);
 
   React.useEffect(() => {
+    const currency = getNativeCurrencySymbol();
+    const networkName = getActiveNetworkName();
+
+    let onChainMapped = [];
     if (liveMarkets && liveMarkets.length > 0) {
-      const currency = getNativeCurrencySymbol();
-      const networkName = getActiveNetworkName();
-      const mappedMarkets = liveMarkets.map((m) => {
+      onChainMapped = liveMarkets.map((m) => {
         const id = Number(m.id);
         const totalYes = Number(m.totalYesPool) / 1e18;
         const totalNo = Number(m.totalNoPool) / 1e18;
@@ -64,7 +126,7 @@ export default function Feed() {
           noProb,
           yesPrice: yesProb / 100,
           noPrice: noProb / 100,
-          confidence: "Live",
+          confidence: "Live On-Chain",
           openInterest: `${total.toFixed(4)} ${currency}`,
           drift: "LIVE",
           status: m.resolved ? "ENDED" : "ACTIVE",
@@ -73,9 +135,10 @@ export default function Feed() {
           nodeIcon: "https://lh3.googleusercontent.com/aida-public/AB6AXuC5mynRnO05PMYjJd4c9pATpp_CQNpzcuGCuynRG5rI2sR6fjElHLEmsj0uuq1_37kGszQW6Lm7Nx73hl71PgeFxr9oOyn14HpIVZkkfbHiEskuSrePFACjwxxNoJdO8xjTP0jpBN1bTi4K6IpZangC3HOfa0rNiJmVinhzBTn0HsixddoBCOCgjXN3d0SNJkz4EKnodR6fkkh14DscesLHVZ0wRgeEQKOqoC8cABi8GQ95kMVMGB4UgCFztlOQANyh7SsvMYkWoNA",
           nodeName: `${networkName} Oracle`
         };
-      });
-      setFeedCards(mappedMarkets.reverse());
+      }).reverse();
     }
+
+    setFeedCards([...onChainMapped, ...defaultSeedCards]);
   }, [liveMarkets]);
 
   const activateTerminalTrade = (marketTitle, yesPrice, noPrice, confidence, vol, openInterest, drift, realId) => {
