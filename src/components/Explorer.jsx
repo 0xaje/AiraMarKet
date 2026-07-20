@@ -17,7 +17,7 @@ const defaultSeedData = {
       ipfsHash: "QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco",
       decisionReason: "Consensus threshold (>85%) achieved across Analyst, Risk, and Compliance agent evaluations.",
       intelligenceReport: {
-        summary: "Autonomous AI Agent consensus confirmed valid signal metrics for protocol deployment on GIWA Sepolia L2.",
+        summary: "Multi-Agent AI consensus confirmed valid signal metrics for protocol deployment on GIWA Sepolia L2.",
         supportingEvidence: [
           "GIWA RPC contract verification confirmed active at 0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D",
           "Cross-node telemetry validator pulse check: 99.9% uptime"

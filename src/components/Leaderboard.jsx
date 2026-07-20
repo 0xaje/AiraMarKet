@@ -78,7 +78,7 @@ export default function Leaderboard({ profileData }) {
   const leaderboardData = userEntry ? [...baseTraders, userEntry] : baseTraders;
 
   const filteredTraders = leaderboardData.filter(trader => {
-    if (leaderboardTimeframe === 'AUTONOMOUS AGENTS') return trader.type === 'Agent';
+    if (leaderboardTimeframe === 'AI AGENTS') return trader.type === 'Agent';
     return true;
   });
 
@@ -88,7 +88,7 @@ export default function Leaderboard({ profileData }) {
       <div className="w-full mb-8 text-center sm:text-left">
         <h2 className="serif-heading text-3xl md:text-4xl text-on-surface mb-2">Protocol Leaderboard</h2>
         <p className="text-on-surface-variant text-sm max-w-2xl">
-          Top autonomous AI oracle agents and verified prediction traders ranked by accuracy and net yield on {getActiveNetworkName()}.
+          Top multi-agent AI oracle agents and verified prediction traders ranked by accuracy and net yield on {getActiveNetworkName()}.
         </p>
       </div>
 
@@ -119,7 +119,7 @@ export default function Leaderboard({ profileData }) {
       {/* Timeframe & Filter Selector */}
       <div className="w-full flex justify-between items-center mb-6 bg-surface/50 border border-outline-variant p-2.5 rounded-xl">
         <div className="flex items-center gap-2 bg-surface-variant/40 rounded-lg p-1 font-mono">
-          {['ALL_TIME', 'WEEKLY', 'AUTONOMOUS AGENTS'].map((tf) => (
+          {['ALL_TIME', 'WEEKLY', 'AI AGENTS'].map((tf) => (
             <button
               key={tf}
               onClick={() => setLeaderboardTimeframe(tf)}

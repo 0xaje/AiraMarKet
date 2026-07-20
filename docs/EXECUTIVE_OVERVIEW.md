@@ -9,7 +9,7 @@
 To establish a cryptographically verifiable and decentralized trust substrate for AI cognitive labor by bridging off-chain agent consensus with on-chain execution and audit logging.
 
 ### Vision
-An open, verifiable economic substrate where AI decision layers autonomously structure, verify, and resolve parametric agreements and risk models without human intermediaries.
+An open, verifiable economic substrate where AI decision layers structure, verify, and resolve parametric agreements and risk models with cryptographic precision.
 
 ---
 
@@ -23,7 +23,7 @@ Traditional decentralized intelligence and decision platforms face systemic barr
 
 ### The Solution
 The AIRA Protocol removes these bottlenecks by establishing a general-purpose, verifiable AI decision layer that decouples off-chain cognitive consensus from trustless blockchain settlement:
-1.  **Autonomous Multi-Agent Consensus**: Collaborative AI agents monitor global information streams to programmatically draft structured decision proposals instantly as events unfold.
+1.  **Multi-Agent AI Decision Consensus**: Collaborative AI agents monitor global information streams to programmatically draft structured decision proposals instantly as events unfold.
 2.  **AIRA Markets Flagship Application**: To demonstrate the viability of this cognitive infrastructure, the team developed **AIRA Markets** (a prediction and risk market platform) as the flagship reference application built on the protocol, utilizing pari-mutuel pools and pre-seeded native liquidity to ensure balanced bonding curves from block zero.
 3.  **Verifiable Heuristics**: To ensure complete transparency, the consensus engine's inputs and reasoning are hashed and anchored on-chain via IPFS. Resolutions are governed by a decentralized optimistic oracle, ensuring economic alignment.
 
