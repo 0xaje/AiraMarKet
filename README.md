@@ -33,6 +33,17 @@ This approach transforms AI-assisted prediction markets into transparent and ver
 
 ---
 
+## Current MVP Scope
+
+- **Live deployment on GIWA Sepolia Testnet** (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
+- **AI-assisted proposal generation** with natural language signal analysis.
+- **Multi-agent consensus workflow** (Analyst, Risk, Compliance agents).
+- **Evidence packaging with IPFS support** for auditable multihashes.
+- **On-chain market creation and payout settlement**.
+- **Protocol Explorer and audit interface**.
+
+---
+
 ## Tagline
 A Multi-Agent AI Decision Protocol for Transparent Prediction Markets, powered by GIWA.
 

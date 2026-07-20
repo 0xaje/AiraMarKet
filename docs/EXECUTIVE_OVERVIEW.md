@@ -51,7 +51,24 @@ Every approved market, evidence reference, and settlement transaction is anchore
 
 ---
 
-## 3. Core Capabilities & User Value
+## 3. Current MVP Scope
+
+- **Live deployment on GIWA Sepolia Testnet** (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
+- **AI-assisted proposal generation** with natural language signal analysis.
+- **Multi-agent consensus workflow** (Analyst, Risk, Compliance agents).
+- **Evidence packaging with IPFS support** for auditable multihashes.
+- **On-chain market creation and payout settlement**.
+- **Protocol Explorer and audit interface**.
+
+### Future Roadmap
+- **Expanded AI providers** (Gemini Pro, GPT-4o, Anthropic Claude).
+- **Additional market categories** and dynamic signal feeds.
+- **Enhanced analytics and governance** features.
+- **Mainnet deployment** following successful testnet evaluation.
+
+---
+
+## 4. Core Capabilities & User Value
 
 - **Independent Multi-Agent Peer Reviews**: Multiple AI agents evaluate signal inputs and peer-review every proposal, requiring a 66% consensus quorum before creating a market.
 - **Verifiable Decision Audit Trail**: Every evidence item, agent evaluation, and confidence score is anchored with an IPFS CID and logged transparently on-chain.
@@ -60,7 +77,7 @@ Every approved market, evidence reference, and settlement transaction is anchore
 
 ---
 
-## 4. How It Is Implemented (Technical Architecture)
+## 5. How It Is Implemented (Technical Architecture)
 
 The protocol decouples off-chain cognitive evaluation from on-chain asset custody across four core layers:
 
@@ -98,6 +115,6 @@ flowchart TD
 
 ---
 
-## 5. Summary
+## 6. Summary
 
 AIRA Protocol demonstrates a complete end-to-end MVP built on GIWA Sepolia, combining AI-assisted decision making, transparent evidence workflows, and on-chain execution into a unified protocol ready for technical evaluation.
