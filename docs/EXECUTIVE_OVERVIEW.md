@@ -118,3 +118,12 @@ flowchart TD
 ## 6. Summary
 
 AIRA Protocol demonstrates a complete end-to-end MVP built on GIWA Sepolia, combining AI-assisted decision making, transparent evidence workflows, and on-chain execution into a unified protocol ready for technical evaluation.
+
+---
+
+## Resources
+
+- **GitHub Repository**: [0xaje/AiraMarKet](https://github.com/0xaje/AiraMarKet)
+- **Live Testnet Contract**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+- **Block Explorer**: [GIWA Sepolia Explorer](https://sepolia-explorer.giwa.io)
+- **Documentation**: [Developer Documentation Hub](file:///home/oyeolorun/AiraMarKet/docs/developer/architecture_overview.md)

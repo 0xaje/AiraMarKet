@@ -225,5 +225,14 @@ The following metrics represent verified protocol capabilities and testing outco
 
 ---
 
+## Resources
+
+- **GitHub Repository**: [0xaje/AiraMarKet](https://github.com/0xaje/AiraMarKet)
+- **Live Testnet Contract**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+- **Block Explorer**: [GIWA Sepolia Explorer](https://sepolia-explorer.giwa.io)
+- **Documentation**: [Executive Overview](file:///home/oyeolorun/AiraMarKet/docs/EXECUTIVE_OVERVIEW.md)
+
+---
+
 ## License
 This project is licensed under the MIT License. See [LICENSE](file:///home/oyeolorun/AiraMarKet/LICENSE) for more details.
