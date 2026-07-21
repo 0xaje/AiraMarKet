@@ -1,9 +1,15 @@
 # AIRA Protocol: Executive Overview
-### A Multi-Agent AI Decision Protocol for Transparent Prediction Markets, powered by GIWA.
+### A Verifiable AI Decision Protocol demonstrated through Prediction Markets on GIWA.
 
 > [!IMPORTANT]
-> **30-Second Summary**
-> AIRA Protocol enables transparent AI-assisted prediction markets where multiple specialized AI agents independently evaluate the available evidence, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than relying on opaque AI outputs, AIRA exposes the reasoning, supporting evidence, and consensus process behind every approved market before it is executed on GIWA.
+> **Core Value Proposition**  
+> *"AIRA doesn't ask users to trust AI. It gives them the tools to inspect how AI reached a decision before that decision is committed on-chain."*
+
+---
+
+> [!NOTE]
+> **30-Second Summary**  
+> AIRA is a verifiable AI decision protocol demonstrated through prediction markets. Multiple specialized AI agents independently evaluate available evidence, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than relying on opaque AI outputs, AIRA exposes the reasoning, supporting evidence, and consensus process behind every approved market before it is executed on GIWA.
 
 | Parameter | Status / Details |
 | :--- | :--- |
@@ -17,7 +23,7 @@
 
 ## What Makes AIRA Different?
 
-Unlike traditional prediction markets that rely on manual market creation or opaque AI systems, AIRA combines:
+Unlike traditional platforms that rely on manual market creation or opaque AI systems, AIRA combines:
 
 - **Multi-agent AI reasoning** instead of a single AI response.
 - **Transparent evidence packages** that can be independently inspected.
@@ -32,15 +38,29 @@ This approach makes AI-assisted prediction markets transparent, inspectable, and
 
 Real-world events emerge faster than traditional prediction markets can be created manually. AIRA uses AI to assist with evidence collection, proposal generation, and structured reasoning, while preserving human oversight and transparent verification before execution on GIWA.
 
+### Why This Matters Now
+
+As AI becomes increasingly involved in decision-making, users need systems that explain how conclusions were reached—not just the conclusions themselves. AIRA provides that transparency by combining AI reasoning, human oversight, and on-chain verification.
+
 ---
 
-## Design Principles
+## Protocol Principles
 
 - **Human approval remains part of the deployment workflow.**
 - **AI assists rather than autonomously executes.**
 - **Every market is supported by inspectable evidence.**
 - **Settlement is transparent and verifiable on GIWA.**
-- **The protocol is designed for extensibility across AI providers.**
+- **The protocol is designed for extensibility across pluggable AI providers.**
+
+---
+
+## Security Model
+
+- **Human approval required** before deployment.
+- **AI outputs are reviewable** before execution.
+- **Evidence packages are immutable** once anchored.
+- **Smart contract settlement is deterministic** on GIWA.
+- **Dispute resolution follows an optimistic challenge model**.
 
 ---
 
