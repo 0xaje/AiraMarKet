@@ -113,18 +113,27 @@ if (match) {
         </p>
         
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4 w-full mb-12">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center px-4 w-full mb-12">
           <button 
-            className="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-lg font-bold text-[10px] tracking-[0.2em] uppercase hover:bg-on-surface hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary/20"
-            onClick={() => navigate('/creator')}
-          >
-            Launch Consensus Engine
-          </button>
-          <button 
-            className="w-full sm:w-auto px-8 py-4 bg-surface border border-outline text-on-surface rounded-lg font-bold text-[10px] tracking-[0.2em] uppercase hover:border-primary hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="w-full sm:w-auto px-7 py-3.5 bg-primary text-white rounded-lg font-extrabold text-[10px] tracking-[0.2em] uppercase hover:bg-on-surface hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
             onClick={() => navigate('/feed')}
           >
-            Explore Core Feed
+            <span className="material-symbols-outlined text-sm">play_circle</span>
+            <span>Try Live Demo</span>
+          </button>
+          <button 
+            className="w-full sm:w-auto px-7 py-3.5 bg-surface border border-outline text-on-surface rounded-lg font-bold text-[10px] tracking-[0.2em] uppercase hover:border-primary hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            onClick={() => navigate('/creator')}
+          >
+            <span className="material-symbols-outlined text-sm">auto_awesome</span>
+            <span>Consensus Engine</span>
+          </button>
+          <button 
+            className="w-full sm:w-auto px-7 py-3.5 bg-surface-variant/50 border border-outline-variant text-on-surface-variant rounded-lg font-bold text-[10px] tracking-[0.2em] uppercase hover:border-primary hover:text-primary hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            onClick={() => navigate('/explorer')}
+          >
+            <span className="material-symbols-outlined text-sm">account_tree</span>
+            <span>View Architecture</span>
           </button>
         </div>
 
