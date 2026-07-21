@@ -6,6 +6,8 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](file:///home/oyeolorun/AiraMarKet/docs/developer/local_development.md)
 [![Solidity](https://img.shields.io/badge/Language-Solidity-lightgrey.svg)](file:///home/oyeolorun/AiraMarKet/contracts/AiraMarket.sol)
 
+AIRA Protocol enables transparent AI-assisted decision workflows by combining multi-agent review, structured evidence, human approval, and on-chain execution on GIWA.
+
 > [!IMPORTANT]
 > **Core Value Proposition**  
 > *"AIRA doesn't ask users to trust AI. It gives them the tools to inspect how AI reached a decision before that decision is committed on-chain."*
@@ -14,7 +16,7 @@
 
 > [!NOTE]
 > **30-Second Summary**  
-> AIRA is a transparent multi-agent decision protocol demonstrated through prediction markets. Multiple specialized AI agents perform specialized analysis using distinct evaluation roles, produce transparent reasoning, pass multi-agent review, and store structured evidence packages on IPFS before market creation. Rather than relying on opaque AI outputs, AIRA exposes the reasoning, supporting evidence, and review pipeline behind every approved market before it is executed on GIWA.
+> AIRA is a transparent multi-agent decision protocol demonstrated through prediction markets. Multiple specialized AI agents perform specialized analysis using distinct evaluation roles, produce transparent reasoning, pass multi-agent review, and upload structured evidence packages to IPFS, with the resulting Content Identifier (CID) referenced by the smart contract during market creation. Rather than relying on opaque AI outputs, AIRA exposes the reasoning, supporting evidence, and review pipeline behind every approved market before it is executed on GIWA.
 
 | Parameter | Status / Details |
 | :--- | :--- |
@@ -46,6 +48,10 @@ Real-world events emerge faster than traditional prediction markets can be creat
 ### Why This Matters Now
 
 As AI becomes increasingly involved in decision-making, users need systems that explain how conclusions were reached—not just the conclusions themselves. AIRA provides that transparency by combining AI reasoning, human oversight, and on-chain verification.
+
+### Why This MVP Matters
+
+AIRA demonstrates that AI-assisted decision making can be transparent rather than opaque. Instead of replacing human judgment, the protocol structures AI analysis into an inspectable review pipeline where supporting evidence, human approval, and on-chain execution remain visible throughout the decision lifecycle.
 
 ### Why AI Computation is Off-Chain
 
@@ -82,15 +88,15 @@ AIRA intentionally separates AI computation from blockchain execution. Computati
 
 ---
 
-## Technical Architecture
+## Technical Architecture (Five-Layer Modular Architecture)
 
 `AI Layer` ➔ `Review Pipeline` ➔ `Evidence Layer` ➔ `Settlement Layer` ➔ `Application Layer`
 
 1. **AI Layer**: Supports configurable LLM providers through an abstraction layer, with deterministic fallback logic when external AI services are unavailable.
-2. **Review Pipeline**: Orchestrates multi-agent reviews (Analyst, Risk, Compliance) to approve proposals based on quorum thresholds.
+2. **Review Pipeline**: Coordinates Analyst, Risk, and Compliance evaluations before determining whether a proposal satisfies the configured approval threshold.
 3. **Evidence Layer**: Normalizes real-world signal feeds into deterministic JSON payloads pinned to IPFS CIDs.
 4. **Settlement Layer**: Manages market creation, pre-seeded liquidity, trading, optimistic dispute resolution, and payouts on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
-5. **Application Layer**: Delivers a responsive 7-module interface for signal creation, interactive trading, and cryptographic audits.
+5. **Application Layer**: Delivers a responsive 7-module interface for signal creation, interactive trading, and decision audit interfaces.
 
 ---
 
@@ -103,15 +109,27 @@ External Signal ➔ Signal Normalization ➔ Multi-Agent Review ➔ Evidence Pac
 ```mermaid
 flowchart TD
     s1[External Real-World Signal] --> s2[Signal Normalization]
-    s2 --> s3[Multi-Agent Review]
+    s2 --> s3[Multi-Agent Review Pipeline]
     s3 --> s4[Evidence Package Assembly]
     s4 --> s5[Human Approval Checkpoint]
-    s5 --> s6[IPFS Storage]
-    s6 --> s7[GIWA Smart Contract]
-    s7 --> s8[Prediction Market Creation]
+    s5 --> s6[IPFS CID Storage]
+    s6 --> s7[GIWA Smart Contract Deployment]
+    s7 --> s8[Prediction Market Active]
     s8 --> s9[Optimistic Dispute Resolution]
     s9 --> s10[Winnings Claim]
 ```
+
+---
+
+## Technology Stack
+
+- **Frontend**: React, Vite, Tailwind CSS, Zustand
+- **Web3 Integrations**: Wagmi v2, Viem, RainbowKit
+- **Backend API & Indexer**: Node.js, Express, Prisma ORM
+- **Database**: PostgreSQL
+- **Smart Contracts**: Solidity, Hardhat, Ethers.js v6
+- **Storage**: IPFS Content Identifiers (CIDs)
+- **Network**: GIWA Sepolia L2 Testnet (Chain ID: `91342`)
 
 ---
 
@@ -126,24 +144,26 @@ flowchart TD
 
 ## Current MVP Metrics
 
-- **Live Smart Contract**: Deployed on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
-- **Smart Contract Tests**: `9/9` unit tests passing (`npx hardhat test`).
-- **Pipeline Integration Tests**: `5/5` decision pipeline tests passing (`npm run test:consensus`).
-- **Application Modules**: `7` production modules (Landing, Feed, Creator, Terminal, Explorer, Registry, Portfolio).
-- **Specialized AI Evaluation Roles**: `3` distinct roles (Analyst, Risk, Compliance).
-- **Audit Interface**: 4-tab Explorer (Evidence, Swarm, On-Chain, Raw JSON).
-- **Web3 Integration**: Wagmi v2, Viem, and RainbowKit wallet support.
-- **Storage**: IPFS Evidence CID content addressing.
-- **UI Responsiveness**: Fully responsive mobile/desktop interfaces.
+| Metric | Current MVP |
+| :--- | :--- |
+| **Smart Contract** | Live on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`) |
+| **Unit Tests** | 9/9 Passing (`npx hardhat test`) |
+| **Integration Tests** | 5/5 Passing (`npm run test:consensus`) |
+| **Application Modules** | 7 Production Modules |
+| **AI Review Roles** | 3 Specialized Roles (Analyst, Risk, Compliance) |
+| **Wallet Integrations** | RainbowKit / Wagmi v2 / Viem |
+| **Evidence Layer** | Content-Addressed IPFS CIDs |
+| **Settlement Layer** | GIWA Sepolia L2 |
+| **Mobile Support** | Fully Responsive |
 
 ---
 
 ## Current MVP Limitations
 
-- **Provider Abstraction**: Current MVP relies on configurable LLM providers through an abstraction layer.
-- **Human Oversight**: Market creation requires human-in-the-loop approval before on-chain execution.
-- **Reputation Systems**: Agent historical calibration and reputation scoring are scheduled for future roadmap phases.
-- **Governance Evolution**: Decentralized governance parameter control will be introduced post-testnet evaluation.
+- AI quality depends on the configured LLM provider.
+- Human approval is required before market deployment.
+- Agent reputation and calibration history are not yet persisted across long-term operation.
+- Governance remains application-managed during the testnet phase.
 
 ---
 
@@ -166,7 +186,7 @@ The following metrics represent verified protocol capabilities and testing outco
     *   `[x]` 5/5 decision pipeline integration tests passing
     *   `[x]` Production frontend build compiled and verified
 
-> **AIRA Protocol demonstrates a practical architecture for combining AI-assisted analysis, human review, transparent evidence, and on-chain execution within a prediction market workflow.**
+> **AIRA Protocol demonstrates how AI-assisted analysis, transparent evidence, human oversight, and deterministic smart contract execution can be combined into a practical, end-to-end decision workflow on GIWA. By separating computational reasoning from on-chain settlement, the protocol preserves transparency, minimizes execution costs, and provides an extensible foundation for future AI-assisted decentralized applications.**
 
 ---
 
