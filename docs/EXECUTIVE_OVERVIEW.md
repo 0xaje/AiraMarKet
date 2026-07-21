@@ -11,7 +11,7 @@
 | **Deployment** | Verified (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`) |
 | **Explorer** | Available ([GIWA Explorer](https://sepolia-explorer.giwa.io)) |
 | **Wallet** | RainbowKit / Wagmi / Viem |
-| **Status** | Live MVP |
+| **Status** | Active on GIWA Sepolia (Live MVP) |
 
 ---
 

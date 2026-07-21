@@ -16,7 +16,7 @@
 | **Deployment** | Verified (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`) |
 | **Explorer** | Available ([GIWA Explorer](https://sepolia-explorer.giwa.io)) |
 | **Wallet** | RainbowKit / Wagmi / Viem |
-| **Status** | Live MVP |
+| **Status** | Active on GIWA Sepolia (Live MVP) |
 
 ---
 
@@ -236,6 +236,7 @@ The following metrics represent verified protocol capabilities and testing outco
     *   `[x]` Collaborative consensus thresholds implemented (66% approval quorum)
     *   `[x]` Agent evaluation reasoning persisted in database cache
 *   **Code Quality & Verification**:
+    *   `[x]` Live Deployment Status: Active on GIWA Sepolia Testnet
     *   `[x]` 9/9 smart contract unit tests passing
     *   `[x]` 5/5 consensus engine integration tests passing
     *   `[x]` Production frontend build compiled and verified
