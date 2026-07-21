@@ -33,6 +33,22 @@ This approach transforms AI-assisted prediction markets into transparent and ver
 
 ---
 
+## Why AI?
+
+Real-world events emerge faster than traditional prediction markets can be created manually. AIRA uses AI to assist with evidence collection, proposal generation, and structured reasoning, while preserving human oversight and transparent verification before execution on GIWA.
+
+---
+
+## Design Principles
+
+- **AI assists rather than autonomously executes.**
+- **Every market is supported by inspectable evidence.**
+- **Human approval remains part of the deployment workflow.**
+- **Settlement is transparent and verifiable on GIWA.**
+- **The protocol is designed for extensibility across AI providers.**
+
+---
+
 ## End-to-End Decision Lifecycle
 
 `Signal` ➔ `Multi-Agent Analysis` ➔ `Consensus` ➔ `Evidence Package` ➔ `Human Approval` ➔ `IPFS` ➔ `GIWA Transaction` ➔ `Prediction Market` ➔ `Settlement` ➔ `Claim`
@@ -248,9 +264,10 @@ The following metrics represent verified protocol capabilities and testing outco
 ## Resources
 
 - **GitHub Repository**: [0xaje/AiraMarKet](https://github.com/0xaje/AiraMarKet)
-- **Live Testnet Contract**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+- **Live MVP Application**: [AIRA Protocol App](https://airamarket.vercel.app)
+- **Smart Contract Address**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
 - **Block Explorer**: [GIWA Sepolia Explorer](https://sepolia-explorer.giwa.io)
-- **Documentation**: [Executive Overview](file:///home/oyeolorun/AiraMarKet/docs/EXECUTIVE_OVERVIEW.md)
+- **Documentation Hub**: [Executive Overview](file:///home/oyeolorun/AiraMarKet/docs/EXECUTIVE_OVERVIEW.md)
 
 ---
 

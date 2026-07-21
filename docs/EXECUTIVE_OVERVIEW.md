@@ -28,6 +28,22 @@ This approach transforms AI-assisted prediction markets into transparent and ver
 
 ---
 
+## Why AI?
+
+Real-world events emerge faster than traditional prediction markets can be created manually. AIRA uses AI to assist with evidence collection, proposal generation, and structured reasoning, while preserving human oversight and transparent verification before execution on GIWA.
+
+---
+
+## Design Principles
+
+- **AI assists rather than autonomously executes.**
+- **Every market is supported by inspectable evidence.**
+- **Human approval remains part of the deployment workflow.**
+- **Settlement is transparent and verifiable on GIWA.**
+- **The protocol is designed for extensibility across AI providers.**
+
+---
+
 ## End-to-End Decision Lifecycle
 
 `Signal` ➔ `Multi-Agent Analysis` ➔ `Consensus` ➔ `Evidence Package` ➔ `Human Approval` ➔ `IPFS` ➔ `GIWA Transaction` ➔ `Prediction Market` ➔ `Settlement` ➔ `Claim`
@@ -115,14 +131,14 @@ flowchart TD
 1. **Off-Chain Multi-Agent Consensus Swarm**:
    - **`AnalystAgent`**: Ingests raw signal data and models baseline probability estimates.
    - **`RiskAgent`**: Audits order book depth, volatility indices, and safety circuit breakers.
-   - **`ComplianceAgent`**: Enforces oracle dispute rules, timelocks, and protocol compliance.
+   - **`ComplianceAgent`**: Enforces protocol policy checks and content safety guidelines.
 
 2. **On-Chain Settlement Engine (`AiraMarketProtocol.sol`)**:
    - The `AiraMarketProtocol` contract manages market creation, liquidity, trading, dispute resolution, and payout settlement on GIWA.
    - Deployed at `0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D` on GIWA Sepolia L2 (Chain ID: `91342`).
 
 3. **Storage & Audit Layer**:
-   - Supports IPFS evidence anchoring for metadata logs and cryptographic multihash verification.
+   - Stores the IPFS CID associated with each market, creating a verifiable reference between off-chain evidence and on-chain execution.
 
 4. **Seven Integrated Application Modules**:
    - **Core Feed (`/feed`)**: 4 category streams with status filters and mobile stream view.
@@ -143,6 +159,7 @@ AIRA Protocol delivers an end-to-end MVP on GIWA Sepolia that demonstrates AI-as
 ## Resources
 
 - **GitHub Repository**: [0xaje/AiraMarKet](https://github.com/0xaje/AiraMarKet)
-- **Live Testnet Contract**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+- **Live MVP Application**: [AIRA Protocol App](https://airamarket.vercel.app)
+- **Smart Contract Address**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
 - **Block Explorer**: [GIWA Sepolia Explorer](https://sepolia-explorer.giwa.io)
 - **Documentation**: [Developer Documentation Hub](file:///home/oyeolorun/AiraMarKet/docs/developer/architecture_overview.md)
