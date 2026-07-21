@@ -1,5 +1,5 @@
 # AIRA Protocol: Executive Overview
-### A Verifiable AI Decision Protocol demonstrated through Prediction Markets on GIWA.
+### A Transparent Multi-Agent Decision Protocol demonstrated through Prediction Markets on GIWA.
 
 > [!IMPORTANT]
 > **Core Value Proposition**  
@@ -9,14 +9,14 @@
 
 > [!NOTE]
 > **30-Second Summary**  
-> AIRA is a verifiable AI decision protocol demonstrated through prediction markets. Multiple specialized AI agents independently evaluate available evidence, produce transparent reasoning, reach consensus, and anchor evidence on GIWA before a market is created. Rather than relying on opaque AI outputs, AIRA exposes the reasoning, supporting evidence, and consensus process behind every approved market before it is executed on GIWA.
+> AIRA is a transparent multi-agent decision protocol demonstrated through prediction markets. Multiple specialized AI agents perform specialized analysis using distinct evaluation roles, produce transparent reasoning, pass multi-agent review, and store structured evidence packages on IPFS before market creation. Rather than relying on opaque AI outputs, AIRA exposes the reasoning, supporting evidence, and review pipeline behind every approved market before it is executed on GIWA.
 
 | Parameter | Status / Details |
 | :--- | :--- |
 | **Network** | GIWA Sepolia Testnet (Chain ID: `91342`) |
 | **Deployment** | Verified (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`) |
 | **Explorer** | Available ([GIWA Explorer](https://sepolia-explorer.giwa.io)) |
-| **Wallet** | RainbowKit / Wagmi / Viem |
+| **Wallet Stack** | RainbowKit / Wagmi / Viem |
 | **Status** | Active on GIWA Sepolia (Live MVP) |
 
 ---
@@ -26,9 +26,9 @@
 Unlike traditional platforms that rely on manual market creation or opaque AI systems, AIRA combines:
 
 - **Multi-agent AI reasoning** instead of a single AI response.
-- **Transparent evidence packages** that can be independently inspected.
+- **Structured evidence packages** stored on IPFS and referenced on-chain.
 - **On-chain verification through GIWA** for settlement and auditability.
-- **Human-in-the-loop approval** before market deployment.
+- **Human approval required before on-chain market creation.**
 
 This approach makes AI-assisted prediction markets transparent, inspectable, and verifiable.
 
@@ -42,11 +42,24 @@ Real-world events emerge faster than traditional prediction markets can be creat
 
 As AI becomes increasingly involved in decision-making, users need systems that explain how conclusions were reached—not just the conclusions themselves. AIRA provides that transparency by combining AI reasoning, human oversight, and on-chain verification.
 
+### Why AI Computation is Off-Chain
+
+AIRA intentionally separates AI computation from blockchain execution. Computationally intensive reasoning occurs off-chain, while only the resulting evidence reference, proposal metadata, and settlement logic are committed on GIWA. This minimizes execution costs while preserving auditability and deterministic settlement.
+
+---
+
+## Why This Architecture Fits GIWA
+
+- **Low Gas Costs**: Enables frequent market creation, administrative signing, and micro-trade execution without high cost barriers.
+- **Fast Confirmations**: Rapid L2 block times improve prediction market UX and transaction finality.
+- **EVM Tooling Compatibility**: Simplifies smart contract deployment, viem/wagmi integration, and RPC indexer synchronization.
+- **Transparent Ledger**: Immutable on-chain state complements off-chain AI analysis for complete decision auditability.
+
 ---
 
 ## Protocol Principles
 
-- **Human approval remains part of the deployment workflow.**
+- **Human approval is required before on-chain market creation.**
 - **AI assists rather than autonomously executes.**
 - **Every market is supported by inspectable evidence.**
 - **Settlement is transparent and verifiable on GIWA.**
@@ -56,9 +69,9 @@ As AI becomes increasingly involved in decision-making, users need systems that 
 
 ## Security Model
 
-- **Human approval required** before deployment.
+- **Human approval required** before on-chain deployment.
 - **AI outputs are reviewable** before execution.
-- **Evidence packages are immutable** once anchored.
+- **Evidence packages are content-addressed via IPFS** and referenced on-chain.
 - **Smart contract settlement is deterministic** on GIWA.
 - **Dispute resolution follows an optimistic challenge model**.
 
@@ -66,68 +79,71 @@ As AI becomes increasingly involved in decision-making, users need systems that 
 
 ## Technical Architecture
 
-`AI Layer` ➔ `Consensus Layer` ➔ `Evidence Layer` ➔ `Settlement Layer` ➔ `Application Layer`
+`AI Layer` ➔ `Review Pipeline` ➔ `Evidence Layer` ➔ `Settlement Layer` ➔ `Application Layer`
 
-1. **AI Layer**: Supports configurable AI providers (currently OpenRouter/OpenAI), with deterministic fallback logic when external AI services are unavailable.
-2. **Consensus Layer**: Orchestrates multi-agent reviews (Analyst, Risk, Compliance) to approve proposals based on quorum thresholds.
+1. **AI Layer**: Supports configurable LLM providers through an abstraction layer, with deterministic fallback logic when external AI services are unavailable.
+2. **Review Pipeline**: Orchestrates multi-agent reviews (Analyst, Risk, Compliance) to approve proposals based on quorum thresholds.
 3. **Evidence Layer**: Normalizes real-world signal feeds into deterministic JSON payloads pinned to IPFS CIDs.
-4. **Settlement Layer**: Manages market creation, liquidity, trading, optimistic dispute resolution, and payouts on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
+4. **Settlement Layer**: Manages market creation, pre-seeded liquidity, trading, optimistic dispute resolution, and payouts on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
 5. **Application Layer**: Delivers a responsive 7-module interface for signal creation, interactive trading, and cryptographic audits.
 
 ---
 
 ## End-to-End Decision Lifecycle
 
-`Signal` ➔ `Multi-Agent Analysis` ➔ `Consensus` ➔ `Evidence Package` ➔ `Human Approval` ➔ `IPFS` ➔ `GIWA Transaction` ➔ `Prediction Market` ➔ `Settlement` ➔ `Claim`
+```
+External Signal ➔ Signal Normalization ➔ Multi-Agent Review ➔ Evidence Package ➔ Human Approval ➔ IPFS Storage ➔ GIWA Smart Contract ➔ Prediction Market ➔ Settlement ➔ Claim
+```
 
 ```mermaid
 flowchart TD
-    s1[Signal] --> s2[Multi-Agent Analysis]
-    s2 --> s3[Consensus]
-    s3 --> s4[Evidence Package]
-    s4 --> s5[Human Approval]
-    s5 --> s6[IPFS Anchoring]
-    s6 --> s7[GIWA Transaction]
-    s7 --> s8[Prediction Market]
-    s8 --> s9[Optimistic Settlement]
+    s1[External Real-World Signal] --> s2[Signal Normalization]
+    s2 --> s3[Multi-Agent Review]
+    s3 --> s4[Evidence Package Assembly]
+    s4 --> s5[Human Approval Checkpoint]
+    s5 --> s6[IPFS Storage]
+    s6 --> s7[GIWA Smart Contract]
+    s7 --> s8[Prediction Market Creation]
+    s8 --> s9[Optimistic Dispute Resolution]
     s9 --> s10[Winnings Claim]
 ```
 
 ---
 
-## 1. Why This Is Important
+## Current MVP Metrics
 
-Traditional prediction markets and decentralized decision platforms face three major bottlenecks:
-
-1. **Manual Market Creation**: Creating prediction markets is still largely manual, making it slow to react to fast-moving real-world events.
-2. **Hard-to-Verify AI Decisions**: AI-generated decisions are difficult to verify when outputs are produced inside opaque black boxes.
-3. **Lack of Decision Visibility**: Users have little visibility into how AI reached a conclusion or what evidence was evaluated.
-
-### **The AIRA Solution**
-**AIRA allows multiple AI agents to independently evaluate the available evidence, explain their reasoning, reach consensus, preserve supporting evidence, and anchor that evidence on GIWA.**
-
-Instead of trusting a single prompt or an opaque black box, specialized AI agents evaluate real-world signals, calculate risk parameters, and verify compliance rules. Every decision audit trail is anchored on-chain to **GIWA Sepolia L2**, giving users complete visibility into how conclusions were reached.
-
----
-
-## 2. Why GIWA?
-
-AIRA uses GIWA as its execution and verification layer.
-
-Every approved market, evidence package, and settlement transaction is verifiably anchored on GIWA, creating a transparent execution trail from AI reasoning to on-chain settlement.
+- **Live Smart Contract**: Deployed on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
+- **Smart Contract Tests**: `9/9` unit tests passing (`npx hardhat test`).
+- **Pipeline Integration Tests**: `5/5` decision pipeline tests passing (`npm run test:consensus`).
+- **Application Modules**: `7` production modules (Landing, Feed, Creator, Terminal, Explorer, Registry, Portfolio).
+- **Specialized AI Evaluation Roles**: `3` distinct roles (Analyst, Risk, Compliance).
+- **Audit Interface**: 4-tab Explorer (Evidence, Swarm, On-Chain, Raw JSON).
+- **Web3 Integration**: Wagmi v2, Viem, and RainbowKit wallet support.
+- **Storage**: IPFS Evidence CID content addressing.
+- **UI Responsiveness**: Fully responsive mobile/desktop interfaces.
 
 ---
 
-## 3. Current MVP Scope
+## Current MVP Limitations
 
-- **Live deployment on GIWA Sepolia Testnet** (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
-- **AI-assisted proposal generation** with natural language signal analysis.
-- **Multi-agent consensus workflow** (Analyst, Risk, Compliance agents).
-- **Evidence packaging with IPFS support** for auditable multihashes.
-- **On-chain market creation, optimistic dispute resolution, and payout settlement**.
-- **Protocol Explorer and audit interface**.
+- **Provider Abstraction**: Current MVP relies on configurable LLM providers through an abstraction layer.
+- **Human Oversight**: Market creation requires human-in-the-loop approval before on-chain execution.
+- **Reputation Systems**: Agent historical calibration and reputation scoring are scheduled for future roadmap phases.
+- **Governance Evolution**: Decentralized governance parameter control will be introduced post-testnet evaluation.
 
-### Future Roadmap
+---
+
+## 4. Core Capabilities & User Value
+
+- **Multi-Agent Review Pipeline**: Specialized AI roles perform distinct analysis stages and peer-review every proposal, requiring approval before creating a market.
+- **Verifiable Decision Audit Trail**: Every evidence item, agent evaluation, and confidence score is content-addressed via IPFS and referenced on-chain.
+- **Pre-Seeded Liquidity Pools**: Pre-seeded liquidity minimizes initial pricing distortion during early market participation.
+- **Clear Outcome & Winnings Payouts**: Traders can track active predictions, verify `WON` or `LOST` statuses, and claim payouts directly into their Web3 wallets.
+
+---
+
+## 5. Future Roadmap
+
 - **Agent reputation and historical calibration** tracking for long-term swarm accuracy.
 - **Expanded AI providers** (Gemini Pro, GPT-4o, Anthropic Claude).
 - **Additional market categories** and dynamic signal feeds.
@@ -136,56 +152,9 @@ Every approved market, evidence package, and settlement transaction is verifiabl
 
 ---
 
-## 4. Core Capabilities & User Value
-
-- **Independent Multi-Agent Peer Reviews**: Multiple AI agents evaluate signal inputs and peer-review every proposal, requiring a 66% consensus quorum before creating a market.
-- **Verifiable Decision Audit Trail**: Every evidence item, agent evaluation, and confidence score is anchored with an IPFS CID and logged transparently on-chain.
-- **Instant Micro-Liquidity Seeding**: Markets are pre-funded with contract-enforced seed liquidity on block zero to establish initial trading depth.
-- **Clear Outcome & Winnings Payouts**: Traders can track active predictions, verify `WON` or `LOST` statuses, and claim payouts directly into their Web3 wallets.
-
----
-
-## 5. How It Is Implemented (Technical Architecture)
-
-The protocol decouples off-chain cognitive evaluation from on-chain asset custody across four core layers:
-
-```mermaid
-flowchart TD
-    stage1[External Real-World Signals] --> stage2[Signal Ingestion & Evidence Package]
-    stage2 --> stage3[Independent Agent Peer Reviews]
-    stage3 --> stage4[66% Consensus Approval Quorum]
-    stage4 --> stage5[IPFS Evidence CID Anchoring]
-    stage5 --> stage6[GIWA Sepolia Smart Contract Execution]
-    stage6 --> stage7[Automated Settlement & Winnings Claim]
-```
-
-### **Component Layer Breakdown:**
-
-1. **Off-Chain Multi-Agent Consensus Swarm**:
-   - **`AnalystAgent`**: Ingests raw signal data and models baseline probability estimates.
-   - **`RiskAgent`**: Audits order book depth, volatility indices, and safety circuit breakers.
-   - **`ComplianceAgent`**: Enforces protocol policy checks and content safety guidelines.
-
-2. **On-Chain Settlement Engine (`AiraMarketProtocol.sol`)**:
-   - The `AiraMarketProtocol` contract manages market creation, liquidity, trading, dispute resolution, and payout settlement on GIWA.
-   - Deployed at `0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D` on GIWA Sepolia L2 (Chain ID: `91342`).
-
-3. **Storage & Audit Layer**:
-   - Stores the IPFS CID associated with each market, creating a verifiable reference between off-chain evidence and on-chain execution.
-
-4. **Seven Integrated Application Modules**:
-   - **Core Feed (`/feed`)**: 4 category streams with status filters and mobile stream view.
-   - **AI Creator Lab (`/creator`)**: Prompt-to-market creator with live wallet signing.
-   - **Trading Terminal (`/terminal`)**: Interactive probability charts and Decision Timeline.
-   - **Protocol Explorer (`/explorer`)**: 4-tab verifiable audit reports per proposal (Evidence, Swarm, On-Chain, Raw JSON).
-   - **Decision Transparency Registry (`/leaderboard`)**: Swarm node calibration metrics, connected participant wallets, and protocol activity.
-   - **Portfolio (`/portfolio`)**: Win/Loss outcome verification and 1-click payout claims.
-
----
-
 ## 6. Summary
 
-AIRA Protocol delivers a complete MVP that demonstrates how AI reasoning, verifiable evidence, human oversight, and on-chain execution can work together on GIWA to create transparent prediction markets.
+AIRA Protocol demonstrates a practical architecture for combining AI-assisted analysis, human review, transparent evidence, and on-chain execution within a prediction market workflow.
 
 ---
 
