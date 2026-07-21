@@ -24,7 +24,7 @@ Unlike traditional prediction markets that rely on manual market creation or opa
 - **On-chain verification through GIWA** for settlement and auditability.
 - **Human-in-the-loop approval** before market deployment.
 
-This approach transforms AI-assisted prediction markets into transparent and verifiable decision systems.
+This approach makes AI-assisted prediction markets transparent, inspectable, and verifiable.
 
 ---
 
@@ -36,11 +36,23 @@ Real-world events emerge faster than traditional prediction markets can be creat
 
 ## Design Principles
 
+- **Human approval remains part of the deployment workflow.**
 - **AI assists rather than autonomously executes.**
 - **Every market is supported by inspectable evidence.**
-- **Human approval remains part of the deployment workflow.**
 - **Settlement is transparent and verifiable on GIWA.**
 - **The protocol is designed for extensibility across AI providers.**
+
+---
+
+## Technical Architecture
+
+`AI Layer` ➔ `Consensus Layer` ➔ `Evidence Layer` ➔ `Settlement Layer` ➔ `Application Layer`
+
+1. **AI Layer**: Supports configurable AI providers (currently OpenRouter/OpenAI), with deterministic fallback logic when external AI services are unavailable.
+2. **Consensus Layer**: Orchestrates multi-agent reviews (Analyst, Risk, Compliance) to approve proposals based on quorum thresholds.
+3. **Evidence Layer**: Normalizes real-world signal feeds into deterministic JSON payloads pinned to IPFS CIDs.
+4. **Settlement Layer**: Manages market creation, liquidity, trading, optimistic dispute resolution, and payouts on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
+5. **Application Layer**: Delivers a responsive 7-module interface for signal creation, interactive trading, and cryptographic audits.
 
 ---
 
@@ -96,6 +108,7 @@ Every approved market, evidence package, and settlement transaction is verifiabl
 - **Protocol Explorer and audit interface**.
 
 ### Future Roadmap
+- **Agent reputation and historical calibration** tracking for long-term swarm accuracy.
 - **Expanded AI providers** (Gemini Pro, GPT-4o, Anthropic Claude).
 - **Additional market categories** and dynamic signal feeds.
 - **Enhanced analytics and governance** features.
@@ -107,7 +120,7 @@ Every approved market, evidence package, and settlement transaction is verifiabl
 
 - **Independent Multi-Agent Peer Reviews**: Multiple AI agents evaluate signal inputs and peer-review every proposal, requiring a 66% consensus quorum before creating a market.
 - **Verifiable Decision Audit Trail**: Every evidence item, agent evaluation, and confidence score is anchored with an IPFS CID and logged transparently on-chain.
-- **Instant Micro-Liquidity Seeding**: Markets are pre-funded with `0.000002 GIWA` seed liquidity on block zero, enabling micro-orders (`0.00002 GIWA`) without high faucet barriers.
+- **Instant Micro-Liquidity Seeding**: Markets are pre-funded with contract-enforced seed liquidity on block zero to establish initial trading depth.
 - **Clear Outcome & Winnings Payouts**: Traders can track active predictions, verify `WON` or `LOST` statuses, and claim payouts directly into their Web3 wallets.
 
 ---
@@ -144,7 +157,7 @@ flowchart TD
    - **Core Feed (`/feed`)**: 4 category streams with status filters and mobile stream view.
    - **AI Creator Lab (`/creator`)**: Prompt-to-market creator with live wallet signing.
    - **Trading Terminal (`/terminal`)**: Interactive probability charts and Decision Timeline.
-   - **Protocol Explorer (`/explorer`)**: 4-tab verifiable audit reports per proposal.
+   - **Protocol Explorer (`/explorer`)**: 4-tab verifiable audit reports per proposal (Evidence, Swarm, On-Chain, Raw JSON).
    - **Decision Transparency Registry (`/leaderboard`)**: Swarm node calibration metrics, connected participant wallets, and protocol activity.
    - **Portfolio (`/portfolio`)**: Win/Loss outcome verification and 1-click payout claims.
 
@@ -152,7 +165,7 @@ flowchart TD
 
 ## 6. Summary
 
-AIRA Protocol delivers an end-to-end MVP on GIWA Sepolia that demonstrates AI-assisted decision making, transparent evidence workflows, and verifiable on-chain execution.
+AIRA Protocol delivers a complete MVP that demonstrates how AI reasoning, verifiable evidence, human oversight, and on-chain execution can work together on GIWA to create transparent prediction markets.
 
 ---
 

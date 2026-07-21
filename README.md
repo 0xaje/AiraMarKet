@@ -135,7 +135,7 @@ Key network advantages include:
 ## Features
 *   **Decoupled Cognitive Layer**: Isolates intensive AI computations off-chain while anchoring custody and execution rules securely on-chain.
 *   **First Reference Application (AIRA Markets)**: The flagship prediction and risk market application built on the protocol, demonstrating agent-driven creation and optimistic resolution of binary decision pools.
-*   **Pre-Seeded Liquidity Pools**: Contract-enforced native token seeding (2.0 tokens split 50/50) to prevent early-trader curve manipulation.
+*   **Pre-Seeded Liquidity Pools**: Contract-enforced native token seeding split 50/50 between outcome pools to establish initial trading depth.
 *   **Vibrant Interface**: A mobile-responsive React dashboard featuring Web3 wallet connectors (Wagmi/RainbowKit) and direct explorer notifications.
 *   **Fault-Tolerant Indexer**: Relies on stateless polling to eliminate WebSocket disconnections and node rate-limit crashes.
 
@@ -257,7 +257,7 @@ The following metrics represent verified protocol capabilities and testing outco
     *   `[x]` 5/5 consensus engine integration tests passing
     *   `[x]` Production frontend build compiled and verified
 
-> **AIRA Protocol delivers an end-to-end MVP on GIWA Sepolia that demonstrates AI-assisted decision making, transparent evidence workflows, and verifiable on-chain execution.**
+> **AIRA Protocol delivers a complete MVP that demonstrates how AI reasoning, verifiable evidence, human oversight, and on-chain execution can work together on GIWA to create transparent prediction markets.**
 
 ---
 
