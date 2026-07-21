@@ -81,11 +81,11 @@ export default function Leaderboard({ profileData }) {
     id: `user_${walletAddress}`,
     rank: baseNodes.length + globalParticipants.length + 1,
     name: profileData?.nickname || 'Connected Predictor',
-    role: 'Wallet Signer & Prediction Participant',
+    role: 'Connected Participant Wallet & Protocol Activity',
     address: walletAddress,
     avatar: profileData?.picture || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=120',
     calibrationStatus: 'ACTIVE',
-    nodeRole: 'Connected Wallet Node',
+    nodeRole: 'Connected Participant Wallet',
     status: 'VERIFIED ON GIWA',
     isUser: true,
     type: 'User'

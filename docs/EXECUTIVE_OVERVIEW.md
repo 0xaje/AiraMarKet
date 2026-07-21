@@ -129,7 +129,7 @@ flowchart TD
    - **AI Creator Lab (`/creator`)**: Prompt-to-market creator with live wallet signing.
    - **Trading Terminal (`/terminal`)**: Interactive probability charts and Decision Timeline.
    - **Protocol Explorer (`/explorer`)**: 4-tab verifiable audit reports per proposal.
-   - **Decision Transparency Registry (`/leaderboard`)**: Swarm node calibration metrics.
+   - **Decision Transparency Registry (`/leaderboard`)**: Swarm node calibration metrics, connected participant wallets, and protocol activity.
    - **Portfolio (`/portfolio`)**: Win/Loss outcome verification and 1-click payout claims.
 
 ---
