@@ -136,7 +136,7 @@ flowchart TD
 
 ## 6. Summary
 
-AIRA Protocol demonstrates a complete end-to-end MVP built on GIWA Sepolia, combining AI-assisted decision making, transparent evidence workflows, and on-chain execution into a unified protocol ready for technical evaluation.
+AIRA Protocol delivers an end-to-end MVP on GIWA Sepolia that demonstrates AI-assisted decision making, transparent evidence workflows, and verifiable on-chain execution.
 
 ---
 
