@@ -492,12 +492,28 @@ export default function CreatorLab() {
                           )}
                         </div>
 
-                        <div className="flex justify-center pt-1">
+                        {/* Human Approval Checkpoint Banner */}
+                        <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 mt-4 mb-2 flex items-center justify-between text-left shadow-sm">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-7 h-7 rounded bg-amber-500/20 text-amber-600 flex items-center justify-center shrink-0">
+                              <span className="material-symbols-outlined text-sm font-bold">verified_user</span>
+                            </div>
+                            <div>
+                              <p className="text-[9px] font-mono font-bold text-amber-700 uppercase tracking-widest flex items-center gap-1.5">
+                                Human Approval Checkpoint
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping inline-block"></span>
+                              </p>
+                              <p className="text-[9.5px] font-mono text-on-surface-variant font-medium">66% Agent Quorum Reached — Explicit human confirmation required before smart contract execution on GIWA.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex justify-center pt-2">
                           <button 
                             className="group px-6 py-3.5 bg-primary text-white font-mono text-[9px] tracking-[0.2em] rounded-lg transition-all hover:bg-on-surface hover:shadow-lg active:scale-95 uppercase font-bold flex items-center gap-2"
                             onClick={() => handleLaunchOnChain(msg)}
                           >
-                            <span>Generate Proposal</span>
+                            <span>Approve & Deploy to GIWA Sepolia</span>
                             <span className="material-symbols-outlined text-xs">rocket_launch</span>
                           </button>
                         </div>
