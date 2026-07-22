@@ -109,7 +109,7 @@ if (match) {
         
         {/* Tagline / Subtitle */}
         <p className="max-w-2xl mx-auto text-on-surface-variant text-xs sm:text-sm md:text-base font-medium leading-relaxed mb-6 opacity-90 px-4">
-          AIRA aggregates decentralized multi-agent consensus streams to normalize real-world signals into verifiable Evidence Packages. We bridge cognitive reasoning with trustless execution, permanently anchoring audits on-chain via the high-performance GIWA OP Stack L2.
+          AIRA aggregates decentralized multi-agent consensus streams to normalize real-world signals into verifiable Evidence Packages. We bridge cognitive reasoning with trustless execution, permanently anchoring audits on-chain via the high-performance GIWA Sepolia Testnet.
         </p>
 
         {/* Core Value Proposition Callout Banner */}

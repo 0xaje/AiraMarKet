@@ -2,7 +2,7 @@
 ### A Transparent Multi-Agent Decision Protocol demonstrated through Prediction Markets on GIWA.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](file:///home/oyeolorun/AiraMarKet/LICENSE)
-[![GIWA L2](https://img.shields.io/badge/Ecosystem-GIWA_L2-blue.svg)](https://sepolia-explorer.giwa.io)
+[![GIWA Sepolia](https://img.shields.io/badge/Ecosystem-GIWA_Sepolia-blue.svg)](https://sepolia-explorer.giwa.io)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](file:///home/oyeolorun/AiraMarKet/docs/developer/local_development.md)
 [![Solidity](https://img.shields.io/badge/Language-Solidity-lightgrey.svg)](file:///home/oyeolorun/AiraMarKet/contracts/AiraMarket.sol)
 
@@ -153,7 +153,7 @@ flowchart TD
 | **AI Review Roles** | 3 Specialized Roles (Analyst, Risk, Compliance) |
 | **Wallet Integrations** | RainbowKit / Wagmi v2 / Viem |
 | **Evidence Layer** | Content-Addressed IPFS CIDs |
-| **Settlement Layer** | GIWA Sepolia L2 |
+| **Settlement Layer** | GIWA Sepolia Testnet |
 | **Mobile Support** | Fully Responsive |
 
 ---
@@ -172,7 +172,7 @@ flowchart TD
 The following metrics represent verified protocol capabilities and testing outcomes:
 *   **Infrastructure & Integration**:
     *   `[x]` Multi-chain architecture configuration
-    *   `[x]` Dunamu's GIWA L2 integration verified
+    *   `[x]` Dunamu's GIWA Sepolia Testnet integration verified
     *   `[x]` Production diagnostics & health monitoring active
     *   `[x]` Standardized structured logging implemented
 *   **Consensus & Intelligence**:
