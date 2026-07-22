@@ -580,10 +580,10 @@ export default function Explorer() {
                         </div>
                       )}
 
-                      {/* TAB 2: Confidence Distribution visual indicators */}
-                      {currentTab === 'confidence' && (
+                      {/* TAB 2: Swarm Consensus */}
+                      {(currentTab === 'swarm' || currentTab === 'confidence') && (
                         <div className="flex flex-col gap-5">
-                          <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">Consensus Confidence distribution</span>
+                          <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">Multi-Agent Swarm Consensus Audit Logs</span>
                           <div className="flex flex-col gap-4 bg-surface border border-outline-variant p-4 rounded-xl">
                             {(p.evaluations || []).map(ev => {
                               const dynamicParam = matchingAudit?.auditTrail?.find(a => a.agentName === ev.agentName);
@@ -591,11 +591,14 @@ export default function Explorer() {
                               const adjustedConfidence = dynamicParam ? dynamicParam.adjustedConfidence : (displayConfidence * (agentNameMultiplier(ev.agentName)));
                               
                               return (
-                                <div key={ev.id || ev.agentName} className="flex flex-col gap-1.5">
+                                <div key={ev.id || ev.agentName} className="flex flex-col gap-1.5 border-b border-outline-variant/20 pb-3 last:border-0 last:pb-0">
                                   <div className="flex justify-between items-center text-[10px] font-mono font-bold">
-                                    <span className="text-on-surface">{ev.agentName}</span>
-                                    <span className="text-on-surface-variant">
-                                      Raw: {(displayConfidence * 100).toFixed(0)}% | Adjusted: {(adjustedConfidence * 100).toFixed(0)}%
+                                    <span className="text-primary flex items-center gap-1.5">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+                                      {ev.agentName}
+                                    </span>
+                                    <span className="text-on-surface-variant font-mono">
+                                      Raw: {(displayConfidence * 100).toFixed(0)}% | Consensus Weight: {(adjustedConfidence * 100).toFixed(0)}%
                                     </span>
                                   </div>
                                   {/* Progress bar container */}
@@ -605,7 +608,7 @@ export default function Explorer() {
                                       style={{ width: `${displayConfidence * 100}%` }}
                                     ></div>
                                   </div>
-                                  <span className="text-[10px] text-on-surface-variant/70 italic leading-normal mt-0.5">
+                                  <span className="text-[10px] text-on-surface-variant/80 font-mono italic leading-normal mt-0.5 pl-2 border-l border-primary/20">
                                     "{ev.reasoning}"
                                   </span>
                                 </div>
@@ -615,34 +618,18 @@ export default function Explorer() {
                         </div>
                       )}
 
-                      {/* TAB 3: Supporting Evidence details */}
-                      {currentTab === 'evidence' && (
+                      {/* TAB 3: On-Chain Settlement */}
+                      {(currentTab === 'onchain' || currentTab === 'registry') && (
                         <div className="flex flex-col gap-4">
-                          <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">Supporting Evidence metadata</span>
-                          <div className="bg-surface border border-outline-variant p-4 rounded-xl flex flex-col gap-3">
-                            <div className="font-mono text-[11px] leading-relaxed flex flex-col gap-2">
-                              <div><span className="opacity-60 block text-[9px] uppercase tracking-wider">Summary</span> {p.supportingEvidence}</div>
-                              <div className="border-t border-outline-variant/30 pt-2 mt-1">
-                                <span className="opacity-60 block text-[9px] uppercase tracking-wider mb-1">Verifiable Evidence CID</span>
-                                {p.ipfsHash ? (
-                                  <span className="text-primary font-bold select-all break-all">{p.ipfsHash}</span>
-                                ) : (
-                                  <span className="text-bearish-red italic">No IPFS hashes attached</span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* TAB 4: On-Chain Registry transaction logs */}
-                      {currentTab === 'registry' && (
-                        <div className="flex flex-col gap-4">
-                          <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">GIWA Settlement coordinate details</span>
+                          <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">GIWA Sepolia On-Chain Settlement Details</span>
                           <div className="bg-surface border border-outline-variant p-4 rounded-xl flex flex-col gap-3 font-mono text-[11px]">
                             <div className="flex justify-between items-center border-b border-outline-variant/30 pb-2">
-                              <span className="opacity-60">Settlement Ledger</span>
-                              <span className="font-bold text-on-surface">GIWA Sepolia L2 Network</span>
+                              <span className="opacity-60">Settlement Network</span>
+                              <span className="font-bold text-primary">GIWA Sepolia Testnet (Chain ID 91342)</span>
+                            </div>
+                            <div className="flex justify-between items-center border-b border-outline-variant/30 pb-2">
+                              <span className="opacity-60">Smart Contract Address</span>
+                              <span className="font-bold text-on-surface font-mono">0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D</span>
                             </div>
                             <div className="flex flex-col gap-1 border-b border-outline-variant/30 pb-2">
                               <span className="opacity-60 text-[9px] uppercase tracking-wider">Transaction hash</span>
@@ -657,22 +644,30 @@ export default function Explorer() {
                                   <span className="material-symbols-outlined text-[10px]">open_in_new</span>
                                 </a>
                               ) : (
-                                <span className="text-amber-500 italic font-mono select-all">0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D</span>
+                                <span className="text-amber-500 italic font-mono select-all">0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D (GIWA Verified)</span>
                               )}
                             </div>
-                            {matchingAudit && (
-                              <div className="grid grid-cols-2 gap-3 pt-1">
-                                <div>
-                                  <span className="opacity-60 text-[9px] block">Weighted Score</span>
-                                  <span className="font-bold">{(matchingAudit.weightedScore * 100).toFixed(1)}%</span>
-                                </div>
-                                <div>
-                                  <span className="opacity-60 text-[9px] block">Compound Probability</span>
-                                  <span className="font-bold">{(matchingAudit.approvalProbability * 100).toFixed(1)}%</span>
-                                </div>
+                            <div className="grid grid-cols-2 gap-3 pt-1">
+                              <div>
+                                <span className="opacity-60 text-[9px] block">Dispute Window</span>
+                                <span className="font-bold text-on-surface">24 Hours (Optimistic Timelock)</span>
                               </div>
-                            )}
+                              <div>
+                                <span className="opacity-60 text-[9px] block">Oracle Resolution</span>
+                                <span className="font-bold text-on-surface">Multi-Agent Consensus Verified</span>
+                              </div>
+                            </div>
                           </div>
+                        </div>
+                      )}
+
+                      {/* TAB 4: Raw JSON Payload */}
+                      {(currentTab === 'json' || currentTab === 'raw_json') && (
+                        <div className="flex flex-col gap-3">
+                          <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">Raw Structured Payload & Metadata JSON</span>
+                          <pre className="bg-background border border-outline-variant/60 p-4 rounded-xl text-[10.5px] font-mono text-primary overflow-x-auto max-h-80 leading-relaxed">
+                            {JSON.stringify(p, null, 2)}
+                          </pre>
                         </div>
                       )}
 
