@@ -578,7 +578,7 @@ export default function Explorer() {
                       )}
 
                       {/* TAB 2: Swarm Consensus */}
-                      {(currentTab === 'swarm' || currentTab === 'confidence') && (
+                      {(activeTab === 'swarm' || activeTab === 'confidence') && (
                         <div className="flex flex-col gap-5">
                           <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">Multi-Agent Swarm Consensus Audit Logs</span>
                           <div className="flex flex-col gap-4 bg-surface border border-outline-variant p-4 rounded-xl">
@@ -616,7 +616,7 @@ export default function Explorer() {
                       )}
 
                       {/* TAB 3: On-Chain Settlement */}
-                      {(currentTab === 'onchain' || currentTab === 'registry') && (
+                      {(activeTab === 'onchain' || activeTab === 'registry') && (
                         <div className="flex flex-col gap-4">
                           <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">GIWA Sepolia On-Chain Settlement Details</span>
                           <div className="bg-surface border border-outline-variant p-4 rounded-xl flex flex-col gap-3 font-mono text-[11px]">
@@ -659,7 +659,7 @@ export default function Explorer() {
                       )}
 
                       {/* TAB 4: Raw JSON Payload */}
-                      {(currentTab === 'json' || currentTab === 'raw_json') && (
+                      {(activeTab === 'json' || activeTab === 'raw_json') && (
                         <div className="flex flex-col gap-3">
                           <span className="font-bold uppercase tracking-widest text-[9px] font-mono text-on-surface-variant block">Raw Structured Payload & Metadata JSON</span>
                           <pre className="bg-background border border-outline-variant/60 p-4 rounded-xl text-[10.5px] font-mono text-primary overflow-x-auto max-h-80 leading-relaxed">
