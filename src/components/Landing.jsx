@@ -108,9 +108,16 @@ if (match) {
         </h1>
         
         {/* Tagline / Subtitle */}
-        <p className="max-w-2xl mx-auto text-on-surface-variant text-xs sm:text-sm md:text-base font-medium leading-relaxed mb-8 opacity-90 px-4">
+        <p className="max-w-2xl mx-auto text-on-surface-variant text-xs sm:text-sm md:text-base font-medium leading-relaxed mb-6 opacity-90 px-4">
           AIRA aggregates decentralized multi-agent consensus streams to normalize real-world signals into verifiable Evidence Packages. We bridge cognitive reasoning with trustless execution, permanently anchoring audits on-chain via the high-performance GIWA OP Stack L2.
         </p>
+
+        {/* Core Value Proposition Callout Banner */}
+        <div className="w-full max-w-2xl mb-8 p-4 bg-primary/5 border border-primary/20 rounded-xl text-center shadow-sm backdrop-blur-sm">
+          <p className="text-xs sm:text-sm font-semibold italic text-primary tracking-wide">
+            "AIRA doesn't ask users to trust AI. It gives them the tools to inspect how AI reached a decision before that decision is committed on-chain."
+          </p>
+        </div>
         
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4 w-full mb-12">
