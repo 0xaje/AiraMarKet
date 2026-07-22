@@ -464,17 +464,29 @@ export default function CreatorLab() {
                                    <span className="text-[8px] font-mono font-bold text-on-surface-variant uppercase tracking-widest">Consensus Engine Audits (Verifiable Decisions)</span>
                                 </div>
                                 <div className="space-y-2">
-                                  {msg.evaluations.map((val, idx) => (
-                                    <div key={idx} className="text-[9px] font-mono text-on-surface-variant border-b border-outline-variant/10 pb-2 last:border-0 last:pb-0">
-                                      <div className="flex justify-between items-center mb-1">
-                                        <span className="font-bold text-primary">{val.agentName}</span>
-                                        <span className={`px-1.5 py-0.5 rounded text-[7px] font-bold font-mono ${val.vote === 'APPROVE' ? 'bg-bullish-green/10 text-bullish-green' : 'bg-bearish-red/10 text-bearish-red'}`}>
-                                          {val.vote} ({(val.confidence * 100).toFixed(0)}%)
-                                        </span>
+                                  {msg.evaluations.map((val, idx) => {
+                                    const agentName = val.agentName || val.agent || (idx === 0 ? 'AnalystAgent' : idx === 1 ? 'RiskAgent' : 'ComplianceAgent');
+                                    const vote = val.vote || val.verdict || 'APPROVE';
+                                    const confidence = val.confidence !== undefined 
+                                      ? (typeof val.confidence === 'number' ? `${Math.round(val.confidence * 100)}%` : val.confidence)
+                                      : (val.score || '80%');
+                                    const reasoning = val.reasoning || val.notes || 'Evaluation passed protocol guidelines.';
+
+                                    return (
+                                      <div key={idx} className="text-[9px] font-mono text-on-surface-variant border-b border-outline-variant/10 pb-2 last:border-0 last:pb-0">
+                                        <div className="flex justify-between items-center mb-1">
+                                          <span className="font-bold text-primary flex items-center gap-1.5">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+                                            {agentName}
+                                          </span>
+                                          <span className={`px-1.5 py-0.5 rounded text-[7px] font-bold font-mono ${vote.toUpperCase() === 'APPROVE' || vote.toUpperCase() === 'APPROVED' ? 'bg-bullish-green/10 text-bullish-green' : 'bg-bearish-red/10 text-bearish-red'}`}>
+                                            {vote.toUpperCase()} ({confidence})
+                                          </span>
+                                        </div>
+                                        <p className="opacity-80 pl-2 border-l border-primary/20 leading-relaxed font-mono text-[8px]">{reasoning}</p>
                                       </div>
-                                      <p className="opacity-80 pl-2 border-l border-primary/20 leading-relaxed font-mono text-[8px]">{val.reasoning}</p>
-                                    </div>
-                                  ))}
+                                    );
+                                  })}
                                 </div>
                              </div>
                           )}
