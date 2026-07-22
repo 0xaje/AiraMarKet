@@ -463,25 +463,54 @@ export default function Explorer() {
                     
                     {/* Visual Tab Selection Header */}
                     <div className="flex border-b border-outline-variant/40 bg-surface-variant/20 px-5 gap-4 overflow-x-auto no-scrollbar whitespace-nowrap">
-                      {['explainability', 'confidence', 'evidence', 'registry'].map((tab) => (
-                        <button
-                          key={tab}
-                          onClick={() => setTab(p.id, tab)}
-                          className={`py-3 text-[10px] font-bold uppercase tracking-wider font-mono border-b-2 transition-all shrink-0 ${currentTab === tab ? 'border-primary text-primary' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
-                        >
-                          {tab === 'explainability' ? 'Intelligence Report' :
-                           tab === 'confidence' ? 'Confidence Distribution' :
-                           tab === 'evidence' ? 'Supporting Evidence' : 'On-Chain Registry'}
-                        </button>
-                      ))}
+                      {['evidence', 'swarm', 'onchain', 'json'].map((tab) => {
+                        const activeTab = currentTab === 'explainability' ? 'evidence' : (currentTab === 'confidence' ? 'swarm' : (currentTab === 'registry' ? 'onchain' : currentTab));
+                        return (
+                          <button
+                            key={tab}
+                            onClick={() => setTab(p.id, tab)}
+                            className={`py-3 text-[10px] font-bold uppercase tracking-wider font-mono border-b-2 transition-all shrink-0 ${activeTab === tab ? 'border-primary text-primary font-black' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
+                          >
+                            {tab === 'evidence' ? '1. Evidence (IPFS CID)' :
+                             tab === 'swarm' ? '2. Swarm Consensus' :
+                             tab === 'onchain' ? '3. On-Chain Settlement' : '4. Raw JSON Payload'}
+                          </button>
+                        );
+                      })}
                     </div>
 
                     {/* Tab Body Contents */}
                     <div className="p-5 text-xs">
                       
-                      {/* TAB 1: Intelligence Report */}
-                      {currentTab === 'explainability' && (
+                      {/* TAB 1: Evidence (IPFS CID) & Intelligence Report */}
+                      {(currentTab === 'evidence' || currentTab === 'explainability' || !currentTab) && (
                         <div className="flex flex-col gap-5">
+                          {/* Content-Addressed IPFS Evidence Box */}
+                          <div className="bg-primary/5 border border-primary/20 p-4 rounded-xl space-y-3 shadow-sm">
+                            <div className="flex justify-between items-center border-b border-primary/20 pb-2">
+                              <span className="font-mono text-[9px] text-primary font-bold uppercase tracking-widest flex items-center gap-1.5">
+                                <span className="material-symbols-outlined text-sm">folder_zip</span>
+                                Content-Addressed IPFS Evidence Package
+                              </span>
+                              <span className="px-2 py-0.5 bg-primary/10 text-primary text-[8px] font-mono rounded font-bold uppercase">Immutable IPFS Storage</span>
+                            </div>
+                            <div>
+                              <span className="text-[9px] font-mono text-on-surface-variant/70 uppercase tracking-wider block mb-1">IPFS Content Identifier (CID)</span>
+                              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 bg-surface p-2.5 rounded border border-outline-variant">
+                                <code className="font-mono text-xs font-bold text-primary break-all select-all flex-1">{p.ipfsHash}</code>
+                                <a 
+                                  href={`https://ipfs.io/ipfs/${p.ipfsHash}`} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="px-3 py-1.5 bg-primary text-white text-[9px] font-mono font-bold rounded uppercase hover:bg-on-surface transition-colors flex items-center gap-1 shrink-0"
+                                >
+                                  <span>Inspect IPFS</span>
+                                  <span className="material-symbols-outlined text-[10px]">open_in_new</span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+
                           <div className="bg-surface border border-outline-variant p-5 rounded-xl space-y-4 shadow-sm">
                             <div className="flex justify-between items-center border-b border-outline-variant/60 pb-3">
                               <span className="font-mono text-[9px] text-primary font-bold uppercase tracking-widest">Protocol Intelligence Report</span>
