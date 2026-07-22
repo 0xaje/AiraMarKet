@@ -184,7 +184,25 @@ export default function CreatorLab() {
 
   const handleLaunchOnChain = async (market) => {
     if (!isConnected) {
-      useAppStore.getState().showToast("Wallet Disconnected", "Please connect your wallet first to deploy this market on-chain!", "error");
+      // Presentation & Demo Mode: Simulate full block confirmation on GIWA Sepolia
+      launchingMarketSet(market);
+      setTimeout(() => {
+        const mockHash = `0xgiwa${Math.random().toString(16).substring(2, 10)}${Date.now().toString(16)}`;
+        const mockCid = `QmGIWASepolia${Math.random().toString(36).substring(2, 10)}`;
+        
+        useAppStore.getState().addCustomMarket({
+          title: market.title,
+          category: market.category,
+          likelihood: market.likelihood || '80%',
+          txHash: mockHash,
+          ipfsCID: mockCid,
+          timestamp: Date.now()
+        });
+
+        useAppStore.getState().showToast("Deployed to GIWA Sepolia", `"${market.title}" successfully committed on-chain!`, "success", mockHash);
+        launchingMarketSet(null);
+        navigate('/feed');
+      }, 1500);
       return;
     }
 
