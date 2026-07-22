@@ -422,7 +422,7 @@ export default function Explorer() {
         ) : (
           filteredProposals.map(p => {
             const isExpanded = expandedProposal === p.id;
-            const currentTab = proposalTabs[p.id] || 'explainability';
+            const activeTab = proposalTabs[p.id] || 'evidence';
             
             const matchingTransparency = (data.transparency || []).find(t => t.marketTitle === p.title);
             const matchingAudit = (data.consensusAudits || []).find(a => a.signalId === p.signalId);
@@ -464,27 +464,24 @@ export default function Explorer() {
                     
                     {/* Visual Tab Selection Header */}
                     <div className="flex border-b border-outline-variant/40 bg-surface-variant/20 px-5 gap-4 overflow-x-auto no-scrollbar whitespace-nowrap">
-                      {['evidence', 'swarm', 'onchain', 'json'].map((tab) => {
-                        const activeTab = currentTab === 'explainability' ? 'evidence' : (currentTab === 'confidence' ? 'swarm' : (currentTab === 'registry' ? 'onchain' : currentTab));
-                        return (
-                          <button
-                            key={tab}
-                            onClick={() => setTab(p.id, tab)}
-                            className={`py-3 text-[10px] font-bold uppercase tracking-wider font-mono border-b-2 transition-all shrink-0 ${activeTab === tab ? 'border-primary text-primary font-black' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
-                          >
-                            {tab === 'evidence' ? '1. Evidence (IPFS CID)' :
-                             tab === 'swarm' ? '2. Swarm Consensus' :
-                             tab === 'onchain' ? '3. On-Chain Settlement' : '4. Raw JSON Payload'}
-                          </button>
-                        );
-                      })}
+                      {['evidence', 'swarm', 'onchain', 'json'].map((tab) => (
+                        <button
+                          key={tab}
+                          onClick={() => setProposalTabs(prev => ({ ...prev, [p.id]: tab }))}
+                          className={`py-3 text-[10px] font-bold uppercase tracking-wider font-mono border-b-2 transition-all shrink-0 ${activeTab === tab ? 'border-primary text-primary font-black border-b-2' : 'border-transparent text-on-surface-variant hover:text-on-surface'}`}
+                        >
+                          {tab === 'evidence' ? '1. Evidence (IPFS CID)' :
+                           tab === 'swarm' ? '2. Swarm Consensus' :
+                           tab === 'onchain' ? '3. On-Chain Settlement' : '4. Raw JSON Payload'}
+                        </button>
+                      ))}
                     </div>
 
                     {/* Tab Body Contents */}
                     <div className="p-5 text-xs">
                       
                       {/* TAB 1: Evidence (IPFS CID) & Intelligence Report */}
-                      {(currentTab === 'evidence' || currentTab === 'explainability' || !currentTab) && (
+                      {(activeTab === 'evidence' || activeTab === 'explainability') && (
                         <div className="flex flex-col gap-5">
                           {/* Content-Addressed IPFS Evidence Box */}
                           <div className="bg-primary/5 border border-primary/20 p-4 rounded-xl space-y-3 shadow-sm">
