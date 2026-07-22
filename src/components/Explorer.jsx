@@ -45,7 +45,7 @@ const defaultSeedData = {
       status: "PENDING_APPROVAL",
       confidence: 0.88,
       supportingEvidence: "OpenAI developer blog updates and executive keynotes referencing next-generation frontier models.",
-      ipfsHash: "QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWcPBDG",
+      ipfsHash: "QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco",
       decisionReason: "Evaluating multi-agent consensus; pending final oracle verification.",
       intelligenceReport: {
         summary: "Multi-agent framework analyzing public release indicators and developer API changelogs for GPT-5.",
@@ -76,7 +76,7 @@ const defaultSeedData = {
       status: "RESOLVED",
       confidence: 0.95,
       supportingEvidence: "Aggregate spot ETF inflow metrics and institutional custody vault volume logs.",
-      ipfsHash: "QmZTR5bcpQDjvhJt5qf4B2Zk09a7H8rQnK6bN5yP3Lw8t2",
+      ipfsHash: "QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco",
       decisionReason: "Consensus threshold reached with high confidence on-chain resolution data.",
       intelligenceReport: {
         summary: "Institutional inflows and hash rate stability confirm strong upward market momentum.",
@@ -748,15 +748,16 @@ export default function Explorer() {
             <div className="flex items-center justify-between pt-2">
               <span className="text-[9px] font-mono text-on-surface-variant/60">Immutable Audit Trail • Verifiable CID Hash</span>
               <div className="flex gap-2">
-                <a 
-                  href={`https://gateway.pinata.cloud/ipfs/${ipfsModalItem.ipfsHash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 bg-surface-variant border border-outline-variant text-on-surface font-mono text-[9px] font-bold uppercase rounded-lg hover:border-primary transition-colors flex items-center gap-1"
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText(ipfsModalItem.ipfsHash);
+                    useAppStore.getState().showToast("CID Copied", `IPFS CID copied to clipboard!`, "success");
+                  }}
+                  className="px-4 py-2 bg-surface-variant border border-outline-variant text-on-surface font-mono text-[9px] font-bold uppercase rounded-lg hover:border-primary transition-colors flex items-center gap-1.5"
                 >
-                  <span>Pinata Link</span>
-                  <span className="material-symbols-outlined text-[10px]">open_in_new</span>
-                </a>
+                  <span className="material-symbols-outlined text-[12px] text-primary">content_copy</span>
+                  <span>Copy CID</span>
+                </button>
                 <button 
                   onClick={() => setIpfsModalItem(null)}
                   className="px-5 py-2 bg-primary text-white font-mono text-[9px] font-bold uppercase rounded-lg hover:bg-on-surface transition-colors"
