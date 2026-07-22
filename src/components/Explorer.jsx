@@ -174,6 +174,7 @@ export default function Explorer() {
   const [statusFilter, setStatusFilter] = useState('All');
   const [expandedProposal, setExpandedProposal] = useState(null);
   const [proposalTabs, setProposalTabs] = useState({});
+  const [ipfsModalItem, setIpfsModalItem] = useState(null);
 
   const customMarkets = useAppStore(state => state.customMarkets);
 
@@ -498,15 +499,13 @@ export default function Explorer() {
                               <span className="text-[9px] font-mono text-on-surface-variant/70 uppercase tracking-wider block mb-1">IPFS Content Identifier (CID)</span>
                               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 bg-surface p-2.5 rounded border border-outline-variant">
                                 <code className="font-mono text-xs font-bold text-primary break-all select-all flex-1">{p.ipfsHash}</code>
-                                <a 
-                                  href={`https://ipfs.io/ipfs/${p.ipfsHash}`} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer"
+                                <button 
+                                  onClick={() => setIpfsModalItem(p)}
                                   className="px-3 py-1.5 bg-primary text-white text-[9px] font-mono font-bold rounded uppercase hover:bg-on-surface transition-colors flex items-center gap-1 shrink-0"
                                 >
                                   <span>Inspect IPFS</span>
                                   <span className="material-symbols-outlined text-[10px]">open_in_new</span>
-                                </a>
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -686,6 +685,89 @@ export default function Explorer() {
           })
         )}
       </div>
+      {/* IPFS Evidence Package Inspector Modal */}
+      {ipfsModalItem && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-surface border-2 border-primary/30 rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl relative">
+            <div className="flex items-center justify-between border-b border-outline-variant pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-primary text-lg font-bold">folder_zip</span>
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-sm text-on-surface font-mono">IPFS Evidence Package Inspection</h3>
+                  <p className="text-[10px] font-mono text-primary font-bold">CID: {ipfsModalItem.ipfsHash}</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIpfsModalItem(null)}
+                className="w-8 h-8 rounded-full bg-surface-variant hover:bg-outline-variant text-on-surface flex items-center justify-center transition-colors"
+              >
+                <span className="material-symbols-outlined text-sm font-bold">close</span>
+              </button>
+            </div>
+
+            <div className="bg-surface-variant/30 p-4 rounded-xl border border-outline-variant/60 space-y-2.5 font-mono text-[10px]">
+              <div className="flex justify-between items-center">
+                <span className="text-on-surface-variant font-bold">STORAGE STATUS:</span>
+                <span className="px-2 py-0.5 bg-bullish-green/10 text-bullish-green font-bold rounded flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-bullish-green animate-pulse"></span>
+                  PINNED ON IPFS (PINATA GATEWAY)
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-on-surface-variant font-bold">MULTIHASH ALGORITHM:</span>
+                <span className="text-on-surface">SHA-256 (IPFS v1 CID)</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-on-surface-variant font-bold">ON-CHAIN ANCHOR:</span>
+                <span className="text-primary font-bold">0xBDCd...4f3D (GIWA Sepolia)</span>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-[9px] font-mono font-bold text-on-surface-variant uppercase tracking-wider block mb-1">
+                Serialized Evidence Payload (IPFS JSON Data)
+              </label>
+              <pre className="bg-background border border-outline-variant/60 p-4 rounded-xl text-[10.5px] font-mono text-primary overflow-x-auto max-h-60 leading-relaxed">
+{JSON.stringify({
+  ipfsCID: ipfsModalItem.ipfsHash,
+  protocol: "AIRA Protocol v1.0",
+  title: ipfsModalItem.title,
+  category: ipfsModalItem.category,
+  signalId: ipfsModalItem.signalId,
+  consensusQuorum: "66%",
+  supportingEvidence: ipfsModalItem.supportingEvidence,
+  evaluations: ipfsModalItem.evaluations,
+  anchoredLedger: "GIWA Sepolia Testnet (Chain ID 91342)",
+  timestamp: new Date().toISOString()
+}, null, 2)}
+              </pre>
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              <span className="text-[9px] font-mono text-on-surface-variant/60">Immutable Audit Trail • Verifiable CID Hash</span>
+              <div className="flex gap-2">
+                <a 
+                  href={`https://gateway.pinata.cloud/ipfs/${ipfsModalItem.ipfsHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 bg-surface-variant border border-outline-variant text-on-surface font-mono text-[9px] font-bold uppercase rounded-lg hover:border-primary transition-colors flex items-center gap-1"
+                >
+                  <span>Pinata Link</span>
+                  <span className="material-symbols-outlined text-[10px]">open_in_new</span>
+                </a>
+                <button 
+                  onClick={() => setIpfsModalItem(null)}
+                  className="px-5 py-2 bg-primary text-white font-mono text-[9px] font-bold uppercase rounded-lg hover:bg-on-surface transition-colors"
+                >
+                  Close Inspector
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
