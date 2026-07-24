@@ -24,14 +24,13 @@ A standardized registry prevents configuration drift and assures developers that
 
 | Network | Chain ID | Contract Address | Status | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Mantle Sepolia Testnet** | `5003` | `0xdd277ccb8cda72d652cdca4df09df5f2522fc846` | **Live Production** | Fully operational and verified on-chain. |
-| **GIWA Sepolia Testnet** | `91342` | `0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D` | **Live Production** | Fully operational and verified on-chain. |
+| **GIWA Sepolia Testnet** | `91342` | `0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846` | **Live Production** | Fully operational and verified on-chain. |
 
 ---
 
 ## 3. Deployment Playbook
 
-To deploy and register contracts on any supported EVM chain:
+To deploy and register contracts on the supported EVM chain:
 
 1. **Configure Keys**: Ensure the deployer wallet private key is set in `.env`:
    ```bash
@@ -41,10 +40,6 @@ To deploy and register contracts on any supported EVM chain:
    - For **GIWA Network**:
      ```bash
      npm run deploy:giwa
-     ```
-   - For **Mantle Sepolia**:
-     ```bash
-     npx hardhat run scripts/deploy.cjs --network mantleTestnet
      ```
 3. **Register Deployment Artifacts**:
    - Create a directory `/deployments/<CHAIN_ID>` matching the network chain ID.

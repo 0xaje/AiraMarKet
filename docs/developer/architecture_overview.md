@@ -57,9 +57,6 @@ flowchart TD
 Smart contract interactions dynamically target these deployed network instances:
 
 *   **GIWA Sepolia Testnet** (`Chain ID: 91342`):
-    *   **Registry Address**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
-    *   **Status**: [LIVE] Verified on Explorer
-*   **Mantle Sepolia Testnet** (`Chain ID: 5003`):
-    *   **Registry Address**: [`0xdd277ccb8cda72d652cdca4df09df5f2522fc846`](https://explorer.sepolia.mantle.xyz/address/0xdd277ccb8cda72d652cdca4df09df5f2522fc846)
+    *   **Registry Address**: [`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`](https://sepolia-explorer.giwa.io/address/0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846)
     *   **Status**: [LIVE] Verified on Explorer
 

@@ -1,5 +1,5 @@
 export const AiraMarketProtocolDeployment = {
-  address: "0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D",
+  address: "0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846",
   abi: [
   {
     "inputs": [

@@ -13,14 +13,6 @@ module.exports = {
     }
   },
   networks: {
-    mantleTestnet: {
-      url: "https://rpc.sepolia.mantle.xyz",
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
-    },
-    mantleMainnet: {
-      url: "https://rpc.mantle.xyz",
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
-    },
     giwa: {
       url: process.env.RPC_URL || "https://sepolia-rpc.giwa.io",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
@@ -28,8 +20,6 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      mantleTestnet: process.env.MANTLE_EXPLORER_API_KEY || "",
-      mantleMainnet: process.env.MANTLE_EXPLORER_API_KEY || "",
       giwa: "any_value_needed_by_hardhat"
     },
     customChains: [
@@ -39,22 +29,6 @@ module.exports = {
         urls: {
           apiURL: "https://sepolia-explorer.giwa.io/api",
           browserURL: "https://sepolia-explorer.giwa.io"
-        }
-      },
-      {
-        network: "mantleTestnet",
-        chainId: 5003,
-        urls: {
-          apiURL: "https://explorer.sepolia.mantle.xyz/api",
-          browserURL: "https://explorer.sepolia.mantle.xyz"
-        }
-      },
-      {
-        network: "mantleMainnet",
-        chainId: 5000,
-        urls: {
-          apiURL: "https://explorer.mantle.xyz/api",
-          browserURL: "https://explorer.mantle.xyz"
         }
       }
     ]

@@ -1,12 +1,8 @@
 import { ChainConfig } from './types';
-import { mantle } from './mantle';
-import { mantleSepolia } from './mantleSepolia';
 import { giwa } from './giwa';
 
 const chains: Record<string, ChainConfig> = {
   giwa,
-  mantle,
-  mantleSepolia,
 };
 
 const getEnv = (key: string): string | undefined => {
@@ -38,7 +34,7 @@ export function loadChainConfig(): ChainConfig {
   const config = JSON.parse(JSON.stringify(baseConfig)) as ChainConfig;
 
   // Apply overrides from env variables if present
-  const envRpcUrl = getEnv('RPC_URL') || getEnv('MANTLE_RPC_URL');
+  const envRpcUrl = getEnv('RPC_URL');
   if (envRpcUrl) {
     config.rpcUrl = envRpcUrl;
   }
@@ -53,7 +49,7 @@ export function loadChainConfig(): ChainConfig {
     config.blockExplorer = envBlockExplorer;
   }
 
-  const envContractAddress = getEnv('CONTRACT_ADDRESS') || getEnv('VITE_CONTRACT_ADDRESS') || getEnv('VITE_MANTLE_CONTRACT_ADDRESS');
+  const envContractAddress = getEnv('CONTRACT_ADDRESS') || getEnv('VITE_CONTRACT_ADDRESS');
   if (envContractAddress) {
     config.contracts.marketProtocol = envContractAddress;
   }

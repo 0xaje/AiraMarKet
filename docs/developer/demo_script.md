@@ -92,7 +92,7 @@ The final step is submitting the transaction to the verified contract on the GIW
 
 ### Step 5: GIWA Transaction Receipt
 * **Presenter Action**: Show the block explorer transaction receipt:
-- **Smart Contract Target**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+- **Smart Contract Target**: [`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`](https://sepolia-explorer.giwa.io/address/0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846)
 - **Transaction Hash**: `0x8aeee03dfa7b4cedd0a802dfb54db580e3f9c0449b7aafb9fb1d3cbdad801be4`
 - **Method Called**: `createMarket(signalId, ipfsHash)`
 - **Block Number**: `14205`

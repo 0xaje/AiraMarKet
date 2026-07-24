@@ -21,7 +21,7 @@ AIRA Protocol enables transparent AI-assisted decision workflows by combining mu
 | Parameter | Status / Details |
 | :--- | :--- |
 | **Network** | GIWA Sepolia Testnet (Chain ID: `91342`) |
-| **Deployment** | Verified (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`) |
+| **Deployment** | Verified (`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`) |
 | **Explorer** | Available ([GIWA Explorer](https://sepolia-explorer.giwa.io)) |
 | **Wallet Stack** | RainbowKit / Wagmi / Viem |
 | **Status** | Active on GIWA Sepolia (Live MVP) |
@@ -95,7 +95,7 @@ AIRA intentionally separates AI computation from blockchain execution. Computati
 1. **AI Layer**: Supports configurable LLM providers through an abstraction layer, with deterministic fallback logic when external AI services are unavailable.
 2. **Review Pipeline**: Coordinates Analyst, Risk, and Compliance evaluations before determining whether a proposal satisfies the configured approval threshold.
 3. **Evidence Layer**: Normalizes real-world signal feeds into deterministic JSON payloads pinned to IPFS CIDs.
-4. **Settlement Layer**: Manages market creation, pre-seeded liquidity, trading, optimistic dispute resolution, and payouts on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`).
+4. **Settlement Layer**: Manages market creation, pre-seeded liquidity, trading, optimistic dispute resolution, and payouts on GIWA Sepolia (`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`).
 5. **Application Layer**: Delivers a responsive 7-module interface for signal creation, interactive trading, and decision audit interfaces.
 
 ---
@@ -146,7 +146,7 @@ flowchart TD
 
 | Metric | Current MVP |
 | :--- | :--- |
-| **Smart Contract** | Live on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`) |
+| **Smart Contract** | Live on GIWA Sepolia (`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`) |
 | **Unit Tests** | 9/9 Passing (`npx hardhat test`) |
 | **Integration Tests** | 5/5 Passing (`npm run test:consensus`) |
 | **Application Modules** | 7 Production Modules |
@@ -194,7 +194,7 @@ The following metrics represent verified protocol capabilities and testing outco
 
 - **GitHub Repository**: [0xaje/AiraMarKet](https://github.com/0xaje/AiraMarKet)
 - **Live MVP Application**: [AIRA Protocol App](https://airamarket.vercel.app)
-- **Smart Contract Address**: [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+- **Smart Contract Address**: [`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`](https://sepolia-explorer.giwa.io/address/0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846)
 - **Block Explorer**: [GIWA Sepolia Explorer](https://sepolia-explorer.giwa.io)
 - **Documentation Hub**: [Executive Overview](file:///home/oyeolorun/AiraMarKet/docs/EXECUTIVE_OVERVIEW.md)
 

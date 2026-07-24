@@ -19,7 +19,7 @@ const defaultSeedData = {
       intelligenceReport: {
         summary: "Multi-Agent AI consensus confirmed valid signal metrics for protocol deployment on GIWA Sepolia L2.",
         supportingEvidence: [
-          "GIWA RPC contract verification confirmed active at 0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D",
+          "GIWA RPC contract verification confirmed active at 0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846",
           "Cross-node telemetry validator pulse check: 99.9% uptime"
         ],
         contradictingEvidence: [
@@ -626,7 +626,7 @@ export default function Explorer() {
                             </div>
                             <div className="flex justify-between items-center border-b border-outline-variant/30 pb-2">
                               <span className="opacity-60">Smart Contract Address</span>
-                              <span className="font-bold text-on-surface font-mono">0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D</span>
+                              <span className="font-bold text-on-surface font-mono">0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846</span>
                             </div>
                             <div className="flex flex-col gap-1 border-b border-outline-variant/30 pb-2">
                               <span className="opacity-60 text-[9px] uppercase tracking-wider">Transaction hash</span>
@@ -641,7 +641,7 @@ export default function Explorer() {
                                   <span className="material-symbols-outlined text-[10px]">open_in_new</span>
                                 </a>
                               ) : (
-                                <span className="text-amber-500 italic font-mono select-all">0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D (GIWA Verified)</span>
+                                <span className="text-amber-500 italic font-mono select-all">0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846 (GIWA Verified)</span>
                               )}
                             </div>
                             <div className="grid grid-cols-2 gap-3 pt-1">
@@ -713,7 +713,7 @@ export default function Explorer() {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-on-surface-variant font-bold">ON-CHAIN ANCHOR:</span>
-                <span className="text-primary font-bold">0xBDCd...4f3D (GIWA Sepolia)</span>
+                <span className="text-primary font-bold">0xDD27...c846 (GIWA Sepolia)</span>
               </div>
             </div>
 

@@ -3,7 +3,7 @@
 > **Subheading:** A Transparent Multi-Agent Decision Protocol demonstrated through Prediction Markets on GIWA.  
 > **Headline Pitch:** *"AIRA doesn't ask users to trust AI. It gives them the tools to inspect how AI reached a decision before that decision is committed on-chain."*  
 > **Network:** GIWA Sepolia Testnet (Chain ID: `91342`)  
-> **Contract Address:** [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+> **Contract Address:** [`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`](https://sepolia-explorer.giwa.io/address/0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846)
 
 ---
 
@@ -16,7 +16,7 @@
   - Standardizing transparent multi-agent reasoning for Web3 workflows.
   - Demonstrated through decentralized decision and prediction markets.
   - Native settlement on GIWA Sepolia Testnet (`Chain ID: 91342`).
-  - Verified Smart Contract: `0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`
+  - Verified Smart Contract: `0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`
 
 ---
 
@@ -91,7 +91,7 @@
 * **Key Visual:** GIWA Block Explorer Transaction Verification Box.
 * **Contract Specification:**
   - **Contract Name:** `AiraMarketProtocol.sol`
-  - **Address:** `0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`
+  - **Address:** `0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`
   - **Chain ID:** `91342` (GIWA Sepolia Testnet)
   - **Features:** Pari-mutuel trading pools, IPFS CID logging, pre-seeded liquidity support, optimistic 24-hour challenge timelocks.
   - **Verification:** 9 out of 9 Hardhat unit tests passing (`npx hardhat test`), 5 out of 5 consensus pipeline integration tests passing.
@@ -103,7 +103,7 @@
 * **Metrics Table:**
   | Dimension | Outcome / Status |
   | :--- | :--- |
-  | **Smart Contract** | Live on GIWA Sepolia (`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`) |
+  | **Smart Contract** | Live on GIWA Sepolia (`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`) |
   | **Hardhat Unit Tests** | `9 / 9` Passing |
   | **Pipeline Integration Tests** | `5 / 5` Passing |
   | **Production Modules** | 7 Live Modules |
@@ -123,7 +123,7 @@
 * **Links & Submission Artifacts:**
   - 🌐 **Live Web Application:** [airamarket.vercel.app](https://airamarket.vercel.app)
   - 💻 **GitHub Repository:** [github.com/0xaje/AiraMarKet](https://github.com/0xaje/AiraMarKet)
-  - 📜 **GIWA Explorer Contract:** [`0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D`](https://sepolia-explorer.giwa.io/address/0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D)
+  - 📜 **GIWA Explorer Contract:** [`0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846`](https://sepolia-explorer.giwa.io/address/0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846)
 
 ---
 

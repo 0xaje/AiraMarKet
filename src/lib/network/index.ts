@@ -24,44 +24,8 @@ export const giwaChain = defineChain({
   testnet: true,
 });
 
-export const mantleSepoliaChain = defineChain({
-  id: 5003,
-  name: 'Mantle Sepolia Testnet',
-  nativeCurrency: { name: 'MNT', symbol: 'MNT', decimals: 18 },
-  rpcUrls: {
-    default: { http: ['https://rpc.sepolia.mantle.xyz'] },
-    public: { http: ['https://rpc.sepolia.mantle.xyz'] },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Explorer',
-      url: 'https://explorer.sepolia.mantle.xyz',
-    },
-  },
-  testnet: true,
-});
-
-export const mantleChain = defineChain({
-  id: 5000,
-  name: 'Mantle',
-  nativeCurrency: { name: 'MNT', symbol: 'MNT', decimals: 18 },
-  rpcUrls: {
-    default: { http: ['https://rpc.mantle.xyz'] },
-    public: { http: ['https://rpc.mantle.xyz'] },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Explorer',
-      url: 'https://explorer.mantle.xyz',
-    },
-  },
-  testnet: false,
-});
-
 // Select active chain from dynamic config
-export const activeChain = activeChainConfig.chainId === 91342 ? giwaChain :
-                           activeChainConfig.chainId === 5003 ? mantleSepoliaChain :
-                           mantleChain;
+export const activeChain = giwaChain;
 
 const connectors = connectorsForWallets(
   [
@@ -78,11 +42,9 @@ const connectors = connectorsForWallets(
 
 export const config = createConfig({
   connectors,
-  chains: [giwaChain, mantleSepoliaChain, mantleChain],
+  chains: [giwaChain],
   transports: {
     [giwaChain.id]: http(giwaChain.rpcUrls.default.http[0]),
-    [mantleSepoliaChain.id]: http(mantleSepoliaChain.rpcUrls.default.http[0]),
-    [mantleChain.id]: http(mantleChain.rpcUrls.default.http[0]),
   },
 });
 

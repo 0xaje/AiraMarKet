@@ -250,7 +250,7 @@ if (match) {
 
                   {demoStep === 7 && (
                     <div className="space-y-1 text-xs text-on-surface">
-                      <p className="font-mono text-[10px] text-on-surface-variant">[GIWA_LEDGER] Submitting registry log transaction to AiraMarketProtocol at 0xBDCd79e468a05BaD60cc0822Df42c11B4e0E4f3D...</p>
+                      <p className="font-mono text-[10px] text-on-surface-variant">[GIWA_LEDGER] Submitting registry log transaction to AiraMarketProtocol at 0xDD277CCB8cDa72D652CdcA4df09df5f2522fc846...</p>
                       <p className="font-bold text-on-surface break-all select-all font-mono mt-1">
                         Tx Hash: 0x8aeee03dfa7b4cedd0a802dfb54db580e3f9c0449b7aafb9fb1d3cbdad801be4
                       </p>

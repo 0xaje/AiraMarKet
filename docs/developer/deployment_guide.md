@@ -20,12 +20,6 @@ npm run deploy:giwa
 ```
 This command triggers the Hardhat deployment script configured in `/scripts/deploy.cjs` targeting network settings in `hardhat.config.cjs`.
 
-### Deployment to Alternate Networks (e.g. Mantle Sepolia)
-To deploy targeting alternative supported EVM chains:
-```bash
-npx hardhat run scripts/deploy.cjs --network mantleTestnet
-```
-
 ---
 
 ## 2. On-Chain Code Verification
@@ -36,11 +30,6 @@ Contract source codes should be verified on block explorer registries to ensure 
 To verify the solidity contract code on Dunamu's GIWA Explorer:
 ```bash
 npm run verify:giwa -- --contract contracts/AiraMarket.sol:AiraMarketProtocol <DEPLOYED_CONTRACT_ADDRESS>
-```
-
-### Verification on Alternate Explorers (e.g. Mantle Sepolia)
-```bash
-npx hardhat verify --network mantleTestnet <DEPLOYED_CONTRACT_ADDRESS>
 ```
 
 ---

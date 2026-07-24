@@ -52,8 +52,6 @@ import { arbitrum } from './arbitrum';
 
 const chains: Record<string, ChainConfig> = {
   giwa,
-  mantle,
-  mantleSepolia,
   arbitrum,
 };
 ```
@@ -65,9 +63,9 @@ import { AiraMarketProtocolDeployment as arbitrumDeployment } from './42161/Aira
 
 const deployments: Record<number, Record<string, { address: string; abi: any }>> = {
   91342: { AiraMarketProtocol: giwaDeployment },
-  5003: { AiraMarketProtocol: mantleSepoliaDeployment },
   42161: { AiraMarketProtocol: arbitrumDeployment },
 };
+```
 
 ---
 

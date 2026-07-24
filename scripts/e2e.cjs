@@ -3,7 +3,7 @@ const fs = require("fs");
 require("dotenv").config();
 
 async function main() {
-    const contractAddress = process.env.VITE_CONTRACT_ADDRESS || process.env.CONTRACT_ADDRESS || process.env.VITE_MANTLE_CONTRACT_ADDRESS;
+    const contractAddress = process.env.VITE_CONTRACT_ADDRESS || process.env.CONTRACT_ADDRESS;
     if (!contractAddress) {
         throw new Error("No contract address found in environment variables");
     }
@@ -30,7 +30,7 @@ async function main() {
         report.push(msg);
     }
 
-    log("### Starting E2E Testing on Mantle Testnet ###\n");
+    log("### Starting E2E Testing on GIWA Sepolia ###\n");
 
     try {
         // Test A: Create Market
